@@ -1,28 +1,42 @@
 <template>
+  
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    
+    <!-- <TheNavbar></TheNavbar>
+    <ToDos></ToDos>
+    <StatusBar/>
+  
+    <ProcessBar/> -->
+    <TheHeader/>
+    <!-- <ShopIndex/> -->
+    <ShoppingCart/>
+    <TheFooter/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+// import ToDos from './components/ToDos.vue'
+// import TheNavbar from  './components/TheNavbar.vue'
+// import StatusBar from  './components/StatusBar.vue'
+// import ProcessBar from  './components/ProcessBar.vue'
+import TheHeader from './layout/TheHeader.vue'
+import TheFooter from './layout/TheFooter.vue'
+//import ShopIndex from './components/ShopIndex.vue'
+import ShoppingCart from './components/ShoppingCart.vue'
 export default {
   name: 'App',
   components: {
-    HelloWorld
+  //  ToDos,TheNavbar,StatusBar,ProcessBar
+  TheHeader,TheFooter,ShoppingCart
   }
 }
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  
+  
 }
+@import url('./assets/css/style.css');
+/* @import url('./assets/lib/owlcarousel/assets/owl.carousel.min.css'); */
 </style>
