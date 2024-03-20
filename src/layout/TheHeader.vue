@@ -105,17 +105,19 @@
                     </button>
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto py-0">
-                            <a href="index.html" class="nav-item nav-link">Home</a>
-                            <a href="shop.html" class="nav-item nav-link">Shop</a>
-                            <a href="detail.html" class="nav-item nav-link">Shop Detail</a>
-                            <div class="nav-item dropdown">
+                            <router-link  class="nav-item nav-link" to="/">Home</router-link>
+                            <router-link class="nav-item nav-link" to="theshop">Shop</router-link>
+                            <router-link to="/productdetail" class="nav-item nav-link">Shop Detail</router-link>
+                            <router-link to="/shoppingcart" class="nav-item nav-link">Shopping Cart</router-link>
+                            <router-link to="/checkout" class="nav-item nav-link">Checkout</router-link>
+                            <!-- <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle active" data-toggle="dropdown">Pages</a>
                                 <div class="dropdown-menu rounded-0 m-0">
-                                    <a href="cart.html" class="dropdown-item">Shopping Cart</a>
-                                    <a href="checkout.html" class="dropdown-item">Checkout</a>
+                                    <router-link class="dropdown-item" to="/shoppingcart">Shopping Cart</router-link>
+                                    <a class="dropdown-item">Checkout</a>
                                 </div>
-                            </div>
-                            <a href="contact.html" class="nav-item nav-link">Contact</a>
+                            </div> -->
+                            <router-link to="/contact"  class="nav-item nav-link">Contact</router-link>
                         </div>
                         <div class="navbar-nav ml-auto py-0">
                             <a href="" class="nav-item nav-link">Login</a>
@@ -123,18 +125,25 @@
                         </div>
                     </div>
                 </nav>
+                
             </div>
         </div>
     </div>
+
     <!-- Navbar End -->
     </div>
     
 </template>
+
 <script>
+//import TheHeaderCur from './TheHeaderCur.vue'
 export default {
-    name:'TheHeader'
+    name:'TheHeader',
+    components:{}
 }
 </script>
 <style >
-
+.router-link-active{
+   color:#D19C97;
+}
 </style>

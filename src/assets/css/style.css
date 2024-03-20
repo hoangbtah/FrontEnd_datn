@@ -3969,6 +3969,7 @@ input[type="button"].btn-block {
   border-color: #dee2e6 #dee2e6 #fff;
 }
 
+
 .nav-tabs .dropdown-menu {
   margin-top: -1px;
 }
@@ -9567,9 +9568,9 @@ a.text-dark:hover, a.text-dark:focus {
 
 .back-to-top {
   position: fixed;
-  /* display: none; */
-  right: 30px;
-  bottom: 30px;
+  display: none;
+  right: 20px;
+  bottom: 80px;
   z-index: 11;
   animation: action 1s infinite alternate;
 }

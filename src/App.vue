@@ -8,8 +8,9 @@
   
     <ProcessBar/> -->
     <TheHeader/>
+    <PageContent/>
     <!-- <ShopIndex/> -->
-    <ShoppingCart/>
+    <!-- <ShoppingCart/> -->
     <TheFooter/>
   </div>
 </template>
@@ -21,13 +22,14 @@
 // import ProcessBar from  './components/ProcessBar.vue'
 import TheHeader from './layout/TheHeader.vue'
 import TheFooter from './layout/TheFooter.vue'
+import PageContent from './layout/PageContent.vue';
 //import ShopIndex from './components/ShopIndex.vue'
-import ShoppingCart from './components/ShoppingCart.vue'
+//import ShoppingCart from './components/ShoppingCart.vue'
 export default {
   name: 'App',
   components: {
   //  ToDos,TheNavbar,StatusBar,ProcessBar
-  TheHeader,TheFooter,ShoppingCart
+  TheHeader,TheFooter,PageContent
   }
 }
 </script>

@@ -1,5 +1,7 @@
 <template lang="">
+   
     <div>
+        <TheHeaderCur/>  
          <!-- Featured Start -->
     <div class="container-fluid pt-5">
         <div class="row px-xl-5 pb-3">
@@ -439,7 +441,7 @@
 
 
     <!-- Vendor Start -->
-    <div class="container-fluid py-5">
+    <!-- <div class="container-fluid py-5">
         <div class="row px-xl-5">
             <div class="col">
                 <div class="owl-carousel vendor-carousel">
@@ -469,15 +471,17 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </div> -->
+    <!-- </div> -->
     <!-- Vendor End -->
 
     </div>
 </template>
 <script>
+import TheHeaderCur from '../layout/TheHeaderCur.vue'
 export default {
-    name:'ShopIndex'
+    name:'ShopIndex',
+    components:{TheHeaderCur}
 }
 </script>
 <style lang="">
