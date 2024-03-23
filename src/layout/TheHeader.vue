@@ -105,11 +105,11 @@
                     </button>
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav ">
-                            <router-link  class="nav-item nav-link" to="/index"><div class="nav-text">Home</div></router-link>
+                            <router-link  class="nav-item nav-link" to="/" exact><div class="nav-text">Home</div></router-link>
                             <router-link class="nav-item nav-link" to="theshop"><div class="nav-text">Shop</div></router-link>
-                            <router-link to="/productdetail" class="nav-item nav-link">Shop Detail</router-link>
-                            <router-link to="/shoppingcart" class="nav-item nav-link">Shopping Cart</router-link>
-                            <router-link to="/checkout" class="nav-item nav-link">Checkout</router-link>
+                            <router-link to="/productdetail" class="nav-item nav-link"><div class="nav-text">Shop Detail</div></router-link>
+                            <router-link to="/shoppingcart" class="nav-item nav-link"><div class="nav-text">Shopping Cart</div></router-link>
+                            <router-link to="/checkout" class="nav-item nav-link"><div class="nav-text">Check out</div></router-link>
                             <!-- <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle active" data-toggle="dropdown">Pages</a>
                                 <div class="dropdown-menu rounded-0 m-0">
@@ -117,7 +117,7 @@
                                     <a class="dropdown-item">Checkout</a>
                                 </div>
                             </div> -->
-                            <router-link to="/contact"  class="nav-item nav-link">Contact</router-link>
+                            <router-link to="/contact"  class="nav-item nav-link"><div class="nav-text">Contact</div></router-link>
                         </div>
                         <div class="navbar-nav ml-auto py-0">
                             <a href="" class="nav-item nav-link">Login</a>

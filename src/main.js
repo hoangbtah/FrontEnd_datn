@@ -17,7 +17,7 @@ Vue.use(VueRouter)
 const routes = [
   { path: '/', component: UserIndex,
     children: [
-      { path: '/index', component: ShopIndex },
+      { path: '/', component: ShopIndex },
   { path: '/shoppingcart', component: ShoppingCart },
   { path: '/theshop', component: TheShop },
   { path: '/productdetail', component: ProductDetail },
