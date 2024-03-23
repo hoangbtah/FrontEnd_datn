@@ -104,9 +104,9 @@
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-                        <div class="navbar-nav mr-auto py-0">
-                            <router-link  class="nav-item nav-link" to="/">Home</router-link>
-                            <router-link class="nav-item nav-link" to="theshop">Shop</router-link>
+                        <div class="navbar-nav ">
+                            <router-link  class="nav-item nav-link" to="/index"><div class="nav-text">Home</div></router-link>
+                            <router-link class="nav-item nav-link" to="theshop"><div class="nav-text">Shop</div></router-link>
                             <router-link to="/productdetail" class="nav-item nav-link">Shop Detail</router-link>
                             <router-link to="/shoppingcart" class="nav-item nav-link">Shopping Cart</router-link>
                             <router-link to="/checkout" class="nav-item nav-link">Checkout</router-link>
@@ -143,7 +143,7 @@ export default {
 }
 </script>
 <style >
-.router-link-active{
+.router-link-active .nav-text{
    color:#D19C97;
 }
 </style>

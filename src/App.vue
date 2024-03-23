@@ -5,13 +5,14 @@
     <!-- <TheNavbar></TheNavbar>
     <ToDos></ToDos>
     <StatusBar/>
-  
+      <router-view></router-view>
     <ProcessBar/> -->
-    <TheHeader/>
-    <PageContent/>
+    <!-- <TheHeader/>
+    <PageContent/> -->
     <!-- <ShopIndex/> -->
     <!-- <ShoppingCart/> -->
-    <TheFooter/>
+    <!-- <TheFooter/> -->
+    <router-view></router-view>
   </div>
 </template>
 
@@ -20,16 +21,17 @@
 // import TheNavbar from  './components/TheNavbar.vue'
 // import StatusBar from  './components/StatusBar.vue'
 // import ProcessBar from  './components/ProcessBar.vue'
-import TheHeader from './layout/TheHeader.vue'
-import TheFooter from './layout/TheFooter.vue'
-import PageContent from './layout/PageContent.vue';
+// import TheHeader from './layout/TheHeader.vue'
+// import TheFooter from './layout/TheFooter.vue'
+// import PageContent from './layout/PageContent.vue';
 //import ShopIndex from './components/ShopIndex.vue'
 //import ShoppingCart from './components/ShoppingCart.vue'
+
 export default {
   name: 'App',
   components: {
   //  ToDos,TheNavbar,StatusBar,ProcessBar
-  TheHeader,TheFooter,PageContent
+  // TheHeader,TheFooter,PageContent
   }
 }
 </script>
