@@ -3,11 +3,14 @@ import Vuex from 'vuex'
 
 import auth from './modules/auth'
 import todos from './modules/todos'
+import catagorys from './modules/catagory'
+import manufactorers from './modules/manufactorer'
+
 
 Vue.use(Vuex)
 const storeData= {
     modules:{
-        auth,todos
+        auth,todos,catagorys,manufactorers
     }
   
 

@@ -70,28 +70,29 @@
         <div class="row border-top px-xl-5">
             <div class="col-lg-3 d-none d-lg-block">
                 <a class="btn shadow-none d-flex align-items-center justify-content-between bg-primary text-white w-100" data-toggle="collapse" href="#navbar-vertical" style="height: 65px; margin-top: -1px; padding: 0 30px;">
-                    <h6 class="m-0">Categories</h6>
+                    <h6 class="m-0">Thương hiệu</h6>
                     <i class="fa fa-angle-down text-dark"></i>
                 </a>
                 <nav class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0 bg-light" id="navbar-vertical" style="width: calc(100% - 30px); z-index: 1;">
-                    <div class="navbar-nav w-100 overflow-hidden" style="height: 410px">
-                        <div class="nav-item dropdown">
+                    <div class="navbar-nav w-100 overflow-hidden" style="height: 410px"  >
+                        <!-- <div class="nav-item dropdown">
                             <a href="#" class="nav-link" data-toggle="dropdown">Dresses <i class="fa fa-angle-down float-right mt-1"></i></a>
                             <div class="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
                                 <a href="" class="dropdown-item">Men's Dresses</a>
                                 <a href="" class="dropdown-item">Women's Dresses</a>
                                 <a href="" class="dropdown-item">Baby's Dresses</a>
                             </div>
-                        </div>
-                        <a href="" class="nav-item nav-link">Shirts</a>
-                        <a href="" class="nav-item nav-link">Jeans</a>
-                        <a href="" class="nav-item nav-link">Swimwear</a>
+                        </div> -->
+                        <a href="" class="nav-item nav-link"  v-for="manufactorer in manufactorers" :key="manufactorer.manufactorerId"
+                       >{{ manufactorer.manufactorerName }}</a>
+                        <!-- <a href="" class="nav-item nav-link">Jeans</a> -->
+                        <!-- <a href="" class="nav-item nav-link">Swimwear</a>
                         <a href="" class="nav-item nav-link">Sleepwear</a>
                         <a href="" class="nav-item nav-link">Sportswear</a>
                         <a href="" class="nav-item nav-link">Jumpsuits</a>
                         <a href="" class="nav-item nav-link">Blazers</a>
                         <a href="" class="nav-item nav-link">Jackets</a>
-                        <a href="" class="nav-item nav-link">Shoes</a>
+                        <a href="" class="nav-item nav-link">Shoes</a> -->
                     </div>
                 </nav>
             </div>
@@ -110,13 +111,13 @@
                             <router-link to="/productdetail" class="nav-item nav-link"><div class="nav-text">Shop Detail</div></router-link>
                             <router-link to="/shoppingcart" class="nav-item nav-link"><div class="nav-text">Shopping Cart</div></router-link>
                             <router-link to="/checkout" class="nav-item nav-link"><div class="nav-text">Check out</div></router-link>
-                            <!-- <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle active" data-toggle="dropdown">Pages</a>
-                                <div class="dropdown-menu rounded-0 m-0">
-                                    <router-link class="dropdown-item" to="/shoppingcart">Shopping Cart</router-link>
-                                    <a class="dropdown-item">Checkout</a>
+                            <div class="nav-item dropdown" >
+                                <a href="#" class="nav-link dropdown-toggle " data-toggle="dropdown">Danh mục</a>
+                                <div class="dropdown-menu rounded-0 m-0" >
+                                    <a class="dropdown-item" v-for="catagory in catagorys" :key="catagory.catagoryId">{{ catagory.catagoryName }}</a>
+                                    <!-- <a class="dropdown-item">Checkout</a> -->
                                 </div>
-                            </div> -->
+                            </div>
                             <router-link to="/contact"  class="nav-item nav-link"><div class="nav-text">Contact</div></router-link>
                         </div>
                         <div class="navbar-nav ml-auto py-0">
@@ -136,10 +137,19 @@
 </template>
 
 <script>
+import { mapActions ,mapGetters} from 'vuex';
 //import TheHeaderCur from './TheHeaderCur.vue'
 export default {
     name:'TheHeader',
-    components:{}
+    components:{},
+    computed:{...mapGetters(['catagorys','manufactorers'])},
+    created() {
+        this.getCatagorys()
+        this.getManufactorers()
+    },
+    methods:{
+        ...mapActions(['getCatagorys','getManufactorers'])
+    },
 }
 </script>
 <style >
