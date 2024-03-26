@@ -1,15 +1,7 @@
 <template>
-    <div>
-         <!-- <TheNavbar></TheNavbar>
-    <ToDos></ToDos>
-    <StatusBar/>
-  <p</p>
-    <ProcessBar/> -->
-    
+    <div> 
     <TheHeader/>
     <PageContent/>
-    <!-- <ShopIndex/> -->
-    <!-- <ShoppingCart/> -->
     <TheFooter/>
     <!-- show chat bot  -->
     <df-messenger
