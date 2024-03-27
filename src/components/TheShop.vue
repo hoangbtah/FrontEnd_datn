@@ -168,6 +168,7 @@
                                 <img class="img-fluid w-100" :src="productabc.Image" alt="">
                             </div>
                             <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                                <h7 class="text-truncate mb-3">{{productabc.ManufactorerName}}</h7>
                                 <h6 class="text-truncate mb-3">{{productabc.ProductName}}</h6>
                                 <div class="d-flex justify-content-center">
                                     <h6>{{ productabc.Price }}</h6><h6 class="text-muted ml-2"><del>$123.00</del></h6>
