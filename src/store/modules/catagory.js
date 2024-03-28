@@ -1,7 +1,7 @@
 import axios from "axios";
 const catagoryModules={
     state:{
-        catagorys:[]
+        catagorys:[],
     },
     getters:{
         catagorys:state=> state.catagorys

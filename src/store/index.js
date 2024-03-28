@@ -8,6 +8,7 @@ import manufactorers from './modules/manufactorer'
 import products from './modules/product'
 import product from './modules/product'
 import comments from './modules/comment'
+//import productguccis from './modules.product'
 
 
 Vue.use(Vuex)

@@ -74,7 +74,7 @@
                     <i class="fa fa-angle-down text-dark"></i>
                 </a>
                 <nav class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0 bg-light" id="navbar-vertical" style="width: calc(100% - 30px); z-index: 1;">
-                    <div class="navbar-nav w-100 overflow-hidden" style="height: 410px"  >
+                    <div class="navbar-nav w-100 overflow-hidden" style="min-height: 300px"  >
                         <!-- <div class="nav-item dropdown">
                             <a href="#" class="nav-link" data-toggle="dropdown">Dresses <i class="fa fa-angle-down float-right mt-1"></i></a>
                             <div class="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
@@ -83,8 +83,9 @@
                                 <a href="" class="dropdown-item">Baby's Dresses</a>
                             </div>
                         </div> -->
-                        <a href="" class="nav-item nav-link"  v-for="manufactorer in manufactorers" :key="manufactorer.manufactorerId"
-                       >{{ manufactorer.manufactorerName }}</a>
+                        <a class="nav-item nav-link"  v-for="manufactorer in manufactorers" :key="manufactorer.manufactorerId"
+                        @click="getProductsByManufactorerId(manufactorer.manufactorerId)"
+                       > <router-link to="/theshop">{{ manufactorer.manufactorerName }}</router-link></a>
                         <!-- <a href="" class="nav-item nav-link">Jeans</a> -->
                         <!-- <a href="" class="nav-item nav-link">Swimwear</a>
                         <a href="" class="nav-item nav-link">Sleepwear</a>
@@ -114,7 +115,7 @@
                             <div class="nav-item dropdown" >
                                 <a href="#" class="nav-link dropdown-toggle " data-toggle="dropdown">Danh mục</a>
                                 <div class="dropdown-menu rounded-0 m-0" >
-                                    <a class="dropdown-item" v-for="catagory in catagorys" :key="catagory.catagoryId">{{ catagory.catagoryName }}</a>
+                                    <a class="dropdown-item" v-for="catagory in catagorys" :key="catagory.catagoryId" @click="getProductsByCatagoryId(catagory.catagoryId)"><router-link to="/theshop">{{ catagory.catagoryName }}</router-link></a>
                                     <!-- <a class="dropdown-item">Checkout</a> -->
                                 </div>
                             </div>
@@ -148,7 +149,7 @@ export default {
         this.getManufactorers()
     },
     methods:{
-        ...mapActions(['getCatagorys','getManufactorers'])
+        ...mapActions(['getCatagorys','getManufactorers','getProductsByCatagoryId','getProductsByManufactorerId'])
     },
 }
 </script>
