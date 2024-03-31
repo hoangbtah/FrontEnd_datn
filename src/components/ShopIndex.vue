@@ -105,7 +105,7 @@
             <h2 class="section-title px-5"><span class="px-2">GUCCI</span></h2>
         </div>
         <div class="row px-xl-5 pb-3">
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1" v-for="product in products.slice(0, 4)" :key="product.ProductId">
+            <div class="col-lg-3 col-md-6 col-sm-12 pb-1" v-for="product in getGucciProducts()" :key="product.ProductId">
                 <div class="card product-item border-0 mb-4" >
                     <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
                         <img class="img-fluid w-100" :src="product.Image" alt="">
@@ -118,7 +118,8 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between bg-light border">
-                        <router-link to="/productdetail" class="btn btn-sm text-dark p-0" ><button @click.stop="getProduct(product.ProductId)" @click ="getComments(product.ProductId)" style="border: none; background-color: transparent;"><i class="fas fa-eye text-primary mr-1"></i>View Detail</button></router-link>
+                        <router-link to="/productdetail" class="btn btn-sm text-dark p-0" ><button @click="handleProductClick(product.ProductId)"
+                         style="border: none; background-color: transparent;"><i class="fas fa-eye text-primary mr-1"></i>View Detail</button></router-link>
                         <router-link to="/shoppingcart" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</router-link>
                     </div>
                 </div>
@@ -127,7 +128,35 @@
         </div>
     </div>
     <!-- Products End -->
-
+      <!-- Products Start -->
+      <div class="container-fluid pt-5">
+        <div class="text-center mb-4">
+            <h2 class="section-title px-5"><span class="px-2">VALENTINO</span></h2>
+        </div>
+        <div class="row px-xl-5 pb-3">
+            <div class="col-lg-3 col-md-6 col-sm-12 pb-1"  v-for="product in getValentinoProducts()" :key="product.ProductId">
+                <div class="card product-item border-0 mb-4">
+                    <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                        <img class="img-fluid w-100" :src="product.Image" alt="">
+                    </div>
+                    <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                        <h7 class="text-truncate mb-3">{{product.ManufactorerName}}</h7>
+                        <h6 class="text-truncate mb-3">{{product.ProductName}}</h6>
+                        <div class="d-flex justify-content-center">
+                            <h6>{{product.Price}}VNĐ</h6><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+                        </div>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between bg-light border">
+                        <router-link to="/productdetail" class="btn btn-sm text-dark p-0" ><button @click="handleProductClick(product.ProductId)" 
+                        style="border: none; background-color: transparent;"><i class="fas fa-eye text-primary mr-1"></i>View Detail</button></router-link>
+                        <router-link to="/shoppingcart" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</router-link>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <!-- Products End -->
 
     <!-- Subscribe Start -->
     <div class="container-fluid bg-secondary my-5">
@@ -149,16 +178,14 @@
         </div>
     </div>
     <!-- Subscribe End -->
-
-
-    <!-- Products Start -->
-    <div class="container-fluid pt-5">
+        <!-- Products Start -->
+        <div class="container-fluid pt-5">
         <div class="text-center mb-4">
-            <h2 class="section-title px-5"><span class="px-2">Just Arrived</span></h2>
+            <h2 class="section-title px-5"><span class="px-2">NARCISO RODRIGUEZ</span></h2>
         </div>
         <div class="row px-xl-5 pb-3">
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1" v-for="product in products.slice(0, 4)" :key="product.ProductId">
-                <div class="card product-item border-0 mb-4" >
+            <div class="col-lg-3 col-md-6 col-sm-12 pb-1"  v-for="product in getNARCISOProducts()" :key="product.ProductId">
+                <div class="card product-item border-0 mb-4">
                     <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
                         <img class="img-fluid w-100" :src="product.Image" alt="">
                     </div>
@@ -170,7 +197,7 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between bg-light border">
-                        <router-link to="/productdetail" class="btn btn-sm text-dark p-0" ><button @click.stop="getProduct(product.ProductId)" @click ="getComments(product.ProductId)" style="border: none; background-color: transparent;"><i class="fas fa-eye text-primary mr-1"></i>View Detail</button></router-link>
+                        <router-link to="/productdetail" class="btn btn-sm text-dark p-0" ><button @click="handleProductClick(product.ProductId)"  style="border: none; background-color: transparent;"><i class="fas fa-eye text-primary mr-1"></i>View Detail</button></router-link>
                         <router-link to="/shoppingcart" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</router-link>
                     </div>
                 </div>
@@ -180,6 +207,35 @@
     </div>
     <!-- Products End -->
 
+        <!-- Products Start -->
+        <div class="container-fluid pt-5">
+        <div class="text-center mb-4">
+            <h2 class="section-title px-5"><span class="px-2">BURBERRY</span></h2>
+        </div>
+        <div class="row px-xl-5 pb-3">
+            <div class="col-lg-3 col-md-6 col-sm-12 pb-1"  v-for="product in getBURBERRYProducts()" :key="product.ProductId">
+                <div class="card product-item border-0 mb-4">
+                    <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                        <img class="img-fluid w-100" :src="product.Image" alt="">
+                    </div>
+                    <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                        <h7 class="text-truncate mb-3">{{product.ManufactorerName}}</h7>
+                        <h6 class="text-truncate mb-3">{{product.ProductName}}</h6>
+                        <div class="d-flex justify-content-center">
+                            <h6>{{product.Price}}VNĐ</h6><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+                        </div>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between bg-light border">
+                        <router-link to="/productdetail"  class="btn btn-sm text-dark p-0" ><button @click="handleProductClick(product.ProductId)" style="border: none; background-color: transparent;"><i class="fas fa-eye text-primary mr-1"></i>View Detail</button></router-link>
+                        <router-link to="/shoppingcart" class="btn btn-sm text-dark p-0" ><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</router-link>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <!-- Products End -->
+   
 
     <!-- Vendor Start -->
     <!-- <div class="container-fluid py-5">
@@ -232,7 +288,33 @@ export default {
         
     },
     methods:{
-        ...mapActions(['getProducts','getProduct','getComments'])      
+        ...mapActions(['getProducts','getProduct','getComments']),
+        getValentinoProducts() {
+            return this.products.filter(product => product.ManufactorerName === 'VALENTINO').slice(0, 4);
+        },
+        getGucciProducts() {
+        return this.products.filter(product => product.ManufactorerName === 'GUCCI').slice(0, 4);
+         },       
+         getNARCISOProducts() {
+        return this.products.filter(product => product.ManufactorerName === 'NARCISO RODRIGUEZ').slice(0, 4);
+         },
+         getBURBERRYProducts() {
+        return this.products.filter(product => product.ManufactorerName === 'BURBERRY').slice(0, 4);
+         },
+  goToShoppingCart() {
+    console.log("get");
+        // this.$router.push('/productdetail');
+        // Cuộn đến đầu trang sau khi trang được tải hoàn toàn
+        this.$nextTick(() => {
+            window.scrollTo(0, 0);
+        });
+    },
+    handleProductClick(productId) {
+        this.getProduct(productId);
+        this.getComments(productId);
+        this.goToShoppingCart();
+    }
+
     },
 }
 </script>

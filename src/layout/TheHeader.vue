@@ -122,8 +122,8 @@
                             <router-link to="/contact"  class="nav-item nav-link"><div class="nav-text">Contact</div></router-link>
                         </div>
                         <div class="navbar-nav ml-auto py-0">
-                            <a href="" class="nav-item nav-link">Login</a>
-                            <a href="" class="nav-item nav-link">Register</a>
+                            <router-link to="/login" class="nav-item nav-link"><div class="nav-text">Login</div></router-link>
+                            <router-link to="/register" class="nav-item nav-link"><div class="nav-text">Register</div></router-link>
                         </div>
                     </div>
                 </nav>

@@ -10,7 +10,8 @@ import TheCheckout from './components/TheCheckout.vue'
 import TheContact from './components/TheContact.vue'
 import AdminIndex from './layout/Admin/AdminIndex.vue'
 import UserIndex from './layout/UserIndex.vue'
-
+import TheLogin from './components/TheLogin.vue'
+import TheRegister from './components/TheRegister.vue'
 
 Vue.config.productionTip = false
 Vue.use(VueRouter)
@@ -22,11 +23,14 @@ const routes = [
   { path: '/theshop', component: TheShop },
   { path: '/productdetail', component: ProductDetail },
   { path: '/checkout', component: TheCheckout },
-  { path: '/contact', component: TheContact }
+  { path: '/contact', component: TheContact },
+ 
     ]
   },
 
-  {path:'/admin',component:AdminIndex}
+  {path:'/admin',component:AdminIndex},
+  { path: '/login', component: TheLogin },
+  { path: '/register', component: TheRegister },
 ];
 
 const router = new VueRouter({
