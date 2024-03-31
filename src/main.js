@@ -8,14 +8,17 @@ import TheShop from './components/TheShop.vue'
 import ProductDetail from './components/ProductDetail.vue'
 import TheCheckout from './components/TheCheckout.vue'
 import TheContact from './components/TheContact.vue'
-import AdminIndex from './layout/Admin/AdminIndex.vue'
+import AdminIndex from './layout/Admin/layout/AdminIndex.vue'
 import UserIndex from './layout/UserIndex.vue'
 import TheLogin from './components/TheLogin.vue'
 import TheRegister from './components/TheRegister.vue'
+import ProductList from './layout/Admin/view/product/ProductList'
+import CatagoryList from './layout/Admin/view/catagory/CatagoryList.vue'
 
 Vue.config.productionTip = false
 Vue.use(VueRouter)
 const routes = [
+  /// điều hướng của phẩn user
   { path: '/', component: UserIndex,
     children: [
       { path: '/', component: ShopIndex },
@@ -27,8 +30,14 @@ const routes = [
  
     ]
   },
+  /// điều hướng của admin
+  { path: '/admin', component: AdminIndex,
+  children: [
+    { path: '', component: ProductList },
+{ path: '/catagory', component: CatagoryList },
+  ]
+},
 
-  {path:'/admin',component:AdminIndex},
   { path: '/login', component: TheLogin },
   { path: '/register', component: TheRegister },
 ];

@@ -176,7 +176,7 @@
                             </div>
                             <div class="card-footer d-flex justify-content-between bg-light border">
                                 <!-- <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a> -->
-                                <router-link to="/productdetail" class="btn btn-sm text-dark p-0" ><button @click.stop="getProduct(productabc.ProductId)" @click ="getComments(productabc.ProductId)" style="border: none; background-color: transparent;"><i class="fas fa-eye text-primary mr-1"></i>View Detail</button></router-link>
+                                <router-link to="/productdetail" class="btn btn-sm text-dark p-0" ><button  @click ="handleProductClick(productabc.ProductId)" style="border: none; background-color: transparent;"><i class="fas fa-eye text-primary mr-1"></i>View Detail</button></router-link>
                                 <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
                             </div>
                         </div>
@@ -202,6 +202,14 @@ export default {
     },
     methods:{
         ...mapActions(['getProducts','getProduct','getComments']),
+        handleProductClick(productId) {
+        this.getProduct(productId);
+        this.getComments(productId);
+        this.$nextTick(() => {
+            window.scrollTo(0, 0);
+        });
+    }
+
       
     },
 }
