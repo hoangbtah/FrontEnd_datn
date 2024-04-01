@@ -14,6 +14,7 @@ import TheLogin from './components/TheLogin.vue'
 import TheRegister from './components/TheRegister.vue'
 import ProductList from './layout/Admin/view/product/ProductList'
 import CatagoryList from './layout/Admin/view/catagory/CatagoryList.vue'
+import EmployeeList from './layout/Admin/view/employee/EmployeeList.vue'
 
 Vue.config.productionTip = false
 Vue.use(VueRouter)
@@ -35,6 +36,7 @@ const routes = [
   children: [
     { path: '', component: ProductList },
 { path: '/catagory', component: CatagoryList },
+{ path: '/employee', component: EmployeeList },
   ]
 },
 

@@ -1,0 +1,63 @@
+@import url(./component/table.css);
+@import url(./component/dialog.css);
+@import url(./component/button.css);
+@import url(./component/page.css);
+@import url(./component/icon.css);
+@import url(./component/input.css);
+@import url(./component/combobox.css);
+body {
+    font-family:Googlesand Bolds ;
+    font-size: 13px;
+    margin: 0px;
+}
+@font-face{
+    font-family: Googlesand Bolds ;
+    src: url(../fonts/GoogleSans-Bold.otf);
+} 
+ @font-face{
+    font-family: Googlesand Mediums ;
+    src: url(../fonts/GoogleSans-Medium.otf);
+}
+@font-face{
+    font-family: Googlesand Regular ;
+    src: url(../fonts/GoogleSans-Regular.otf);
+}
+.m-login{
+    background-color: rgb(0, 255, 0);
+    color: #333;
+    border-radius: 50%;
+}
+.main{
+    display: flex;
+    width: 100%;
+    height: calc(100vh - 48px);
+}
+.m-row{
+    width: 100%;
+}
+.m-loading{
+    position: fixed;
+    display: none;
+    top:0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+    background-color: #fff;
+}
+.m-loading .m-loading-icon{
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    top: 50%;
+    left: 50%; 
+     transform: translate(-50%,-50%);
+}
+@keyframes spin{
+    0%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}

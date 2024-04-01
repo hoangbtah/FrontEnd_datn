@@ -20,7 +20,7 @@
                    
                </div>
                <div class="menu-text">
-                   Tiền gửi
+                   Quản lý hãng sản xuất
                </div>
            </div>
            <div class="menu-item">
@@ -28,17 +28,17 @@
                    
                </div>
                <div class="menu-text">
-                   Mua hàng
+                   Quản lý đơn hàng
                </div>
            </div>
-           <div class="menu-item">
+           <router-link to="/employee" class="menu-item">
                <div class="menu-icon m-icon-sell">
                    
                </div>
                <div class="menu-text">
-                   Bán hàng
+                   Quản lý nhân viên
                </div>
-           </div>
+           </router-link>
            <div class="menu-item">
                <div class="menu-icon m-icon-invoice-management">
                    
@@ -57,10 +57,13 @@ export default {
    
 }
 </script>
-<style scoped>
-@import url("../../../assets/css/admincss/style/layout/navbar.css");
-.navbar a{
+<style>
+@import url("../../../assets_ad/css_ad/layout/navbar.css");
+.navbaradmin a{
    text-decoration: none;
    color: unset;
+}
+.navbaradmin a:hover{
+    text-decoration: none;
 }
 </style>

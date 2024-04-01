@@ -18,7 +18,7 @@ export default {
   
   
 }
-@import url('./assets/css/style.css');
+/* @import url('./assets/css/style.css'); */
 /* @import url('./assets/css/admincss/main.css') */
 
 </style>

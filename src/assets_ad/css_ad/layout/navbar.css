@@ -1,0 +1,49 @@
+.navbaradmin{
+    height: 100%;
+    width: 226px;
+    flex-shrink: 0;
+    font-size: 13px;
+    font-family: Googlesand Mediums ;
+    background-color: #FFFFFF;
+    overflow-y: auto;
+}
+.navbaradmin .menu-item{
+    display: flex;
+    height:44px;
+    width: 100%;
+    box-sizing: border-box;
+    align-items: center;
+}
+.navbaradmin .menu-item:hover{
+    background-color: #e5e5e5;
+    color: #000;
+    font-family: Googlesand Regular ;
+    
+
+}
+/* .menu-item.menu-item-focus{
+    background-color: #019160;
+    color: #fff;
+    font-family: Googlesand Mediums ;
+} */
+.menu-item .menu-icon{
+    flex-shrink: 0;
+    margin-left: 16px;
+    margin-right: 8px;
+    width: 20px;
+    height: 20px;
+    align-items: center;
+  
+}
+.navbaradmin .menu-item .menu-text{
+    font-size: 13px;
+
+}
+.navbaradmin .router-link-active{
+    background-color: #019160;
+    color: #fff;
+    font-family: Googlesand Mediums ;
+}
+/* .router-link-active .menu-text{
+    color: #fff;
+} */

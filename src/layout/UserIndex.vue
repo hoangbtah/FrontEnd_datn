@@ -28,6 +28,6 @@ export default {
 
 }
 </script>
-<style lang="">
-/* @import url('./assets/css/style.css'); */
+<style scoped>
+@import url('../assets/css/style.css');
 </style>
