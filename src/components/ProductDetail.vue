@@ -269,7 +269,7 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between bg-light border">
-                        <router-link to="/productdetail" class="btn btn-sm text-dark p-0" ><button @click.stop="getProduct(product.ProductId)" @click ="getComments(product.ProductId)" style="border: none; background-color: transparent;"><i class="fas fa-eye text-primary mr-1"></i>View Detail</button></router-link>
+                        <router-link to="/productdetail" class="btn btn-sm text-dark p-0" ><button @click="handleProductClick(product.ProductId)"  style="border: none; background-color: transparent;"><i class="fas fa-eye text-primary mr-1"></i>View Detail</button></router-link>
                         <router-link to="/shoppingcart" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</router-link>
                     </div>
                 </div>
@@ -290,7 +290,20 @@ export default {
         
     },
     methods:{
-        ...mapActions(['getProduct','getProducts']),
+        ...mapActions(['getProduct','getProducts','getComments']),
+        goToShoppingCart() {
+    console.log("get");
+        // this.$router.push('/productdetail');
+        // Cuộn đến đầu trang sau khi trang được tải hoàn toàn
+        this.$nextTick(() => {
+            window.scrollTo(0, 0);
+        });
+    },
+    handleProductClick(productId) {
+        this.getProduct(productId);
+        this.getComments(productId);
+        this.goToShoppingCart();
+    }
     },
 }
 </script>

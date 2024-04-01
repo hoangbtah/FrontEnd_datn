@@ -17,6 +17,6 @@ export default {
     components:{TheHeader,TheNav,ThePagecontent}
 }
 </script>
-<style>
+<style scoped="">
 @import url('../../../assets_ad/css_ad/main.css');  
 </style>

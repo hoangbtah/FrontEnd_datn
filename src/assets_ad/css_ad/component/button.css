@@ -43,4 +43,24 @@
     background-color:rgb(240, 226, 226);
     color: #31e451;
 }
-
+.m-option{
+    display: flex;
+    justify-content: center;
+}
+.m-btn-option{
+    color: #333;
+    line-height: 10px;
+    /* width: 90px; */
+    height: 30px;
+    border-radius: 4px;
+    border: none;
+    text-align: center;
+    margin-left: 5px;
+    background-color:#31e451 ;
+}
+.m-btn-option.m-btn-ud{
+    width: 50px;
+}
+.m-btn-option.m-btn-de{
+    width: 70px;
+}

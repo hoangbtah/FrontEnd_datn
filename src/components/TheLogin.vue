@@ -12,7 +12,7 @@
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required>
       </div>
-      <button type="submit">Đăng nhập</button>
+      <button  type="submit">Đăng nhập</button>
     </form>
   </div>
    </div>
@@ -22,7 +22,7 @@ export default {
     name:'TheLogin'
 }
 </script>
-<style>
+<style scoped>
 .login{
     display: flex;
   justify-content: center;
