@@ -3,14 +3,13 @@ const productModules={
     state:{
         products:[],
         product:{},
-        // productguccis:[],
-        // productvalentinos:[],
-        // gucci:'5f5bcd29-e832-11ee-acd2-7f3381ec1cc9',
+      //  productsby:[],
     },
     getters:{
         products:state=> state.products,
         product:state=> state.product,
-       // product:state=> state.productguccis
+      //  productsby:state=>state.productsby
+      
     },
     actions:{
 

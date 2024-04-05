@@ -28,27 +28,27 @@
                         </div>
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                             <input type="checkbox" class="custom-control-input" id="price-1">
-                            <label class="custom-control-label" for="price-1">$0 - $100</label>
+                            <label class="custom-control-label" for="price-1">199 k - 399k</label>
                             <!-- <span class="badge border font-weight-normal">150</span> -->
                         </div>
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                             <input type="checkbox" class="custom-control-input" id="price-2">
-                            <label class="custom-control-label" for="price-2">$100 - $200</label>
+                            <label class="custom-control-label" for="price-2">400k - 599k</label>
                             <!-- <span class="badge border font-weight-normal">295</span> -->
                         </div>
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                             <input type="checkbox" class="custom-control-input" id="price-3">
-                            <label class="custom-control-label" for="price-3">$200 - $300</label>
+                            <label class="custom-control-label" for="price-3">600k - 999k</label>
                             <!-- <span class="badge border font-weight-normal">246</span> -->
                         </div>
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                             <input type="checkbox" class="custom-control-input" id="price-4">
-                            <label class="custom-control-label" for="price-4">$300 - $400</label>
+                            <label class="custom-control-label" for="price-4">1000k - 1999k</label>
                             <!-- <span class="badge border font-weight-normal">145</span> -->
                         </div>
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
                             <input type="checkbox" class="custom-control-input" id="price-5">
-                            <label class="custom-control-label" for="price-5">$400 - $500</label>
+                            <label class="custom-control-label" for="price-5">2000k - $</label>
                             <!-- <span class="badge border font-weight-normal">168</span> -->
                         </div>
                     </form>
@@ -162,7 +162,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-sm-12 pb-1" v-for="productabc in products" :key="productabc.ProductId">
+                    <div class="col-lg-4 col-md-6 col-sm-12 pb-1" v-for="productabc in items" :key="productabc.ProductId">
                         <div class="card product-item border-0 mb-4">
                             <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
                                 <img class="img-fluid w-100" :src="productabc.Image" alt="">
@@ -181,7 +181,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 pb-1">
+                    <!-- <div class="col-12 pb-1">
                         <nav aria-label="Page navigation">
                           <ul class="pagination justify-content-center mb-3">
                             <li class="page-item disabled">
@@ -201,6 +201,34 @@
                             </li>
                           </ul>
                         </nav>
+                    </div> -->
+                    <div class="col-12 pb-1">
+                        <nav aria-label="Page navigation">
+                          <ul class="pagination justify-content-center mb-3">
+                            <li class="page-item">
+                              <a class="page-link"  @click="prevPage" :disabled="pageNumber === 1" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Previous</span>
+                              </a> 
+                            </li>
+                            <!-- <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li> -->
+                            <li class="page-item" v-for="page in displayedPages" :key="page" @click="gotoPage(page)" :class="{ 'active': page === pageNumber }"><a class="page-link" href="#">{{ page }}</a></li>
+                            <li class="page-item">
+                              <a class="page-link" @click="nextPage" :disabled="pageNumber === totalPages" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Next</span>
+                              </a>
+                             
+                            </li>
+                            <!-- <li>
+                                <button @click="prevPage" :disabled="pageNumber === 1">Prev</button>
+                                <button v-for="page in displayedPages" :key="page" @click="gotoPage(page)" :class="{ 'active': page === pageNumber }">{{ page }}</button>
+                                <button @click="nextPage" :disabled="pageNumber === totalPages">Next</button>
+                            </li> -->
+                          </ul>
+                          
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -213,11 +241,22 @@
 </template>
 <script>
 import { mapActions ,mapGetters} from 'vuex';
+import axios from "axios";
 export default {
     name:'TheShop',
-    computed:{...mapGetters(['products','product'])},
+    computed:{...mapGetters(['products','product']),
+      // hiển thị trang
+      displayedPages() {
+      const start = Math.max(1,this.pageNumber - Math.floor(this.maxDisplayedPages / 2)
+      );
+      const end = Math.min(this.totalPages, start + this.maxDisplayedPages - 1);
+      return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+    }
+    },
     created() {
-        this.getProducts()
+        this.getProducts();
+        this.fetchItems();
+        this.total();
         
     },
     methods:{
@@ -228,12 +267,61 @@ export default {
         this.$nextTick(() => {
             window.scrollTo(0, 0);
         });
+    },
+    async fetchItems() {
+      try {
+        const response = await axios.get(
+          `https://localhost:7159/api/v1/Product/products/search?pagenumber=${
+            this.pageNumber
+          }&pagesize=${this.pageSize}`
+        );
+        this.items = response.data;
+        // Update total pages based on response or some other logic
+        // this.totalPages = response.headers['x-total-pages'];
+        console.log(this.totalPages);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    nextPage() {
+      if (this.pageNumber < this.totalPages) {
+        this.pageNumber++;
+        this.fetchItems();
+      }
+    },
+    prevPage() {
+      if (this.pageNumber > 1) {
+        this.pageNumber--;
+        this.fetchItems();
+      }
+    },
+    gotoPage(page) {
+      if (page !== this.pageNumber) {
+        this.pageNumber = page;
+        this.fetchItems();
+        // khi chuyển sang trang di chuyển lên vị trí đầu trang
+        this.$nextTick(() => {
+            window.scrollTo(0, 0);
+        });
+      }
+    },
+    total() {
+      (this.totalPages = Math.ceil(this.products.length / this.pageSize))
     }
 
       
     },
+    data() {
+    return {
+      items: [],
+      pageNumber: 1,
+      pageSize: 9,
+      totalPages: 0,
+      maxDisplayedPages: 5
+    };
+  }
 }
 </script>
-<style lang="">
+<style>
     
 </style>

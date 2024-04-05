@@ -32,7 +32,7 @@
                              </tr>       
                             </thead>     
                             <tbody>
-                                <tr v-for="productad in products" :key="productad.ProductId">
+                                <tr v-for="productad in items" :key="productad.ProductId">
                                     <td><input type="checkbox" class="m-select-row"></td>
                                     <td>{{ productad.ProductName }}</td>
                                     <td>{{ productad.Price }}</td>
@@ -70,6 +70,7 @@
                             </div>
                             <div class="m-number">
                                 <button @click="prevPage" :disabled="pageNumber === 1">Prev</button>
+                                <button v-for="page in displayedPages" :key="page" @click="gotoPage(page)" :class="{ 'm-page-selected': page === pageNumber }">{{ page }}</button>
                                 <button @click="nextPage" :disabled="pageNumber === totalPages">Next</button>
                                 <!-- <button >Trước</button>
                                 <button class="m-page-selected">1</button>
@@ -86,65 +87,73 @@
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
-//import axios from "axios";
+import axios from "axios";
 export default {
   name: "EmployeeList",
-  computed: { ...mapGetters(["product", "comments", "products"]) },
+  computed: {
+    ...mapGetters(["product", "comments", "products"]),
+    // hiển thị trang
+    displayedPages() {
+      const start = Math.max(1,this.pageNumber - Math.floor(this.maxDisplayedPages / 2)
+      );
+      const end = Math.min(this.totalPages, start + this.maxDisplayedPages - 1);
+      return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+    }
+  },
   created() {
-      this.getProduct()
-     // this.fetchItems();
-
+    this.getProducts();
+    this.fetchItems();
+    this.total();
   },
   methods: {
     ...mapActions(["getProduct", "getProducts", "getComments"]),
-    //     goToShoppingCart() {
-    // console.log("get");
-    //     // this.$router.push('/productdetail');
-    //     // Cuộn đến đầu trang sau khi trang được tải hoàn toàn
-    //     this.$nextTick(() => {
-    //         window.scrollTo(0, 0);
-    //     });
-    // },
-    // handleProductClick(productId) {
-    //     this.getProduct(productId);
-    //     this.getComments(productId);
-    //     this.goToShoppingCart();
-    // }
-//     async fetchItems() {
-//       try {
-//         const response = await axios.get(
-//           `https://localhost:7159/api/v1/Product/products/search?pagenumber=${this.pageNumber}&pagesize=${this.pageSize}`
-//         );
-//         this.items = response.data;
-//         // Update total pages based on response or some other logic
-//           this.totalPages = response.headers['x-total-pages'];
-//       } catch (error) {
-//         console.error(error);
-//       }
-//     },
-//     nextPage() {
-//      // if (this.pageNumber < this.totalPages) {
-//         this.pageNumber++;
-//         this.fetchItems();
-//      // }
-//     },
-//     prevPage() {
-//       if (this.pageNumber > 1) {
-//         this.pageNumber--;
-//         this.fetchItems();
-//       }
-//     }
+    //lấy sản phẩm theo phân trang lọc tìm kiếm
+    async fetchItems() {
+      try {
+        const response = await axios.get(
+          `https://localhost:7159/api/v1/Product/products/search?pagenumber=${
+            this.pageNumber
+          }&pagesize=${this.pageSize}`
+        );
+        this.items = response.data;
+        // Update total pages based on response or some other logic
+        // this.totalPages = response.headers['x-total-pages'];
+        console.log(this.totalPages);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    nextPage() {
+      if (this.pageNumber < this.totalPages) {
+        this.pageNumber++;
+        this.fetchItems();
+      }
+    },
+    prevPage() {
+      if (this.pageNumber > 1) {
+        this.pageNumber--;
+        this.fetchItems();
+      }
+    },
+    gotoPage(page) {
+      if (page !== this.pageNumber) {
+        this.pageNumber = page;
+        this.fetchItems();
+      }
+    },
+    total() {
+      (this.totalPages = Math.ceil(this.products.length / this.pageSize))
+    }
   },
-//   data() {
-//     return {
-//       items: [],
-//       pageNumber: 1,
-//       pageSize: 10,
-//        totalPages: 0
-//     };
-//   },
-
-
+  data() {
+    return {
+      items: [],
+      pageNumber: 1,
+      pageSize: 3,
+      totalPages: 0,
+      maxDisplayedPages: 5
+    };
+  }
 };
 </script>
 <style>

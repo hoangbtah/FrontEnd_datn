@@ -38,7 +38,7 @@
                         </div>
                     </div>
                     <div class="col-md-4 mb-5">
-                        <h5 class="font-weight-bold text-dark mb-4">Newsletter</h5>
+                        <h5 class="font-weight-bold text-dark mb-4">News letter</h5>
                         <form action="">
                             <div class="form-group">
                                 <input type="text" class="form-control border-0 py-4" placeholder="Your Name" required="required" />
