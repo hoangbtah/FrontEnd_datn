@@ -70,8 +70,29 @@
         </div>
 </template>
 <script>
+import { mapActions ,mapGetters} from 'vuex';
 export default {
-    
+    name:'EmployeeList',
+    computed:{...mapGetters(['product','comments','products'])},
+    created() {
+        this.getProduct()    
+    },
+    methods:{
+        ...mapActions(['getProduct','getProducts','getComments']),
+    //     goToShoppingCart() {
+    // console.log("get");
+    //     // this.$router.push('/productdetail');
+    //     // Cuộn đến đầu trang sau khi trang được tải hoàn toàn
+    //     this.$nextTick(() => {
+    //         window.scrollTo(0, 0);
+    //     });
+    // },
+    // handleProductClick(productId) {
+    //     this.getProduct(productId);
+    //     this.getComments(productId);
+    //     this.goToShoppingCart();
+    // }
+    },
 }
 </script>
 <style>

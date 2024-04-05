@@ -69,12 +69,14 @@
                                 </select>
                             </div>
                             <div class="m-number">
-                                <button >Trước</button>
+                                <button @click="prevPage" :disabled="pageNumber === 1">Prev</button>
+                                <button @click="nextPage" :disabled="pageNumber === totalPages">Next</button>
+                                <!-- <button >Trước</button>
                                 <button class="m-page-selected">1</button>
                             <button >2</button>
                             <button >3</button>
                             <button >4</button>
-                            <button >Sau</button>
+                            <button >Sau</button> -->
                             </div>
                            
                         </div>
@@ -83,15 +85,18 @@
             </div>
 </template>
 <script>
-import { mapActions ,mapGetters} from 'vuex';
+import { mapActions, mapGetters } from "vuex";
+//import axios from "axios";
 export default {
-    name:'EmployeeList',
-    computed:{...mapGetters(['product','comments','products'])},
-    created() {
-        this.getProduct()    
-    },
-    methods:{
-        ...mapActions(['getProduct','getProducts','getComments']),
+  name: "EmployeeList",
+  computed: { ...mapGetters(["product", "comments", "products"]) },
+  created() {
+      this.getProduct()
+     // this.fetchItems();
+
+  },
+  methods: {
+    ...mapActions(["getProduct", "getProducts", "getComments"]),
     //     goToShoppingCart() {
     // console.log("get");
     //     // this.$router.push('/productdetail');
@@ -105,11 +110,45 @@ export default {
     //     this.getComments(productId);
     //     this.goToShoppingCart();
     // }
-    },
-}
+//     async fetchItems() {
+//       try {
+//         const response = await axios.get(
+//           `https://localhost:7159/api/v1/Product/products/search?pagenumber=${this.pageNumber}&pagesize=${this.pageSize}`
+//         );
+//         this.items = response.data;
+//         // Update total pages based on response or some other logic
+//           this.totalPages = response.headers['x-total-pages'];
+//       } catch (error) {
+//         console.error(error);
+//       }
+//     },
+//     nextPage() {
+//      // if (this.pageNumber < this.totalPages) {
+//         this.pageNumber++;
+//         this.fetchItems();
+//      // }
+//     },
+//     prevPage() {
+//       if (this.pageNumber > 1) {
+//         this.pageNumber--;
+//         this.fetchItems();
+//       }
+//     }
+  },
+//   data() {
+//     return {
+//       items: [],
+//       pageNumber: 1,
+//       pageSize: 10,
+//        totalPages: 0
+//     };
+//   },
+
+
+};
 </script>
 <style>
 @import url("../../../..//assets_ad/css_ad/layout/content.css");
-@import url('../../../../assets_ad/css_ad/page/employ.css');
-@import url('../../../../assets_ad/css_ad/component/page.css');    
+@import url("../../../../assets_ad/css_ad/page/employ.css");
+@import url("../../../../assets_ad/css_ad/component/page.css");
 </style>
