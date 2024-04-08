@@ -60,6 +60,8 @@ export default {
            // this.registrationSuccess=true;
           console.log(respone.data);
           this.auth.isEmployee= true;
+          this.auth.isAuthenticated=false;
+          this.auth.username=this.username;
           this.registrationError='';
          this.$router.push('/shoppingcart');
 

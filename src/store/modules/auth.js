@@ -2,6 +2,7 @@ const state= {
     auth:{
         isAuthenticated:true,
         isEmployee:false,
+        username:'',
     }
 }
 const getters={

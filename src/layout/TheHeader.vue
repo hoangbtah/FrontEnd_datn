@@ -122,8 +122,13 @@
                             <router-link to="/contact"  class="nav-item nav-link"><div class="nav-text">Contact</div></router-link>
                         </div>
                         <div class="navbar-nav ml-auto py-0">
-                            <router-link to="/login" class="nav-item nav-link"><div class="nav-text">Login</div></router-link>
+                           <div v-if="auth.isAuthenticated"> <router-link to="/login" class="nav-item nav-link"><div class="nav-text">Login</div></router-link></div>
+                           <div v-else>
+                            <a class="nav-item nav-link"><div class="nav-text">{{ auth.username }}</div></a></div>
                             <router-link to="/register" class="nav-item nav-link"><div class="nav-text">Register</div></router-link>
+                            <div v-if="auth.isAuthenticated==false"><a class="nav-item nav-link" @click="logout()"><div class="nav-text">Logout</div></a>
+                            </div>
+                          
                         </div>
                     </div>
                 </nav>
@@ -138,23 +143,47 @@
 </template>
 
 <script>
-import { mapActions ,mapGetters} from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 //import TheHeaderCur from './TheHeaderCur.vue'
 export default {
-    name:'TheHeader',
-    components:{},
-    computed:{...mapGetters(['catagorys','manufactorers'])},
-    created() {
-        this.getCatagorys()
-        this.getManufactorers()
-    },
-    methods:{
-        ...mapActions(['getCatagorys','getManufactorers','getProductsByCatagoryId','getProductsByManufactorerId'])
-    },
-}
+  name: "TheHeader",
+  components: {},
+  computed: { ...mapGetters(["catagorys", "manufactorers", "auth"]) },
+  created() {
+    this.getCatagorys();
+    this.getManufactorers();
+  },
+  methods: {
+    ...mapActions([
+      "getCatagorys",
+      "getManufactorers",
+      "getProductsByCatagoryId",
+      "getProductsByManufactorerId"
+    ]),
+    logout() {
+      // this.auth.isAuthenticated = true;
+      // localStorage.setItem('token', '');
+      //   this.$nextTick(() => {
+      //     this.auth.username = ""; // Đặt lại giá trị của username sau khi Vue cập nhật DOM
+      //     this.auth.isAuthenticated = true;
+      //     localStorage.setItem('token', '');
+
+      //   });
+      // Xóa token khỏi localStorage
+      localStorage.removeItem("token");
+
+      // Đặt lại trạng thái ủy quyền (authenticated) và dữ liệu cần thiết khác
+      this.auth.isAuthenticated = false;
+      this.auth.username = "";
+
+      // Cập nhật giao diện hoặc chuyển hướng đến trang đăng nhập
+      this.$router.push("/login");
+    }
+  }
+};
 </script>
 <style >
-.router-link-active .nav-text{
-   color:#D19C97;
+.router-link-active .nav-text {
+  color: #d19c97;
 }
 </style>
