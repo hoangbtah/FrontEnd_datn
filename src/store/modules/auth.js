@@ -1,10 +1,11 @@
 const state= {
     auth:{
-        isAuthenticated:true
+        isAuthenticated:true,
+        isEmployee:false,
     }
 }
 const getters={
-    auth :state=> state.auth
+    auth :state=> state.auth,
 }
 const actions={
 

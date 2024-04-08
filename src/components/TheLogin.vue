@@ -2,24 +2,76 @@
    <div class="login">
     <div class="login-container">
         <h1>E SHOPPER</h1>
-    <form class="login-form" action="#" method="POST">
+    <form class="login-form"  @submit.prevent="Login">
       <h5>Đăng nhập</h5>
-      <div class="input-group">
+      <!-- <div class="input-group">
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required>
+      </div> -->
+      <div class="input-group">
+        <label for="username">Tên đăng nhập:</label>
+        <input type="username" id="username" name="username" required v-model="username">
       </div>
       <div class="input-group">
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
+        <label for="password">Mật khẩu:</label>
+        <input type="password" id="password" name="password" required v-model="password">
       </div>
       <button  type="submit">Đăng nhập</button>
+      <div>
+        <p v-if="registrationError" style="color: red;">{{ registrationError }}</p>
+      </div>
     </form>
+    
   </div>
    </div>
 </template>
 <script>
+import axios from 'axios';
+import {mapGetters} from 'vuex';
 export default {
-    name:'TheLogin'
+    name:'TheLogin',
+    data(){
+      return {
+        username:'',
+        password:'',
+        registrationError:''
+      };
+    },
+    computed:{...mapGetters(['auth'])},
+    methods:{
+        async  Login() {
+      const formData = {
+        username: this.username,
+        password: this.password,
+        // email: this.email,
+        // role: this.role
+      };
+
+    try{
+          // Gọi API đăng ký bằng Axios
+     const respone = await axios.post('https://localhost:7043/api/Auth/Login', formData)
+        // .then(response => {
+          console.log('Đăng nhập thành công!');
+          // Xử lý phản hồi từ server nếu cần
+          const token = respone.data;
+       //   console.log(respone.data.token);
+          // Lưu token vào local storage để sử dụng sau này
+          localStorage.setItem('token', token);
+           // this.registrationSuccess=true;
+          console.log(respone.data);
+          this.auth.isEmployee= true;
+          this.registrationError='';
+         this.$router.push('/shoppingcart');
+
+        
+    }     
+    catch (error) {
+        console.error(error);
+        console.error('Đăng nhập thất bại:', error.response.data);
+          this.registrationError = 'Tên đăng nhập hoặc mật khẩu không đúng.';
+      }
+    },
+    }
 }
 </script>
 <style scoped>

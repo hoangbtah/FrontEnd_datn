@@ -8,6 +8,7 @@
                 <p class="m-0"><a href="">Home</a></p>
                 <p class="m-0 px-2">-</p>
                 <p class="m-0">Shopping Cart</p>
+                <p class="m-0">{{ items }}</p>
             </div>
         </div>
     </div>
@@ -175,10 +176,40 @@
     </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
-    name:'ShoppingCart'
+    name:'ShoppingCart',
+    created() {
+        this.GetData()
+    },
+    methods:{
+        async  GetData() {
+    try{
+        const token = localStorage.getItem('token');
+        console.log("mã token để authorise")
+        console.log(token);
+          // Gọi API đăng ký bằng Axios
+     const respone = await axios.get('https://localhost:7043/api/Auth/getpassword'
+     , {
+        headers: {
+        Authorization: `Bearer ${token}`
+        }
+    } );    
+    this.items=respone.data;
+    console.log(respone.data);
+    }     
+    catch (error) {
+        console.error('Lỗi khi gửi yêu cầu đến API:', error);
+      }
+        },
+},
+data(){
+    return {
+        items:'',
+    };
+}
+
 }
 </script>
 <style lang="">
-    
 </style>

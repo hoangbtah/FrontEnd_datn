@@ -271,8 +271,7 @@ export default {
     async fetchItems() {
       try {
         const response = await axios.get(
-          `https://localhost:7159/api/v1/Product/products/search?pagenumber=${
-            this.pageNumber
+          `https://localhost:7159/api/v1/Product/products/search?pagenumber=${this.pageNumber
           }&pagesize=${this.pageSize}`
         );
         this.items = response.data;
