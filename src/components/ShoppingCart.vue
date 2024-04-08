@@ -189,23 +189,46 @@ export default {
         console.log("mã token để authorise")
         console.log(token);
           // Gọi API đăng ký bằng Axios
-     const respone = await axios.get('https://localhost:7043/api/Auth/getpassword'
+     const respone = await axios.get('https://localhost:7043/api/Auth/getname'
      , {
         headers: {
         Authorization: `Bearer ${token}`
         }
     } );    
+    const statusCode = respone.status;
+        
+        // Kiểm tra mã trạng thái để thực hiện xử lý phù hợp
+        if (statusCode === 200) {
+          // Xử lý khi API trả về mã 200 (OK)
+          console.log('tài khoản không được cấp quyền');
+         
+        }
+        //
     this.items=respone.data;
+    console.log("lay du lieu thanh cong");
     console.log(respone.data);
+    console.log(respone.status);
     }     
     catch (error) {
-        console.error('Lỗi khi gửi yêu cầu đến API:', error);
+        //console.error('Lỗi khi gửi yêu cầu đến API:', error);
+        if (error.response) {
+      // Lỗi từ phản hồi của server (không phải lỗi mạng)
+      console.error('Lỗi từ phản hồi của server:', error.response.data);
+    } else if (error.request) {
+      // Lỗi trong quá trình gửi yêu cầu mạng
+      console.error('Lỗi khi gửi yêu cầu mạng:', error.request);
+    } else {
+      // Lỗi không xác định
+      console.error('Lỗi không xác định:', error.message);
+    }
       }
         },
 },
 data(){
     return {
         items:'',
+        isShow:false,
+        thongbao:'',
     };
 }
 
