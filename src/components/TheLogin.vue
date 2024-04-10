@@ -10,7 +10,7 @@
       </div> -->
       <div class="input-group">
         <label for="username">Tên đăng nhập:</label>
-        <input type="username" id="username" name="username" required v-model="username">
+        <input type="username" id="username" name="username" required v-model="name">
       </div>
       <div class="input-group">
         <label for="password">Mật khẩu:</label>
@@ -32,7 +32,7 @@ export default {
     name:'TheLogin',
     data(){
       return {
-        username:'',
+        name:'',
         password:'',
         registrationError:''
       };
@@ -41,7 +41,7 @@ export default {
     methods:{
         async  Login() {
       const formData = {
-        username: this.username,
+        name: this.name,
         password: this.password,
         // email: this.email,
         // role: this.role
@@ -49,7 +49,7 @@ export default {
 
     try{
           // Gọi API đăng ký bằng Axios
-     const respone = await axios.post('https://localhost:7043/api/Auth/Login', formData)
+     const respone = await axios.post('https://localhost:7159/api/Auth/Login', formData)
         // .then(response => {
           console.log('Đăng nhập thành công!');
           // Xử lý phản hồi từ server nếu cần

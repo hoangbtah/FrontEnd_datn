@@ -10,7 +10,7 @@
                     <div id="success"></div>
                     <form name="sentMessage" id="contactForm" novalidate="novalidate" @submit.prevent="submitForm">
                         <div class="control-group">
-                            <input type="text" class="form-control" id="name" placeholder="Họ và tên" v-model="username"
+                            <input type="text" class="form-control" id="name" placeholder="Họ và tên" v-model="name"
                                 required="required" data-validation-required-message="Please enter your name" />
                             <p class="help-block text-danger"></p>
                         </div>
@@ -86,7 +86,7 @@ export default {
     name:'TheRegister',
     data(){
         return {
-            username:'',
+            name:'',
             password:'',
             role:'',
             registrationSuccess: false,
@@ -98,7 +98,7 @@ export default {
     methods:{
         async  submitForm() {
       const formData = {
-        username: this.username,
+        name: this.name,
         password: this.password,
         // email: this.email,
         role: this.role

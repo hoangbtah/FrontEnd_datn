@@ -197,7 +197,7 @@ export default {
         console.log(token);
         // Gọi API đăng ký bằng Axios
         const respone = await axios.get(
-          "https://localhost:7043/api/Auth/getname",
+          "https://localhost:7159/api/Auth/getname",
           {
             headers: {
               Authorization: `Bearer ${token}`
