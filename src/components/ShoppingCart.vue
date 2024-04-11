@@ -193,8 +193,8 @@ export default {
       }
       try {
         //   const token = localStorage.getItem('token');
-        console.log("mã token để authorise");
-        console.log(token);
+     //   console.log("mã token để authorise");
+       // console.log(token);
         // Gọi API đăng ký bằng Axios
         const respone = await axios.get(
           "https://localhost:7159/api/Auth/getname",
@@ -214,9 +214,9 @@ export default {
         // }
         //
         this.items = respone.data;
-        console.log("lay du lieu thanh cong");
-        console.log(respone.data);
-        console.log(respone.status);
+      //  console.log("lay du lieu thanh cong");
+      //  console.log(respone.data);
+      //  console.log(respone.status);
       } catch (error) {
          // Ví dụ: xử lý lỗi 401 (Unauthorized) - token hết hạn hoặc không hợp lệ
     if ( error.response.status === 403) {

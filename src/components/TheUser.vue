@@ -1,8 +1,8 @@
-<template lang="">
+<template>
     <!-- Contact Start -->
     <div class="container-fluid pt-5">
         <div class="text-center mb-4">
-            <h2 class="section-title px-5"><span class="px-2">Đăng kí tài khoản</span></h2>
+            <h2 class="section-title px-5"><span class="px-2">Thông tin tài khoản</span></h2>
         </div>
         <div class="row px-xl-5">
             <div class="col-lg-7 mb-5">
@@ -10,27 +10,32 @@
                     <div id="success"></div>
                     <form name="sentMessage" id="contactForm" novalidate="novalidate" @submit.prevent="submitForm">
                         <div class="control-group">
-                            <input type="text" class="form-control" id="name" placeholder="Họ và tên" v-model="name"
+                            <label for="username">Tên đăng nhập:</label>
+                            <input type="text" class="form-control" id="name" placeholder="Họ và tên" v-model="auth.user.name"
                                 required="required" data-validation-required-message="Please enter your name" />
                             <p class="help-block text-danger"></p>
                         </div>
                         <div class="control-group">
-                            <input type="text" class="form-control" id="password" placeholder="Mật khẩu" v-model="password"
+                            <label for="username">Mật khẩu:</label>
+                            <input type="text" class="form-control" id="password" placeholder="Mật khẩu" v-model="auth.user.name"
                                 required="required" data-validation-required-message="Please enter a subject" />
                             <p class="help-block text-danger"></p>
                         </div>
                         <div class="control-group">
-                            <input type="email" class="form-control" id="email" placeholder="Email " v-model="email"
+                            <label for="username">Email:</label>
+                            <input type="email" class="form-control" id="email" placeholder="Email" v-model="auth.user.email"
                                 required="required" data-validation-required-message="Please enter your email" />
                             <p class="help-block text-danger"></p>
                         </div>
                         <div class="control-group">
-                            <input type="text" class="form-control" id="phonenumber" placeholder="Số điện thoại" v-model="phoneNumber"
+                            <label for="username">Số điện thoại:</label>
+                            <input type="text" class="form-control" id="phonenumber" placeholder="Số điện thoại" v-model="auth.user.phoneNumber"
                                 required="required" data-validation-required-message="Please enter a subject" />
                             <p class="help-block text-danger"></p>
                         </div>
                         <div class="control-group">
-                            <input type="text" class="form-control" id="address" placeholder="Địa chỉ" v-model="address"
+                            <label for="username">Địa chỉ:</label>
+                            <input type="text" class="form-control" id="address" placeholder="Địa chỉ" v-model="auth.user.address"
                                 required="required" data-validation-required-message="Please enter a subject" />
                             <p class="help-block text-danger"></p>
                         </div>
@@ -41,30 +46,30 @@
                             <p class="help-block text-danger"></p>
                         </div> -->
                          <!-- Hiển thị trường chọn vai trò nếu là nhân viên -->
-                        <div v-if="auth.isEmployee">
+                        <!-- <div v-if="auth.isEmployee">
                             <label for="role">Vai trò:</label>
                             <select v-model="role">
                             <option value="Admin">Quản trị viên</option>
                             <option value="Sales">Nhân viên bán hàng</option>
                             <option value="Technician">Kỹ thuật viên</option>
                             </select>
-                        </div>
+                        </div> -->
                         <div>
                             <!-- <router-link to="/login"> -->
                             <button class="btn btn-primary py-2 px-4" type="submit" id="sendMessageButton">Đăng ký</button>
                             <!-- </router-link> -->
                         </div>
-                        <div>
+                        <!-- <div>
                             <p v-if="registrationError" style="color: red;">{{ registrationError }}</p>
                         </div>
                         <p v-if="registrationSuccess" style="color: green;">Đăng ký thành công! Hãy đăng nhập vào tài khoản của bạn.</p>
-                        <router-link  class="nav-item nav-link" to="/login" exact><div class="nav-text">Chuyển đến trang đăng nhập</div></router-link>
+                        <router-link  class="nav-item nav-link" to="/login" exact><div class="nav-text">Chuyển đến trang đăng nhập</div></router-link> -->
 
 
                     </form>
                 </div>
             </div>
-            <div class="col-lg-5 mb-5">
+            <!-- <div class="col-lg-5 mb-5">
                 <h5 class="font-weight-semi-bold mb-3">Get In Touch</h5>
                 <p>Justo sed diam ut sed amet duo amet lorem amet stet sea ipsum, sed duo amet et. Est elitr dolor elitr erat sit sit. Dolor diam et erat clita ipsum justo sed.</p>
                 <div class="d-flex flex-column mb-3">
@@ -79,60 +84,34 @@
                     <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@example.com</p>
                     <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+012 345 67890</p>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
     <!-- Contact End -->
 </template>
 <script>
-import axios from 'axios';
-import {mapGetters} from 'vuex';
+//import axios from 'axios';
+import {mapActions,mapGetters} from 'vuex';
 export default {
-    name:'TheRegister',
+    name:'TheUser',
     data(){
-        return {
-            name:'',
-            password:'',
-            role:'',
-            email:'',
-            address:'',
-            phoneNumber:'',
-            registrationSuccess: false,
-            registrationError: '',
-            isEmployee: false,
-        };
+      return {
+        name:'',
+        password:'',
+        registrationError:''
+      };
+    },
+    created() {
+        this.getUser()
     },
     computed:{...mapGetters(['auth'])},
     methods:{
-        async  submitForm() {
-      const formData = {
-        name: this.name,
-        password: this.password,
-         email: this.email,
-        role: this.role,
-        phoneNumber:this.phoneNumber,
-        address:this.address
-      };
-
-    try{
-          // Gọi API đăng ký bằng Axios
-     const respone = await axios.post('https://localhost:7043/api/Auth/register', formData)
-        // .then(response => {
-          console.log('Đăng ký thành công!');
-          // Xử lý phản hồi từ server nếu cần
-            this.registrationSuccess=true;
-          console.log(respone.data);
-         // this.$router.push('/login');
-    }     
-    catch (error) {
-        console.error(error);
-        console.error('Đăng ký thất bại:', error.response.data);
-          this.registrationError = 'Tên đăng nhập hoặc mật khẩu không hợp lệ.';
-      }
+      ...mapActions(['getUser']),
+      
     },
-    }
+    
 }
 </script>
-<style lang="">
+<style>
     
 </style>

@@ -36,7 +36,7 @@ const productModules={
            
             try {
                 // console.log(catagoryId);
-                const respone=  await  axios.get(`https://localhost:7159/api/v1/Product/catagory/${catagoryId}/products`)
+                const respone=  await  axios.get(`https://localhost:7159/api/v1/Product/catagory/${catagoryId}/products?pagenumber=1&pagesize=9`)
                 commit('SET_PRODUCTSBYCATAGORYID',respone.data)
                 // console.log(respone.data);
                 // console.log(respone.data);

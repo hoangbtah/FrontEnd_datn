@@ -27,7 +27,7 @@
 </template>
 <script>
 import axios from 'axios';
-import {mapGetters} from 'vuex';
+import {mapActions,mapGetters} from 'vuex';
 export default {
     name:'TheLogin',
     data(){
@@ -39,6 +39,7 @@ export default {
     },
     computed:{...mapGetters(['auth'])},
     methods:{
+      ...mapActions(['getUser']),
         async  Login() {
       const formData = {
         name: this.name,
@@ -51,7 +52,7 @@ export default {
           // Gọi API đăng ký bằng Axios
      const respone = await axios.post('https://localhost:7159/api/Auth/Login', formData)
         // .then(response => {
-          console.log('Đăng nhập thành công!');
+        //  console.log('Đăng nhập thành công!');
           // Xử lý phản hồi từ server nếu cần
           const token = respone.data;
        //   console.log(respone.data.token);
@@ -61,12 +62,11 @@ export default {
           console.log(respone.data);
           this.auth.isEmployee= true;
           this.auth.isAuthenticated=false;
-          this.auth.username=this.username;
+          this.auth.name=this.name;
           this.registrationError='';
-         this.$router.push('/shoppingcart');
-
-        
-    }     
+          this.getUser(formData);
+         this.$router.push('/shoppingcart');      
+    }
     catch (error) {
         console.error(error);
         console.error('Đăng nhập thất bại:', error.response.data);

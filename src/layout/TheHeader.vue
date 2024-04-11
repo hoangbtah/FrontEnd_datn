@@ -124,8 +124,10 @@
                         <div class="navbar-nav ml-auto py-0">
                            <div v-if="auth.isAuthenticated"> <router-link to="/login" class="nav-item nav-link"><div class="nav-text">Login</div></router-link></div>
                            <div v-else>
-                            <a class="nav-item nav-link"><div class="nav-text">{{ auth.username }}</div></a></div>
+                            <router-link to="/user" class="nav-item nav-link"><div class="nav-text">{{ auth.name }}</div></router-link>
+                            </div>
                             <router-link to="/register" class="nav-item nav-link"><div class="nav-text">Register</div></router-link>
+                            <!-- <router-link to="/user" class="nav-item nav-link"><div class="nav-text">user</div></router-link> -->
                             <div v-if="auth.isAuthenticated==false"><a class="nav-item nav-link" @click="logout()"><div class="nav-text">Logout</div></a>
                             </div>
                           
@@ -161,20 +163,12 @@ export default {
       "getProductsByManufactorerId"
     ]),
     logout() {
-      // this.auth.isAuthenticated = true;
-      // localStorage.setItem('token', '');
-      //   this.$nextTick(() => {
-      //     this.auth.username = ""; // Đặt lại giá trị của username sau khi Vue cập nhật DOM
-      //     this.auth.isAuthenticated = true;
-      //     localStorage.setItem('token', '');
-
-      //   });
       // Xóa token khỏi localStorage
       localStorage.removeItem("token");
 
       // Đặt lại trạng thái ủy quyền (authenticated) và dữ liệu cần thiết khác
       this.auth.isAuthenticated = false;
-      this.auth.username = "";
+      this.auth.name = "";
 
       // Cập nhật giao diện hoặc chuyển hướng đến trang đăng nhập
       this.$router.push("/login");
