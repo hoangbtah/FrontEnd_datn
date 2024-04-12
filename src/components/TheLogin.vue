@@ -37,13 +37,19 @@ export default {
         registrationError:''
       };
     },
+    created(){
+     // this.Login();
+    //  this.getUser();
+      //this.getCarts();
+    },
     computed:{...mapGetters(['auth'])},
     methods:{
-      ...mapActions(['getUser']),
+      ...mapActions(['getUser','getCarts']),
         async  Login() {
       const formData = {
         name: this.name,
         password: this.password,
+      
         // email: this.email,
         // role: this.role
       };
@@ -62,9 +68,12 @@ export default {
           console.log(respone.data);
           this.auth.isEmployee= true;
           this.auth.isAuthenticated=false;
+          console.log(this.name,this.password);
           this.auth.name=this.name;
           this.registrationError='';
-          this.getUser(formData);
+         await this.getUser(formData);
+          console.log("userid: ",this.auth.user.userId);
+        await  this.getCarts(this.auth.user.userId);
          this.$router.push('/shoppingcart');      
     }
     catch (error) {

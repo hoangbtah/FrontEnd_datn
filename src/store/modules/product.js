@@ -25,8 +25,9 @@ const productModules={
         async getProduct({commit},productId){
            
             try {
-                // console.log(productId);
+                 console.log(productId);
                 const respone=  await  axios.get(`https://localhost:7159/api/v1/Product/${productId}`)
+                console.log("lấy sản phẩm thành công");
                 commit('SET_PRODUCT',respone.data)
               } catch (error) {
                   console.log(error)

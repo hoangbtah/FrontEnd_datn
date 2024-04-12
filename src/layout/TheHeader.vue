@@ -55,10 +55,10 @@
                     <i class="fas fa-heart text-primary"></i>
                     <span class="badge">0</span>
                 </a>
-                <a href="" class="btn border">
+                <router-link  to="/shoppingcart" class="btn border">
                     <i class="fas fa-shopping-cart text-primary"></i>
                     <span class="badge">{{ carts.length }}</span>
-                </a>
+                </router-link>
             </div>
         </div>
     </div>
@@ -155,6 +155,9 @@ export default {
     this.getCatagorys();
     this.getManufactorers();
   },
+//   updated(){
+//     this.logout();
+//   },
   methods: {
     ...mapActions([
       "getCatagorys",
@@ -169,10 +172,12 @@ export default {
       // Đặt lại trạng thái ủy quyền (authenticated) và dữ liệu cần thiết khác
       this.auth.isAuthenticated = false;
       this.auth.name = "";
-      this.auth.user=null;
-    //  this.carts=[];
-    //   console.log("giỏ hàng");
-    //  console.log(this.carts);
+      this.auth.user={};
+      this.carts=[];
+      console.log("user");
+      console.log(this.auth.user);
+       console.log("giỏ hàng");
+      console.log(this.carts);
 
       // Cập nhật giao diện hoặc chuyển hướng đến trang đăng nhập
       this.$router.push("/login");

@@ -285,10 +285,7 @@ import { mapActions ,mapGetters} from 'vuex';
 export default {
     name:'ProductDetail',
     computed:{...mapGetters(['product','comments','products'])},
-    created() {
-        this.getProduct()
-        
-    },
+  
     methods:{
         ...mapActions(['getProduct','getProducts','getComments']),
         goToShoppingCart() {
@@ -304,6 +301,12 @@ export default {
         this.getComments(productId);
         this.goToShoppingCart();
     }
+    },
+      mounted() {
+       // this.getProduct()
+        // Lấy thông tin sản phẩm khi trang được tải
+    const productId = this.$route.params.productId; // Lấy ID sản phẩm từ route params
+    this.getProduct(productId);
     },
 }
 </script>

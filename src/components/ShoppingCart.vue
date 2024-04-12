@@ -183,12 +183,11 @@ import {mapActions,mapGetters} from 'vuex';
 export default {
   name: "ShoppingCart",
   created() {
-   // this.GetData();
    this.getCarts(this.auth.user.userId);
   },
   computed:{...mapGetters(['auth','carts'])},
   methods: {
-    ...mapActions(['getCarts']),
+    ...mapActions(['getUser','getCarts']),
   },
   data() {
     return {

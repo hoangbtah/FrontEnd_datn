@@ -177,7 +177,7 @@
                             <div class="card-footer d-flex justify-content-between bg-light border">
                                 <!-- <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a> -->
                                 <router-link to="/productdetail" class="btn btn-sm text-dark p-0" ><button  @click ="handleProductClick(productabc.ProductId)" style="border: none; background-color: transparent;"><i class="fas fa-eye text-primary mr-1"></i>View Detail</button></router-link>
-                                <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
+                                <a @click="addToCart(productabc)"  class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
                             </div>
                         </div>
                     </div>
@@ -244,7 +244,7 @@ import { mapActions ,mapGetters} from 'vuex';
 import axios from "axios";
 export default {
     name:'TheShop',
-    computed:{...mapGetters(['products','product']),
+    computed:{...mapGetters(['products','product','carts','auth']),
       // hiển thị trang
       displayedPages() {
       const start = Math.max(1,this.pageNumber - Math.floor(this.maxDisplayedPages / 2)
@@ -260,7 +260,7 @@ export default {
         
     },
     methods:{
-        ...mapActions(['getProducts','getProduct','getComments','fetchItems']),
+        ...mapActions(['getProducts','getProduct','getComments','fetchItems','addProductToCart','getUser']),
         handleProductClick(productId) {
         this.getProduct(productId);
         this.getComments(productId);
@@ -307,8 +307,20 @@ export default {
     },
     total() {
       (this.totalPages = Math.ceil(this.products.length / this.pageSize))
+    },
+    async addToCart(product) {
+        console.log("product")
+        console.log(product);
+      const userId = this.auth.user.userId;
+      console.log(userId);
+      try {
+       // await this.$store.dispatch("addProductToCart", { userId, product });
+       await this.addProductToCart(userId,product);
+        console.log("Sản phẩm đã được thêm vào giỏ hàng!");
+      } catch (error) {
+        console.error("Lỗi khi thêm sản phẩm vào giỏ hàng:", error);
+      }
     }
-
       
     },
     data() {
