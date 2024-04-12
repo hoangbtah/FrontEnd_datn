@@ -8,13 +8,13 @@ import manufactorers from './modules/manufactorer'
 import products from './modules/product'
 import product from './modules/product'
 import comments from './modules/comment'
-//import productguccis from './modules.product'
+import carts from './modules/cart'
 
 
 Vue.use(Vuex)
 const storeData= {
     modules:{
-        auth,todos,catagorys,manufactorers,products,product,comments
+        auth,todos,catagorys,manufactorers,products,product,comments,carts,
     }
   
 

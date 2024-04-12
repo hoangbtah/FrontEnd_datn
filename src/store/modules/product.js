@@ -3,12 +3,12 @@ const productModules={
     state:{
         products:[],
         product:{},
-      //  productsby:[],
+      //  productspa:[],
     },
     getters:{
         products:state=> state.products,
         product:state=> state.product,
-      //  productsby:state=>state.productsby
+       // productspa:state=>state.productspa,
       
     },
     actions:{
@@ -48,7 +48,7 @@ const productModules={
            
             try {
                
-                const respone=  await  axios.get(`https://localhost:7159/api/v1/Product/manufactorer/${manufactorerId}/products`)
+                const respone=  await  axios.get(`https://localhost:7159/api/v1/Product/manufactorer/${manufactorerId}/products?pagenumber=1&pagesize=9`)
                 commit('SET_PRODUCTSBYMANUFACTORERID',respone.data)
                 // console.log(respone.data);
                 // console.log(respone.data);
@@ -56,6 +56,7 @@ const productModules={
                   console.log(error)
               }
         },
+        
      
 
     },

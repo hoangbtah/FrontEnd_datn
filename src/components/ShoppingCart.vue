@@ -5,10 +5,12 @@
         <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
             <h1 class="font-weight-semi-bold text-uppercase mb-3">Shopping Cart</h1>
             <div class="d-inline-flex">
-                <p class="m-0"><a href="">Home</a></p>
+                <!-- <p class="m-0"><a href="">Home</a></p>
                 <p class="m-0 px-2">-</p>
                 <p class="m-0">Shopping Cart</p>
-                <p class="m-0">{{ items }}</p>
+                <p class="m-0">{{ items }}</p> -->
+                <p v-if="carts.length === 0">Giỏ hàng của bạn chưa có sản phẩm nào !</p>
+
             </div>
         </div>
     </div>
@@ -16,7 +18,7 @@
 
 
     <!-- Cart Start -->
-    <div class="container-fluid pt-5">
+    <div class="container-fluid pt-5" v-if="carts.length !== 0" >
         <div class="row px-xl-5">
             <div class="col-lg-8 table-responsive mb-5">
                 <table class="table table-bordered text-center mb-0">
@@ -30,9 +32,9 @@
                         </tr>
                     </thead>
                     <tbody class="align-middle">
-                        <tr>
-                            <td class="align-middle"><img src="img/product-1.jpg" alt="" style="width: 50px;"> Colorful Stylish Shirt</td>
-                            <td class="align-middle">$150</td>
+                        <tr v-for="cart in carts" :key="cart.classartId">
+                            <td class="align-middle"><img :src="cart.Image" alt="" style="width: 50px;"> {{ cart.ProductName }}</td>
+                            <td class="align-middle">{{ cart.Price }}</td>
                             <td class="align-middle">
                                 <div class="input-group quantity mx-auto" style="width: 100px;">
                                     <div class="input-group-btn">
@@ -40,7 +42,7 @@
                                         <i class="fa fa-minus"></i>
                                         </button>
                                     </div>
-                                    <input type="text" class="form-control form-control-sm bg-secondary text-center" value="1">
+                                    <input type="text" class="form-control form-control-sm bg-secondary text-center" :value="cart.Quantity">
                                     <div class="input-group-btn">
                                         <button class="btn btn-sm btn-primary btn-plus">
                                             <i class="fa fa-plus"></i>
@@ -48,10 +50,10 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="align-middle">$150</td>
+                            <td class="align-middle">{{ cart.Price*cart.Quantity }}</td>
                             <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
                         </tr>
-                        <tr>
+                        <!-- <tr>
                             <td class="align-middle"><img src="img/product-2.jpg" alt="" style="width: 50px;"> Colorful Stylish Shirt</td>
                             <td class="align-middle">$150</td>
                             <td class="align-middle">
@@ -134,7 +136,7 @@
                             </td>
                             <td class="align-middle">$150</td>
                             <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
-                        </tr>
+                        </tr> -->
                     </tbody>
                 </table>
             </div>
@@ -176,69 +178,17 @@
     </div>
 </template>
 <script>
-import axios from "axios";
+import {mapActions,mapGetters} from 'vuex';
+//import axios from "axios";
 export default {
   name: "ShoppingCart",
   created() {
-    this.GetData();
+   // this.GetData();
+   this.getCarts(this.auth.user.userId);
   },
+  computed:{...mapGetters(['auth','carts'])},
   methods: {
-    async GetData() {
-      // Kiểm tra xem token có tồn tại không
-      const token = localStorage.getItem("token");
-      if (!token) {
-        // Nếu không có token, chuyển hướng đến trang đăng nhập
-        this.$router.push("/login");
-        return;
-      }
-      try {
-        //   const token = localStorage.getItem('token');
-     //   console.log("mã token để authorise");
-       // console.log(token);
-        // Gọi API đăng ký bằng Axios
-        const respone = await axios.get(
-          "https://localhost:7159/api/Auth/getname",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
-        );
-
-       // const statusCode = respone.status;
-
-        // Kiểm tra mã trạng thái để thực hiện xử lý phù hợp
-        // if (statusCode === 200) {
-        //   // Xử lý khi API trả về mã 200 (OK)
-        //   console.log("tài khoản không được cấp quyền");
-        // }
-        //
-        this.items = respone.data;
-      //  console.log("lay du lieu thanh cong");
-      //  console.log(respone.data);
-      //  console.log(respone.status);
-      } catch (error) {
-         // Ví dụ: xử lý lỗi 401 (Unauthorized) - token hết hạn hoặc không hợp lệ
-    if ( error.response.status === 403) {
-      // Xử lý khi token hết hạn hoặc không hợp lệ
-      // Chuyển hướng đến trang đăng nhập
-    //   this.$router.push('/login');
-    this.items="tài khoản không được cấp quyền để thực hiện chức năng này ";
-    console.error("tài khoản không được cấp quyền");
-    }
-        console.error("Lỗi khi gửi yêu cầu đến API:");
-        if (error.response) {
-          // Lỗi từ phản hồi của server (không phải lỗi mạng)
-          console.error("Lỗi từ phản hồi của server:", error.response.data);
-        } else if (error.request) {
-          // Lỗi trong quá trình gửi yêu cầu mạng
-          console.error("Lỗi khi gửi yêu cầu mạng:", error.request);
-        } else {
-          // Lỗi không xác định
-          console.error("Lỗi không xác định:", error.message);
-        }
-      }
-    }
+    ...mapActions(['getCarts']),
   },
   data() {
     return {

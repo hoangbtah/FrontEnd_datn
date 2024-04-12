@@ -260,7 +260,7 @@ export default {
         
     },
     methods:{
-        ...mapActions(['getProducts','getProduct','getComments']),
+        ...mapActions(['getProducts','getProduct','getComments','fetchItems']),
         handleProductClick(productId) {
         this.getProduct(productId);
         this.getComments(productId);
@@ -274,7 +274,8 @@ export default {
           `https://localhost:7159/api/v1/Product/products/search?pagenumber=${this.pageNumber
           }&pagesize=${this.pageSize}`
         );
-        this.items = response.data;
+        this.items= response.data;
+        this.products= this.items;
         // Update total pages based on response or some other logic
         // this.totalPages = response.headers['x-total-pages'];
         console.log(this.totalPages);

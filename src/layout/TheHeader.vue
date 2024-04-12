@@ -57,7 +57,7 @@
                 </a>
                 <a href="" class="btn border">
                     <i class="fas fa-shopping-cart text-primary"></i>
-                    <span class="badge">0</span>
+                    <span class="badge">{{ carts.length }}</span>
                 </a>
             </div>
         </div>
@@ -150,7 +150,7 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   name: "TheHeader",
   components: {},
-  computed: { ...mapGetters(["catagorys", "manufactorers", "auth"]) },
+  computed: { ...mapGetters(["catagorys", "manufactorers", "auth","carts"]) },
   created() {
     this.getCatagorys();
     this.getManufactorers();
@@ -169,6 +169,10 @@ export default {
       // Đặt lại trạng thái ủy quyền (authenticated) và dữ liệu cần thiết khác
       this.auth.isAuthenticated = false;
       this.auth.name = "";
+      this.auth.user=null;
+    //  this.carts=[];
+    //   console.log("giỏ hàng");
+    //  console.log(this.carts);
 
       // Cập nhật giao diện hoặc chuyển hướng đến trang đăng nhập
       this.$router.push("/login");
