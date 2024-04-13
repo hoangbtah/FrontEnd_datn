@@ -120,7 +120,7 @@
                     <div class="card-footer d-flex justify-content-between bg-light border">
                         <router-link to="/productdetail" class="btn btn-sm text-dark p-0" ><button @click="handleProductClick(product.ProductId)"
                          style="border: none; background-color: transparent;"><i class="fas fa-eye text-primary mr-1"></i>View Detail</button></router-link>
-                        <router-link to="/shoppingcart" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</router-link>
+                         <a @click="addToCart(product)"  class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
                     </div>
                 </div>
             </div>
@@ -149,7 +149,7 @@
                     <div class="card-footer d-flex justify-content-between bg-light border">
                         <router-link to="/productdetail" class="btn btn-sm text-dark p-0" ><button @click="handleProductClick(product.ProductId)" 
                         style="border: none; background-color: transparent;"><i class="fas fa-eye text-primary mr-1"></i>View Detail</button></router-link>
-                        <router-link to="/shoppingcart" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</router-link>
+                        <a @click="addToCart(product)"  class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
                     </div>
                 </div>
             </div>
@@ -198,7 +198,7 @@
                     </div>
                     <div class="card-footer d-flex justify-content-between bg-light border">
                         <router-link to="/productdetail" class="btn btn-sm text-dark p-0" ><button @click="handleProductClick(product.ProductId)"  style="border: none; background-color: transparent;"><i class="fas fa-eye text-primary mr-1"></i>View Detail</button></router-link>
-                        <router-link to="/shoppingcart" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</router-link>
+                        <a @click="addToCart(product)"  class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
                     </div>
                 </div>
             </div>
@@ -227,7 +227,7 @@
                     </div>
                     <div class="card-footer d-flex justify-content-between bg-light border">
                         <router-link to="/productdetail"  class="btn btn-sm text-dark p-0" ><button @click="handleProductClick(product.ProductId)" style="border: none; background-color: transparent;"><i class="fas fa-eye text-primary mr-1"></i>View Detail</button></router-link>
-                        <router-link to="/shoppingcart" class="btn btn-sm text-dark p-0" ><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</router-link>
+                        <a @click="addToCart(product)"  class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
                     </div>
                 </div>
             </div>
@@ -278,7 +278,7 @@ import TheHeaderCur from '../layout/TheHeaderCur.vue'
 export default {
     name:'ShopIndex',
     components:{TheHeaderCur},
-    computed:{...mapGetters(['products','product','comments'])
+    computed:{...mapGetters(['products','product','comments','auth'])
     },
     created() {
         this.getProducts()
@@ -286,7 +286,7 @@ export default {
         
     },
     methods:{
-        ...mapActions(['getProducts','getProduct','getComments']),
+        ...mapActions(['getProducts','getProduct','getComments','addProductToCart','getUser']),
         getValentinoProducts() {
             return this.products.filter(product => product.ManufactorerName === 'VALENTINO').slice(0, 4);
         },
@@ -311,6 +311,37 @@ export default {
         this.getProduct(productId);
         this.getComments(productId);
         this.goToShoppingCart();
+    },
+    //thêm sản phẩm vào giỏ hàng
+    async addToCart(product) {
+      const formData = {
+        productId:product.ProductId,
+        userId : this.auth.user.userId,
+        productName:product.ProductName,
+        image:product.Image,
+        quantity:product.Quantity,
+        price:product.Price,
+      }
+        console.log("product")
+        console.log(product);
+     // const userId = this.auth.user.userId;
+     // console.log(userId);
+     const token = localStorage.getItem("token");
+      console.log(token);
+      if (!token) {
+
+        // Nếu không có token, chuyển hướng đến trang đăng nhập
+         this.$router.push("/login");
+      //  commit('SET_NEED_LOGIN', true);
+        return;
+      }
+      try {
+       // await this.$store.dispatch("addProductToCart", { userId, product });
+       await this.addProductToCart(formData);
+        console.log("Sản phẩm đã được thêm vào giỏ hàng!");
+      } catch (error) {
+        console.error("Lỗi khi thêm sản phẩm vào giỏ hàng:", error);
+      }
     }
 
     },

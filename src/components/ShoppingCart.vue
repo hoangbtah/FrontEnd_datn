@@ -32,7 +32,7 @@
                         </tr>
                     </thead>
                     <tbody class="align-middle">
-                        <tr v-for="cart in carts" :key="cart.classartId">
+                        <tr v-for="cart in carts" :key="cart.CartId">
                             <td class="align-middle"><img :src="cart.Image" alt="" style="width: 50px;"> {{ cart.ProductName }}</td>
                             <td class="align-middle">{{ cart.Price }}</td>
                             <td class="align-middle">
@@ -44,99 +44,15 @@
                                     </div>
                                     <input type="text" class="form-control form-control-sm bg-secondary text-center" :value="cart.Quantity">
                                     <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-plus">
+                                        <button class="btn btn-sm btn-primary btn-plus" @click="AddQuantity(cart)">
                                             <i class="fa fa-plus"></i>
                                         </button>
                                     </div>
                                 </div>
                             </td>
                             <td class="align-middle">{{ cart.Price*cart.Quantity }}</td>
-                            <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
+                            <td class="align-middle"><button class="btn btn-sm btn-primary" @click="deleteCart(cart.CartId)"><i class="fa fa-times"></i></button></td>
                         </tr>
-                        <!-- <tr>
-                            <td class="align-middle"><img src="img/product-2.jpg" alt="" style="width: 50px;"> Colorful Stylish Shirt</td>
-                            <td class="align-middle">$150</td>
-                            <td class="align-middle">
-                                <div class="input-group quantity mx-auto" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-minus" >
-                                        <i class="fa fa-minus"></i>
-                                        </button>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm bg-secondary text-center" value="1">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-plus">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="align-middle">$150</td>
-                            <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle"><img src="img/product-3.jpg" alt="" style="width: 50px;"> Colorful Stylish Shirt</td>
-                            <td class="align-middle">$150</td>
-                            <td class="align-middle">
-                                <div class="input-group quantity mx-auto" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-minus" >
-                                        <i class="fa fa-minus"></i>
-                                        </button>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm bg-secondary text-center" value="1">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-plus">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="align-middle">$150</td>
-                            <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle"><img src="img/product-4.jpg" alt="" style="width: 50px;"> Colorful Stylish Shirt</td>
-                            <td class="align-middle">$150</td>
-                            <td class="align-middle">
-                                <div class="input-group quantity mx-auto" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-minus" >
-                                        <i class="fa fa-minus"></i>
-                                        </button>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm bg-secondary text-center" value="1">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-plus">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="align-middle">$150</td>
-                            <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle"><img src="img/product-5.jpg" alt="" style="width: 50px;"> Colorful Stylish Shirt</td>
-                            <td class="align-middle">$150</td>
-                            <td class="align-middle">
-                                <div class="input-group quantity mx-auto" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-minus" >
-                                        <i class="fa fa-minus"></i>
-                                        </button>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm bg-secondary text-center" value="1">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-plus">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="align-middle">$150</td>
-                            <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
-                        </tr> -->
                     </tbody>
                 </table>
             </div>
@@ -178,16 +94,58 @@
     </div>
 </template>
 <script>
-import {mapActions,mapGetters} from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 //import axios from "axios";
 export default {
   name: "ShoppingCart",
   created() {
-   this.getCarts(this.auth.user.userId);
+    this.getCarts(this.auth.user.userId);
   },
-  computed:{...mapGetters(['auth','carts'])},
+  computed: {
+    ...mapGetters(["auth", "carts"]),
+    needLogin() {
+      return this.$store.state.needLogin;
+    }
+  },
   methods: {
-    ...mapActions(['getUser','getCarts']),
+    ...mapActions(["getUser", "getCarts",'deleteCart']),
+    async AddQuantity(product) {
+      const formData = {
+        productId:product.ProductId,
+        userId : this.auth.user.userId,
+        productName:product.ProductName,
+        image:product.Image,
+        quantity:product.Quantity,
+        price:product.Price,
+      }
+        console.log("product")
+        console.log(product);
+     // const userId = this.auth.user.userId;
+     // console.log(userId);
+     const token = localStorage.getItem("token");
+      console.log(token);
+      if (!token) {
+
+        // Nếu không có token, chuyển hướng đến trang đăng nhập
+         this.$router.push("/login");
+      //  commit('SET_NEED_LOGIN', true);
+        return;
+      }
+      try {
+       // await this.$store.dispatch("addProductToCart", { userId, product });
+       await this.addProductToCart(formData);
+        console.log("Sản phẩm đã được thêm vào giỏ hàng!");
+      } catch (error) {
+        console.error("Lỗi khi thêm sản phẩm vào giỏ hàng:", error);
+      }
+    }
+  },
+  watch: {
+    needLogin(value) {
+      if (value) {
+        this.$router.push("/login");
+      }
+    }
   },
   data() {
     return {

@@ -51,13 +51,16 @@
                 </form>
             </div>
             <div class="col-lg-3 col-6 text-right">
-                <a href="" class="btn border">
+                <!-- <a href="" class="btn border">
                     <i class="fas fa-heart text-primary"></i>
                     <span class="badge">0</span>
-                </a>
-                <router-link  to="/shoppingcart" class="btn border">
-                    <i class="fas fa-shopping-cart text-primary"></i>
+                </a> -->
+                <router-link to="/shoppingcart" class="btn border">
+                    <button  @click="checkLogin()"  style="border: none; background-color: transparent;">
+                         <i class="fas fa-shopping-cart text-primary"></i>
+                    <!-- <i class="fas fa-shopping-cart text-primary"></i> -->
                     <span class="badge">{{ carts.length }}</span>
+                </button>
                 </router-link>
             </div>
         </div>
@@ -110,7 +113,7 @@
                             <router-link  class="nav-item nav-link" to="/" exact><div class="nav-text">Home</div></router-link>
                             <router-link class="nav-item nav-link" to="/theshop"><div class="nav-text">Shop</div></router-link>
                             <router-link to="/productdetail" class="nav-item nav-link"><div class="nav-text">Shop Detail</div></router-link>
-                            <router-link to="/shoppingcart" class="nav-item nav-link"><div class="nav-text">Shopping Cart</div></router-link>
+                            <!-- <router-link to="/shoppingcart" class="nav-item nav-link"><div class="nav-text">Shopping Cart</div></router-link> -->
                             <router-link to="/checkout" class="nav-item nav-link"><div class="nav-text">Check out</div></router-link>
                             <div class="nav-item dropdown" >
                                 <a href="#" class="nav-link dropdown-toggle " data-toggle="dropdown">Danh mục</a>
@@ -150,37 +153,53 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   name: "TheHeader",
   components: {},
-  computed: { ...mapGetters(["catagorys", "manufactorers", "auth","carts"]) },
+  computed: { ...mapGetters(["catagorys", "manufactorers", "auth", "carts"]) },
   created() {
     this.getCatagorys();
     this.getManufactorers();
   },
-//   updated(){
-//     this.logout();
-//   },
+  //   updated(){
+  //     this.logout();
+  //   },
   methods: {
     ...mapActions([
       "getCatagorys",
       "getManufactorers",
       "getProductsByCatagoryId",
-      "getProductsByManufactorerId"
+      "getProductsByManufactorerId",
+      "getUser",
+      "resetCarts"
     ]),
+    // kiểm tra xem đã đăng nhập chưa trước khi xem giỏ hàng
+    checkLogin() {
+       
+        console.log("kiểm tra đang nhập chưa")
+        const token = localStorage.getItem("token");
+      console.log(token);
+      if (!token) {
+
+        // Nếu không có token, chuyển hướng đến trang đăng nhập
+        this.$root.$router.push("/login");
+      //  commit('SET_NEED_LOGIN', true);
+        return;
+      }
+    },
     logout() {
       // Xóa token khỏi localStorage
       localStorage.removeItem("token");
 
       // Đặt lại trạng thái ủy quyền (authenticated) và dữ liệu cần thiết khác
-      this.auth.isAuthenticated = false;
+      this.auth.isAuthenticated = true;
       this.auth.name = "";
-      this.auth.user={};
-      this.carts=[];
+      this.auth.user = {};
+      this.resetCarts();
       console.log("user");
       console.log(this.auth.user);
-       console.log("giỏ hàng");
+      console.log("giỏ hàng");
       console.log(this.carts);
 
-      // Cập nhật giao diện hoặc chuyển hướng đến trang đăng nhập
-      this.$router.push("/login");
+      // Cập nhật giao diện hoặc chuyển hướng đến trang chủ
+      this.$router.push("/theshop");
     }
   }
 };

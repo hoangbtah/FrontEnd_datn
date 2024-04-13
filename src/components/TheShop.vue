@@ -309,13 +309,30 @@ export default {
       (this.totalPages = Math.ceil(this.products.length / this.pageSize))
     },
     async addToCart(product) {
+      const formData = {
+        productId:product.ProductId,
+        userId : this.auth.user.userId,
+        productName:product.ProductName,
+        image:product.Image,
+        quantity:product.Quantity,
+        price:product.Price,
+      }
         console.log("product")
         console.log(product);
-      const userId = this.auth.user.userId;
-      console.log(userId);
+     // const userId = this.auth.user.userId;
+     // console.log(userId);
+     const token = localStorage.getItem("token");
+      console.log(token);
+      if (!token) {
+
+        // Nếu không có token, chuyển hướng đến trang đăng nhập
+         this.$router.push("/login");
+      //  commit('SET_NEED_LOGIN', true);
+        return;
+      }
       try {
        // await this.$store.dispatch("addProductToCart", { userId, product });
-       await this.addProductToCart(userId,product);
+       await this.addProductToCart(formData);
         console.log("Sản phẩm đã được thêm vào giỏ hàng!");
       } catch (error) {
         console.error("Lỗi khi thêm sản phẩm vào giỏ hàng:", error);

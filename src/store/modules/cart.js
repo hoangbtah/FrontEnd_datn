@@ -2,6 +2,7 @@ import axios from "axios";
 const cartModules = {
   state: {
     carts: [],
+    needLogin: false,
 
   },
   getters: {
@@ -11,14 +12,22 @@ const cartModules = {
     /// lấy sản phẩm trong giỏ hàng của người dùng 
     async getCarts({ commit }, userId) {
       console.log("mã người dùng truyền vào khi lấy giỏ hàng", userId);
+      //  var me= this;
+      // kiểm tra xem đã đăng nhập chưa
+      // if(!userId){
+      //   this.$router.push("/login");
+      //   return;
+      // }
       // Kiểm tra xem token có tồn tại không
       const token = localStorage.getItem("token");
-          console.log(token);
-      if (!token) {
-        // Nếu không có token, chuyển hướng đến trang đăng nhập
-        this.$router.push("/login");
-        return;
-      }
+      console.log(token);
+      // if (!token) {
+
+      //   // Nếu không có token, chuyển hướng đến trang đăng nhập
+      //    this.$router.push("/login");
+      // //  commit('SET_NEED_LOGIN', true);
+      //   return;
+      // }
       try {
 
         const respone = await axios.get(`https://localhost:7159/api/ShoppingCart/carts/${userId}`,
@@ -58,31 +67,45 @@ const cartModules = {
     },
 
     // Thêm sản phẩm vào giỏ hàng của người dùng
-    async addProductToCart({ dispatch },  userId, product ) {
+    async addProductToCart({ commit }, data) {
       try {
         const token = localStorage.getItem("token");
         if (!token) {
-          throw new Error("Không có token xác thực");
+          this.$router.push("/login");
         }
 
         // Gọi API để thêm sản phẩm vào giỏ hàng
-        await axios.post(
-          `https://localhost:7159/api/ShoppingCart/addshoppingcart/${userId}`,
-          { product },
+        const respone = await axios.post(
+          "https://localhost:7159/api/ShoppingCart/addshoppingcart", data,
           {
             headers: {
               Authorization: `Bearer ${token}`
             }
           }
         );
-
-        // Sau khi thêm thành công, gọi lại API để lấy giỏ hàng mới
-        await dispatch("getCarts", userId);
-
+        commit('ADD_CART',data);
+        console.log(respone.data);
         console.log("Thêm sản phẩm vào giỏ hàng thành công");
       } catch (error) {
         console.error("Lỗi khi thêm sản phẩm vào giỏ hàng:", error);
         throw error;
+      }
+    },
+    resetCarts({ commit }) {
+      commit('SET_CARTS', []); // Gọi mutation SET_CARTS với mảng rỗng
+    },
+    // xóa sản phẩm khỏi giỏ hàng 
+    async deleteCart({ commit }, cartId) {
+
+      try {
+        console.log(cartId);
+        const respone = await axios.delete(`https://localhost:7159/api/ShoppingCart/${cartId}`)
+        commit('DELETE_CART', cartId)
+        // console.log(respone.data);
+        console.log("xóa thành công");
+        console.log(respone.data);
+      } catch (error) {
+        console.log(error)
       }
     },
 
@@ -91,7 +114,16 @@ const cartModules = {
   mutations: {
     SET_CARTS(state, carts) {
       state.carts = carts
-    }
+    },
+    SET_NEED_LOGIN(state, value) {
+      state.needLogin = value; // Cập nhật trạng thái needLogin với giá trị mới
+    },
+    DELETE_CART(state, cartId) {
+      state.carts = state.carts.filter(cart => cart.CartId !== cartId)
+    },
+    ADD_CART(state,newCart) {
+      state.carts.unshift(newCart)
+    },
   }
 }
 export default cartModules

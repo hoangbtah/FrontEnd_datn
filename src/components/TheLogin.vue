@@ -74,7 +74,7 @@ export default {
          await this.getUser(formData);
           console.log("userid: ",this.auth.user.userId);
         await  this.getCarts(this.auth.user.userId);
-         this.$router.push('/shoppingcart');      
+         this.$router.push('/');      
     }
     catch (error) {
         console.error(error);
