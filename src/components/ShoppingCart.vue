@@ -44,7 +44,7 @@
                                     </div>
                                     <input type="text" class="form-control form-control-sm bg-secondary text-center" :value="cart.Quantity">
                                     <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-plus" @click="AddQuantity(cart)">
+                                        <button class="btn btn-sm btn-primary btn-plus" @click="UpdateQuantity(cart)">
                                             <i class="fa fa-plus"></i>
                                         </button>
                                     </div>
@@ -108,18 +108,21 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["getUser", "getCarts",'deleteCart']),
-    async AddQuantity(product) {
+    ...mapActions(["getUser", "getCarts",'deleteCart','updateCart']),
+    async UpdateQuantity(cart) {
+      console.log("lấy 1 sản phẩm trong giỏ hàng");
+      console.log(cart);
       const formData = {
-        productId:product.ProductId,
-        userId : this.auth.user.userId,
-        productName:product.ProductName,
-        image:product.Image,
-        quantity:product.Quantity,
-        price:product.Price,
+        cartId:cart.CartId,
+        productId:cart.ProductId,
+        userId : cart.UserId,
+        productName:cart.ProductName,
+        image:cart.Image,
+        quantity:cart.Quantity+1,
+        price:cart.Price,
       }
-        console.log("product")
-        console.log(product);
+        console.log("cart")
+        console.log(formData);
      // const userId = this.auth.user.userId;
      // console.log(userId);
      const token = localStorage.getItem("token");
@@ -133,7 +136,7 @@ export default {
       }
       try {
        // await this.$store.dispatch("addProductToCart", { userId, product });
-       await this.addProductToCart(formData);
+       await this.updateCart(formData);
         console.log("Sản phẩm đã được thêm vào giỏ hàng!");
       } catch (error) {
         console.error("Lỗi khi thêm sản phẩm vào giỏ hàng:", error);

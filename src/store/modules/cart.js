@@ -109,6 +109,35 @@ const cartModules = {
       }
     },
 
+     // Chỉnh sửa sản phẩm giỏ hàng của người dùng
+     async updateCart({ commit },data) {
+      // console.log("dữ liệu truyền cho api");
+      // console.log(data.cartId);
+      // console.log(data);
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          this.$router.push("/login");
+        }
+
+        // Gọi API để thêm sản phẩm vào giỏ hàng
+        const respone = await axios.put(
+          `https://localhost:7159/api/ShoppingCart/${data.cartId}`, data,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+        commit('UPDATE_CART',data);
+        console.log(respone.data);
+        console.log("Sửa sản phẩm trong giỏ hàng thành công");
+      } catch (error) {
+        console.error("Lỗi khi sửa sản phẩm trong giỏ hàng:", error);
+        throw error;
+      }
+    },
+
 
   },
   mutations: {
@@ -123,6 +152,31 @@ const cartModules = {
     },
     ADD_CART(state,newCart) {
       state.carts.unshift(newCart)
+    },
+    UPDATE_CART(state,newCart) {
+    //  state.carts.unshift(newCart)
+    var data={
+      CartId:newCart.cartId,
+      ProductId:newCart.productId,
+      UserId : newCart.userId,
+      ProductName:newCart.productName,
+      Image:newCart.image,
+      Quantity:newCart.quantity,
+      Price:newCart.price,
+    }
+     // Tìm và cập nhật sản phẩm trong state.carts với dữ liệu mới từ updatedCart
+     const index = state.carts.findIndex(cart => cart.CartId === newCart.cartId);
+     console.log("chỉ số",index);
+     console.log("sản phẩm sửa trong cart",newCart);
+      if (index !== -1) {
+       // Nếu tìm thấy sản phẩm trong giỏ hàng, thay thế nó bằng updatedCart
+       console.log("lỗi xảy ra ")
+      // state.carts =
+        state.carts.splice(index, 1,data);
+     } else {
+       // Trường hợp không tìm thấy sản phẩm, có thể xử lý theo ý của bạn (ví dụ: báo lỗi)
+       console.error(`Không tìm thấy sản phẩm có cartId: ${newCart.cartId}`);
+     }
     },
   }
 }
