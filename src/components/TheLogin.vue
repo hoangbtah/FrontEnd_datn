@@ -3,7 +3,7 @@
     <div class="login-container">
         <h1>E SHOPPER</h1>
     <form class="login-form"  @submit.prevent="Login">
-      <h5>Đăng nhập</h5>
+      <h5>Đăng Nhập</h5>
       <!-- <div class="input-group">
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required>
@@ -16,11 +16,17 @@
         <label for="password">Mật khẩu:</label>
         <input type="password" id="password" name="password" required v-model="password">
       </div>
-      <button  type="submit">Đăng nhập</button>
+      <div class="forgot-password">
+      <p>Quên mật khẩu ?</p>
+    </div>
+      <button  type="submit">Đăng Nhập</button>
       <div>
         <p v-if="registrationError" style="color: red;">{{ registrationError }}</p>
       </div>
     </form>
+   <div class="register">
+    <router-link to="/register" ><div><label>Đăng ký tài khoản !</label></div></router-link>
+   </div>
     
   </div>
    </div>
@@ -133,5 +139,15 @@ button {
   border-radius: 4px;
   cursor: pointer;
 }
-
+.forgot-password p{
+  color:red;
+  cursor: pointer;
+  text-align: center;
+}
+.register{
+  margin-top: 20px;
+}
+.register label{
+  color:#000;
+}
 </style>
