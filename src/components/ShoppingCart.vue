@@ -85,8 +85,8 @@
                             <h5 class="font-weight-bold">{{ formatCurrency(totalAmount())}} đ</h5>
                         </div>
                         <router-link to="/checkout" >
-                         <button class="btn btn-block btn-primary my-3 py-3">Đặt hàng</button></router-link>
-                        <!-- <button class="btn btn-block btn-primary my-3 py-3">Đặt hàng</button> -->
+                         <button class="btn btn-block btn-primary my-3 py-3">Tiến hành kiểm tra</button></router-link>
+                        <!-- <button class="btn btn-block btn-primary my-3 py-3" @click="placeOrder()">Đặt hàng</button> -->
                     </div>
                 </div>
             </div>
@@ -96,6 +96,7 @@
     </div>
 </template>
 <script>
+
 import { mapActions, mapGetters } from "vuex";
 //import axios from "axios";
 export default {
@@ -120,13 +121,12 @@ export default {
       } else if (action === -1) {
         // Thực hiện trừ số lượng (nếu số lượng > 0)
         if (cart.Quantity === 1) {
-         // cart.Quantity--;
+          // cart.Quantity--;
           this.deleteCart(cart.CartId);
-        } else if(cart.Quantity > 1)
-         {
+        } else if (cart.Quantity > 1) {
           // nếu số lượng sản phẩm trong giỏ hàng mà bẳng 0 thì xóa giỏ hàng đó
-        //   this.deleteCart(cart.CartId);
-        cart.Quantity--;
+          //   this.deleteCart(cart.CartId);
+          cart.Quantity--;
         }
       }
       const formData = {
@@ -175,11 +175,13 @@ export default {
     },
     //tính tổng tiền thanh toán trong giỏ hàng
     totalAmount() {
-        // Sử dụng reduce để tính tổng cart.Price * cart.Quantity của tất cả các cart trong danh sách carts
-        return this.carts.reduce((total, cart) => {
-            return total + (cart.Price * cart.Quantity);
-        }, 0); // Giá trị khởi tạo total là 0
-    }
+      // Sử dụng reduce để tính tổng cart.Price * cart.Quantity của tất cả các cart trong danh sách carts
+      return this.carts.reduce((total, cart) => {
+        return total + cart.Price * cart.Quantity;
+      }, 0); // Giá trị khởi tạo total là 0
+    },
+    // Phương thức để gọi API POST để tạo đơn hàng và chi tiết đơn hàng
+  
   },
   watch: {
     needLogin(value) {

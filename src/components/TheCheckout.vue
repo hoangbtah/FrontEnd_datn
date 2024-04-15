@@ -134,36 +134,28 @@
             <div class="col-lg-4">
                 <div class="card border-secondary mb-5">
                     <div class="card-header bg-secondary border-0">
-                        <h4 class="font-weight-semi-bold m-0">Order Total</h4>
+                        <h4 class="font-weight-semi-bold m-0">Đơn Hàng</h4>
                     </div>
                     <div class="card-body">
-                        <h5 class="font-weight-medium mb-3">Products</h5>
-                        <div class="d-flex justify-content-between">
-                            <p>Colorful Stylish Shirt 1</p>
-                            <p>$150</p>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <p>Colorful Stylish Shirt 2</p>
-                            <p>$150</p>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <p>Colorful Stylish Shirt 3</p>
-                            <p>$150</p>
+                        <h5 class="font-weight-medium mb-3">Danh sách sản phẩm</h5>
+                        <div class="d-flex justify-content-between" v-for="cart in carts" :key="cart.CartId">
+                            <p>{{cart.ProductName}}</p>
+                            <!-- <p>$150</p> -->
                         </div>
                         <hr class="mt-0">
                         <div class="d-flex justify-content-between mb-3 pt-1">
-                            <h6 class="font-weight-medium">Subtotal</h6>
-                            <h6 class="font-weight-medium">$150</h6>
+                            <h6 class="font-weight-medium">Tổng phụ</h6>
+                            <h6 class="font-weight-medium">{{ formatCurrency(totalAmount())}} đ</h6>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <h6 class="font-weight-medium">Shipping</h6>
-                            <h6 class="font-weight-medium">$10</h6>
+                            <h6 class="font-weight-medium">Phí giao hàng</h6>
+                            <h6 class="font-weight-medium"> 0 đ</h6>
                         </div>
                     </div>
                     <div class="card-footer border-secondary bg-transparent">
                         <div class="d-flex justify-content-between mt-2">
-                            <h5 class="font-weight-bold">Total</h5>
-                            <h5 class="font-weight-bold">$160</h5>
+                            <h5 class="font-weight-bold">Tổng tiền</h5>
+                            <h5 class="font-weight-bold">{{ formatCurrency(totalAmount())}} đ</h5>
                         </div>
                     </div>
                 </div>
@@ -192,7 +184,7 @@
                         </div>
                     </div>
                     <div class="card-footer border-secondary bg-transparent">
-                        <button class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3">Place Order</button>
+                        <button class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3"  @click="placeOrder()">Đặt hàng</button>
                     </div>
                 </div>
             </div>
@@ -203,8 +195,140 @@
     </div>
 </template>
 <script>
+import axios from "axios";
+import { mapActions, mapGetters } from "vuex";
 export default {
-    name:'TheCheckout'
+    name:'TheCheckout',
+    computed: {
+    ...mapGetters(["auth", "carts"]),
+  
+  },
+  methods: {
+    ...mapActions(["getUser", "getCarts", "deleteCart", "updateCart"]),
+      // format tiền
+      formatCurrency(number) {
+      // Chuyển số sang chuỗi và đảm bảo là kiểu number
+      number = Number(number);
+
+      // Kiểm tra nếu không phải là số hợp lệ
+      if (isNaN(number)) {
+        return "0";
+      }
+
+      // Sử dụng hàm toLocaleString() để định dạng tiền tệ theo định dạng của Việt Nam
+      // Ví dụ: 100000 sẽ thành "100.000"
+      return number.toLocaleString("vi-VN");
+    },
+    //tính tổng tiền thanh toán trong giỏ hàng
+    totalAmount() {
+      // Sử dụng reduce để tính tổng cart.Price * cart.Quantity của tất cả các cart trong danh sách carts
+      return this.carts.reduce((total, cart) => {
+        return total + cart.Price * cart.Quantity;
+      }, 0); // Giá trị khởi tạo total là 0
+    },
+    async placeOrder() {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        // Nếu không có token, chuyển hướng đến trang đăng nhập
+        this.$router.push("/login");
+        return;
+      }
+
+      try {
+        // Tạo đối tượng đơn hàng từ danh sách carts
+        const orderData = {
+          userId: this.auth.user.userId
+          //  orderDate: new Date().toISOString()
+          // Thay bằng tên khách hàng thực tế
+          // Các trường khác của đơn hàng tùy theo yêu cầu của bạn
+        };
+
+        // Gọi API POST để tạo đơn hàng và nhận lại đối tượng đơn hàng đã được lưu vào CSDL
+        const responseOrder = await axios.post(
+          "https://localhost:7159/api/Order/createOrder",
+          orderData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}` // Gửi token qua header Authorization
+            }
+          }
+        );
+
+        // Lấy OrderId của đơn hàng đã tạo
+        const orderProductId = responseOrder.data.orderProductId;
+        console.log("ma don hang");
+        console.log(orderProductId);
+
+        // Gọi API POST để tạo từng chi tiết đơn hàng
+        for (const cart of this.carts) {
+          const orderDetail = {
+            orderId: orderProductId,
+            productId: cart.ProductId,
+            quantity: cart.Quantity,
+            price: cart.Price,
+            image: cart.Image
+            // Các trường khác của chi tiết đơn hàng tùy theo yêu cầu của bạn
+          };
+
+          console.log("Chi tiết đơn hàng:");
+          console.log(orderDetail);
+
+          // Gọi API POST để tạo chi tiết đơn hàng hiện tại
+          try {
+            const responseOrderDetail = await axios.post(
+              "https://localhost:7159/api/OrderDetail",
+              orderDetail,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}` // Gửi token qua header Authorization
+                }
+              }
+            );
+            console.log(
+              "Đã tạo chi tiết đơn hàng thành công:",
+              responseOrderDetail.data
+            );
+          } catch (error) {
+            console.error(
+              "Lỗi khi tạo chi tiết đơn hàng:",
+              error.response ? error.response.data : error.message
+            );
+            // Xử lý lỗi tại đây nếu cần thiết
+          }
+        }
+
+        // // Tạo danh sách chi tiết đơn hàng từ danh sách carts và orderId
+        // const orderDetails = this.carts.map(cart => ({
+        //   orderId: orderProductId,
+        //   productId: cart.ProductId,
+        //   quantity: cart.Quantity,
+        //   price: cart.Price,
+        //   image:cart.Image
+        //   // Các trường khác của chi tiết đơn hàng tùy theo yêu cầu của bạn
+        // }));
+        // console.log("chi tiet don hang hang");
+        // console.log(orderDetails);
+        // // Gọi API POST để tạo các chi tiết đơn hàng
+        // const responseOrderDetails = await axios.post("https://localhost:7159/api/OrderDetail", orderDetails, {
+        //   headers: {
+        //     Authorization: `Bearer ${token}` // Gửi token qua header Authorization
+        //   }
+        // });
+
+        // // Xử lý kết quả trả về nếu cần thiết
+        // console.log("Đơn hàng và chi tiết đơn hàng đã được tạo thành công:", responseOrder.data, responseOrderDetails.data);
+
+        // Xóa giỏ hàng sau khi đã đặt hàng thành công
+        await this.carts.forEach(cart => this.deleteCart(cart.CartId));
+
+        // Chuyển hướng người dùng đến trang thành công hoặc thông báo thành công
+        this.$router.push("/theshop");
+      } catch (error) {
+        console.error("Lỗi khi đặt hàng:", error);
+        // Xử lý lỗi nếu cần thiết (hiển thị thông báo lỗi, log, ...)
+      }
+    }
+  }
 }
 </script>
 <style lang="">
