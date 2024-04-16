@@ -16,7 +16,10 @@ const actions={
         try {
              console.log("lây nguoif dùng");
             const respone=  await  axios.post(`https://localhost:7159/api/Auth/user`,data)
+            console.log("lấy người dùng")
               console.log(respone.data);
+                // Lưu sản phẩm vào Local Storage
+                localStorage.setItem('selectedUser', JSON.stringify(respone.data));
             commit('SET_USER',respone.data)
           } catch (error) {
               console.log(error)

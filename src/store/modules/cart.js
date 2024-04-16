@@ -20,7 +20,7 @@ const cartModules = {
       // }
       // Kiểm tra xem token có tồn tại không
       const token = localStorage.getItem("token");
-      console.log(token);
+    //  console.log(token);
       // if (!token) {
 
       //   // Nếu không có token, chuyển hướng đến trang đăng nhập
@@ -40,6 +40,7 @@ const cartModules = {
         )
         console.log("lấy giỏ hàng thành công");
         console.log(respone.data);
+        
         commit('SET_CARTS', respone.data);
       } catch (error) {
         console.log(error);

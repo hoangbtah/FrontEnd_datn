@@ -284,10 +284,37 @@
 import { mapActions ,mapGetters} from 'vuex';
 export default {
     name:'ProductDetail',
-    computed:{...mapGetters(['product','comments','products'])},
+    created() {
+        this.getProducts();
+        //lấy sản phẩm
+        const storedProduct = localStorage.getItem('selectedProduct');
+    
+    if (storedProduct) {
+      // Nếu đã lưu sản phẩm trong Local Storage, sử dụng nó
+      this.$store.commit('SET_PRODUCT', JSON.parse(storedProduct));
+    } else {
+      // Nếu chưa có, gọi API để lấy sản phẩm
+      this.getProduct(this.product.productId);
+    }
+    //lấy comment sản phẩm 
+    const commentedProduct = localStorage.getItem('commentsProduct');
+    
+    if (commentedProduct) {
+      // Nếu đã lưu sản phẩm trong Local Storage, sử dụng nó
+      this.$store.commit('SET_COMMENTS', JSON.parse(commentedProduct));
+    } else {
+      // Nếu chưa có, gọi API để lấy sản phẩm
+      this.getComments(this.product.productId);
+    }
+
+    },
+    computed:{...mapGetters(["product",'comments','products'])},
   
     methods:{
-        ...mapActions(['getProduct','getProducts','getComments']),
+        ...mapActions(["getProduct",'getProducts','getComments']),
+    //     async fetchData(productId) {
+    //   await this.getProduct(productId); // Gọi action để lấy sản phẩm từ Store
+    // },
         goToShoppingCart() {
     console.log("get");
         // this.$router.push('/productdetail');
@@ -301,13 +328,8 @@ export default {
         this.getComments(productId);
         this.goToShoppingCart();
     }
-    },
-      mounted() {
-       // this.getProduct()
-        // Lấy thông tin sản phẩm khi trang được tải
-    const productId = this.$route.params.productId; // Lấy ID sản phẩm từ route params
-    this.getProduct(productId);
-    },
+    }
+   
 }
 </script>
 <style lang="">

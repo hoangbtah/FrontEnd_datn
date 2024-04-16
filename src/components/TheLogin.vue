@@ -66,21 +66,23 @@ export default {
         // .then(response => {
         //  console.log('Đăng nhập thành công!');
           // Xử lý phản hồi từ server nếu cần
-          const token = respone.data;
+       //   const token = respone.data;
        //   console.log(respone.data.token);
           // Lưu token vào local storage để sử dụng sau này
-          localStorage.setItem('token', token);
+          localStorage.setItem('token',  respone.data);
            // this.registrationSuccess=true;
-          console.log(respone.data);
+        //  console.log(respone.data);
           this.auth.isEmployee= true;
-          this.auth.isAuthenticated=false;
-          console.log(this.name,this.password);
-          this.auth.name=this.name;
+        
+         console.log(this.auth.isAuthenticated);
+         // this.auth.name=this.name;
           this.registrationError='';
          await this.getUser(formData);
-          console.log("userid: ",this.auth.user.userId);
+      //    console.log("userid: ",this.auth.user.userId);
         await  this.getCarts(this.auth.user.userId);
          this.$router.push('/');      
+       //  this.auth.isAuthenticated=false;
+       
     }
     catch (error) {
         console.error(error);

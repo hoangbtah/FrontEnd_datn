@@ -127,7 +127,7 @@
                         <div class="navbar-nav ml-auto py-0">
                            <div v-if="auth.isAuthenticated"> <router-link to="/login" class="nav-item nav-link"><div class="nav-text">Login</div></router-link></div>
                            <div v-else>
-                            <router-link to="/user" class="nav-item nav-link"><div class="nav-text">{{ auth.name }}</div></router-link>
+                            <router-link to="/user" class="nav-item nav-link"><div class="nav-text">{{ auth.user.name }}</div></router-link>
                             </div>
                             <router-link to="/register" class="nav-item nav-link"><div class="nav-text">Register</div></router-link>
                             <!-- <router-link to="/user" class="nav-item nav-link"><div class="nav-text">user</div></router-link> -->
@@ -157,6 +157,21 @@ export default {
   created() {
     this.getCatagorys();
     this.getManufactorers();
+     //lấy người dùng
+     const user = localStorage.getItem('selectedUser');
+    console.log(this.auth.isAuthenticated)
+    if (user) {
+      // Nếu đã lưu sản phẩm trong Local Storage, sử dụng nó
+      this.$store.commit('SET_USER', JSON.parse(user));
+      console.log("lật lại user")
+      this.$store.commit('TOGGLE_AUTH');
+      console.log(this.auth.isAuthenticated)
+    } 
+    else {
+      // Nếu chưa có, gọi API để lấy sản phẩm
+      this.getUser(this.auth.user.name,this.auth.user.password);
+    }
+
   },
   //   updated(){
   //     this.logout();
@@ -187,6 +202,9 @@ export default {
     logout() {
       // Xóa token khỏi localStorage
       localStorage.removeItem("token");
+      localStorage.removeItem("selectedProduct");
+      localStorage.removeItem("commentedProduct");
+      localStorage.removeItem("selectedUser");
 
       // Đặt lại trạng thái ủy quyền (authenticated) và dữ liệu cần thiết khác
       this.auth.isAuthenticated = true;
