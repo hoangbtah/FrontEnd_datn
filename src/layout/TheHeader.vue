@@ -171,6 +171,8 @@ export default {
       // Nếu chưa có, gọi API để lấy sản phẩm
       this.getUser(this.auth.user.name,this.auth.user.password);
     }
+    // lấy giỏ hàng
+    this.getCarts(this.auth.user.userId);
 
   },
   //   updated(){
@@ -183,7 +185,8 @@ export default {
       "getProductsByCatagoryId",
       "getProductsByManufactorerId",
       "getUser",
-      "resetCarts"
+      "resetCarts",
+      "getCarts"
     ]),
     // kiểm tra xem đã đăng nhập chưa trước khi xem giỏ hàng
     checkLogin() {

@@ -14,8 +14,15 @@
       </div>
       <div class="input-group">
         <label for="password">Mật khẩu:</label>
-        <input type="password" id="password" name="password" required v-model="password">
-      </div>
+        <!-- <div class="password-input"> -->
+        <input class="password-field"
+        :type="showPassword ? 'text' : 'password'"
+        id="password" name="password" required v-model="password">
+        <span @click="toggleShowPassword" class="toggle-password">
+              <i class="fa" :class="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+            </span>
+            <!-- </div> -->
+       </div>     
       <div class="forgot-password">
       <p>Quên mật khẩu ?</p>
     </div>
@@ -40,7 +47,8 @@ export default {
       return {
         name:'',
         password:'',
-        registrationError:''
+        registrationError:'',
+        showPassword:false
       };
     },
     created(){
@@ -90,6 +98,9 @@ export default {
           this.registrationError = 'Tên đăng nhập hoặc mật khẩu không đúng.';
       }
     },
+    toggleShowPassword() {
+      this.showPassword = !this.showPassword;
+    }
     }
 }
 </script>
@@ -151,5 +162,19 @@ button {
 }
 .register label{
   color:#000;
+}
+.toggle-password {
+  position: absolute;
+  top: 50px;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+/* Điều chỉnh biểu tượng mắt */
+.toggle-password i {
+  font-size: 18px;
+  color: #2b2727;
+ 
 }
 </style>

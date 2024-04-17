@@ -5,7 +5,7 @@
     right: 0;
     bottom: 0;
     background-color: #bbbbbba1;
-    display: none;
+    /* display: none; */
     z-index: 10;
 }
 .m-dialog .m-dialog-content{

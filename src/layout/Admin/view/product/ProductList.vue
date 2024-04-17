@@ -3,12 +3,12 @@
             <div class="m-page-header">
                 <div class="m-page-title">Sản phẩm</div>
                 <div class="m-page-button">
-                    <button id="btn-add" class="m-btn ">Thêm mới sản phẩm</button>
+                    <button id="btn-add" class="m-btn" @click="btnAddClick()">Thêm mới</button>
                 </div>
             </div>
             <div class="m-page-toolbar">
                 <div class="m-toolbar-left">
-                    <input id="txtSearch" class="m-input m-btn-icon-right m-icon-search" placeholder="Tìm theo mã,tên" style="width: 200px;"/>
+                    <input id="txtSearch" class="m-input m-btn-icon-right m-icon-search" placeholder="Tìm theo tên" style="width: 200px;"/>
                 </div>
                 <div class="m-toolbar-right">
                     <button id="reload" class="m-icon-refresh"></button>
@@ -44,9 +44,9 @@
                                     <!-- <td></td> -->
                                     <td>
                                        <div class="m-option">
-                                        <button class="m-btn-option m-btn-de">Chi tiết</button>
-                                        <button class="m-btn-option m-btn-ud">Sửa</button>
-                                        <button class="m-btn-option m-btn-ud">Xóa</button>
+                                        <button class="m-btn-option m-btn-de btn-info"  @click="btnDetailClick(productad.ProductId)">Chi tiết</button>
+                                        <button class="m-btn-option m-btn-ud btn-warning">Sửa</button>
+                                        <button class="m-btn-option m-btn-ud  btn-danger">Xóa</button>
                                        </div>
                                     </td>
                                 </tr>
@@ -60,18 +60,18 @@
                         </div>
                         <div class="m-page-right">
                             <div class="m-number-page">
-                                <select name="" id="">
+                                <!-- <select name="" id="">
                                     <option>10 bản ghi trên 1 trang</option>
                                     <option>20 bản ghi trên 1 trang</option>
                                     <option>30 bản ghi trên 1 trang</option>
                                     <option>50 bản ghi trên 1 trang</option>
                                     <option>100 bản ghi trên 1 trang</option>
-                                </select>
+                                </select> -->
                             </div>
                             <div class="m-number">
-                                <button @click="prevPage" :disabled="pageNumber === 1">Prev</button>
+                                <button @click="prevPage" :disabled="pageNumber === 1">Trước</button>
                                 <button v-for="page in displayedPages" :key="page" @click="gotoPage(page)" :class="{ 'm-page-selected': page === pageNumber }">{{ page }}</button>
-                                <button @click="nextPage" :disabled="pageNumber === totalPages">Next</button>
+                                <button @click="nextPage" :disabled="pageNumber === totalPages">Sau</button>
                                 <!-- <button >Trước</button>
                                 <button class="m-page-selected">1</button>
                             <button >2</button>
@@ -83,15 +83,18 @@
                         </div>
                     </div>   
             </div>
-            </div>
+            <ProductDetailAD/>
+            </div>        
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
 import axios from "axios";
+import ProductDetailAD from './ProductDetailAD';
 export default {
   name: "EmployeeList",
+  components:{ProductDetailAD},
   computed: {
-    ...mapGetters(["product", "comments", "products"]),
+    ...mapGetters(["product", "comments", "products","isShow"]),
     // hiển thị trang
     displayedPages() {
       const start = Math.max(1,this.pageNumber - Math.floor(this.maxDisplayedPages / 2)
@@ -102,7 +105,7 @@ export default {
   },
   created() {
     this.getProducts();
-    this.fetchItems();
+    this.fetchItems(this.pageNumber,this.pageSize);
     this.total();
   },
   methods: {
@@ -116,8 +119,6 @@ export default {
           }&pagesize=${this.pageSize}`
         );
         this.items = response.data;
-        // Update total pages based on response or some other logic
-        // this.totalPages = response.headers['x-total-pages'];
         console.log(this.totalPages);
       } catch (error) {
         console.error(error);
@@ -143,21 +144,31 @@ export default {
     },
     total() {
       (this.totalPages = Math.ceil(this.products.length / this.pageSize))
-    }
+    },
+    // thêm mới sản  phẩm
+    btnAddClick(){
+     this.$store.commit('SET_PRODUCT',[] )
+     this.$store.commit('TOGGLE_ISSHOW');
+    },
+    // xem chi tiết
+    btnDetailClick(productId){
+        this.getProduct(productId);
+        this.$store.commit('TOGGLE_ISSHOW');
+    },
   },
   data() {
     return {
       items: [],
       pageNumber: 1,
-      pageSize: 3,
+      pageSize: 9,
       totalPages: 0,
-      maxDisplayedPages: 5
+      maxDisplayedPages: 3,
     };
   }
 };
 </script>
 <style>
-@import url("../../../..//assets_ad/css_ad/layout/content.css");
+@import url("../../../../assets_ad/css_ad/layout/content.css");
 @import url("../../../../assets_ad/css_ad/page/employ.css");
 @import url("../../../../assets_ad/css_ad/component/page.css");
 </style>

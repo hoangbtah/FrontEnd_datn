@@ -3,11 +3,13 @@ const productModules = {
     state: {
         products: [],
         product: {},
+        isShow:false
         //  productspa:[],
     },
     getters: {
         products: state => state.products,
         product: state => state.product,
+        isShow:state=>state.isShow,
         // productspa:state=>state.productspa,
 
     },
@@ -78,6 +80,9 @@ const productModules = {
         },
         SET_PRODUCTSBYCATAGORYID(state, products) {
             state.products = products
+        },
+        TOGGLE_ISSHOW(state){
+            state.isShow=!state.isShow
         },
 
     }
