@@ -1,9 +1,9 @@
 <template>
-    <div id="dialogadd" class="m-dialog" v-if="isShow">              
+    <div id="dialogadd" class="m-dialog" v-if="isShowOrderDetail">              
                <div class="m-dialog-content">
                    <div class="m-dialog-header">
                        <div class="m-dialog-title">
-                           Thông tin sản phẩm
+                           Thông tin chi tiết đơn hàng
                        </div>
                        <button id="dialog-close" class="m-dialog-close m-icon-cancel">
                                
@@ -95,19 +95,16 @@
 import axios from "axios";
 import { mapGetters,mapActions } from "vuex";
 export default {
-  name: "ProductDetailAD",
+  name: "OrderDetail",
   components: {},
-  created(){
-    this.getManufactorers();
-    this.getCatagorys();
-  },
   computed: {
-    ...mapGetters(["product", "comments", "products", "isShow","manufactorers","catagorys"])
+    ...mapGetters(["product", "comments", "products", "isShowOrderDetail","manufactorers","catagorys"])
   },
   methods: {
     ...mapActions(['getProduct','getManufactorers','getCatagorys']),
     btnClose() {
-      this.$store.commit("TOGGLE_ISSHOW");
+     console.log(this.isShowOrderDetail);
+      this.$store.commit("TOGGLE_ISSHOWORDERDETAIL");
     },
     btnSave() {
       // var me=this;

@@ -23,30 +23,31 @@
                                 <!-- <th class="m-employee-code"></th> -->
                                 <th class="m-employee-name">NGƯỜI MUA HÀNG</th>
                                 <th class="m-gender">NGÀY ĐẶT</th>
-                                <!-- <th class="m-dateOfbrith">MÔ TẢ</th> -->
-                                <th class="m-identityCode">NGÀY GIAO</th>
+
+                                <!-- <th class="m-dateOfbrith">ĐỊA CHỈ ĐƠN HÀNG</th> -->
+                                <!-- <th class="m-identityCode">NGÀY GIAO</th> -->
                                 <th class="m-position">TÌNH TRANG</th>
-                                <!-- <th class="m-department-name">HÃNG SẢN XUẤT</th>
-                                <th class="m-account">HÌNH ẢNH</th>-->
+                                <th class="m-department-name">ĐỊA CHỈ</th>
+                                <th class="m-account">SỐ ĐT</th>
                                 <th class="m-option">CHỨC NĂNG</th> 
                             </tr>       
                            </thead>     
                            <tbody>
                                <tr v-for="order in orders" :key="order.orderProductId">
                                    <td><input type="checkbox" class="m-select-row"></td>
-                                   <td>{{ order.userId }}</td>
-                                   <td>{{ formatDate(order.orderDate) }}</td>
-                                   <td>{{ formatDate(order.deliveryDate) }}</td>
-                                   <td>{{ order.status }}</td>
-                                   <!-- <td>{{ productad.ManufactorerName }}</td>
-                                   <td> <img class="" style="width:80px;height:80px" :src="productad.Image" alt=""></td>
+                                   <td>{{ order.Name }}</td>
+                                   <td>{{ formatDate(order.OrderDate) }}</td>
+                                   <!-- <td>{{ formatDate(order.deliveryDate) }}</td> -->
+                                   <td>{{ order.Status }}</td>
+                                   <td>{{ order.Phone }}</td>
+                                   <!-- <td> <img class="" style="width:80px;height:80px" :src="productad.Image" alt=""></td> -->
                                    
-                                   <td></td> -->
+                                   <td>{{ order.OrderAddress }}</td>
                                    <td>
                                       <div class="m-option">
-                                       <button class="m-btn-option m-btn-de btn-info"  @click="btnDetailClick(productad.ProductId)">Chi tiết</button>
-                                       <button class="m-btn-option m-btn-ud btn-warning" @click="btnUpdateClick(productad.ProductId)">Sửa</button>
-                                       <button class="m-btn-option m-btn-ud  btn-danger" @click="btnDelete(productad.ProductId)">Xóa</button>
+                                       <button class="m-btn-option m-btn-de btn-info"  @click="btnOrderDetailClick()">Chi tiết</button>
+                                       <button class="m-btn-option m-btn-ud btn-warning" @click="btnUpdateClick()">Sửa</button>
+                                       <button class="m-btn-option m-btn-ud  btn-danger" @click="btnDelete()">Xóa</button>
                                       </div>
                                    </td>
                                </tr>
@@ -83,18 +84,18 @@
                        </div>
                    </div>   
            </div>
-           <!-- <ProductDetailAD 
-           :forMode="forModeDetail"/> -->
+           <OrderDetail/>
            </div>        
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
+import OrderDetail from './OrderDetail';
 import axios from "axios";
 export default {
  name: "OrderList",
- components:{},
+ components:{OrderDetail},
  computed: {
-   ...mapGetters(["orders","isShow"]),
+   ...mapGetters(["orders","isShowOrderDetail"]),
    // hiển thị trang
    displayedPages() {
      const start = Math.max(1,this.pageNumber - Math.floor(this.maxDisplayedPages / 2)
@@ -168,24 +169,26 @@ export default {
      (this.totalPages = Math.ceil(this.products.length / this.pageSize))
    },
    // thêm mới sản  phẩm
-   btnAddClick(){
-     this.forModeDetail=1;
-     console.log(this.forModeDetail);
-    this.$store.commit('SET_PRODUCT',[] )
-    this.$store.commit('TOGGLE_ISSHOW');
-   },
+  //  btnAddClick(){
+  //    this.forModeDetail=1;
+  //    console.log(this.forModeDetail);
+  //   this.$store.commit('SET_PRODUCT',[] )
+  //   this.$store.commit('TOGGLE_ISSHOW');
+  //  },
    // xem chi tiết
-   btnDetailClick(productId){
-       this.getProduct(productId);
-       this.$store.commit('TOGGLE_ISSHOW');
+   btnOrderDetailClick(){
+     //  this.getProduct();
+     console.log(this.isShowOrderDetail);
+       this.$store.commit('TOGGLE_ISSHOWORDERDETAIL');
+       console.log(this.isShowOrderDetail);
    },
    // sửa sản phẩm 
-   btnUpdateClick(productId){
-     this.forModeDetail=0;
-     console.log(this.forModeDetail);
-     this.getProduct(productId);
-       this.$store.commit('TOGGLE_ISSHOW');
-   }
+  //  btnUpdateClick(productId){
+  //    this.forModeDetail=0;
+  //    console.log(this.forModeDetail);
+  //    this.getProduct(productId);
+  //      this.$store.commit('TOGGLE_ISSHOW');
+  //  }
  },
  data() {
    return {
