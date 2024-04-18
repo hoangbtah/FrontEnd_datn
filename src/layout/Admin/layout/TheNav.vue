@@ -23,14 +23,14 @@
                    Quản lý hãng sản xuất
                </div>
            </div>
-           <div class="menu-item">
+           <router-link to="/order" class="menu-item">
                <div class="menu-icon m-icon-purchase">
                    
                </div>
                <div class="menu-text">
                    Quản lý đơn hàng
                </div>
-           </div>
+           </router-link>
            <router-link to="/employee" class="menu-item">
                <div class="menu-icon m-icon-sell">
                    

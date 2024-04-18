@@ -37,32 +37,47 @@
                            <div class="m-dialog-donvi">
                                <div><label for="">Danh mục <i class="required">*</i></label></div>
                                <div>
-                                  
-                               <select id="department" name="department"></select>
+                                <select v-model="product.catagoryId">
+                                      <option value="" disabled selected>Select an option</option>
+                                      <option v-for="catagory in catagorys" :key="catagory.catagoryId" :value="catagory.catagoryId"> 
+                                        {{ catagory.catagoryName }}
+                                      </option>
+                                    </select>
                            </div>
                            </div>
                            <div class="m-dialog-donvi">
                                <div><label for="">Hãng sản xuất <i class="required">*</i></label></div>
                                <div>
-                                  
-                               <select id="department" name="department"></select>
-                           </div>
+                               <select v-model="product.manufactorerId">
+                                      <option value="" disabled selected>Select an option</option>
+                                      <option v-for="manufactorer in manufactorers" :key="manufactorer.manufactorerId" :value="manufactorer.manufactorerId">
+                                        {{ manufactorer.manufactorerName }}
+                                      </option>
+                                    </select>
+                              </div>
                            </div>
                           
                        </div>
                        <div class="m-row-3">
                            <div class="m-dialog-chuc-danh">
                                <div><label for="">Mô tả</label></div>
-                               <div><input  class="m-input loaddel" type="text" id="txtPosition"  v-model="product.description"></div>
+                               <div> 
+                                 <textarea id="comment" name="comment" style="width: 352px; height: 150px;"  v-model="product.description">
+                                 </textarea>
+                       <!-- <img class="" style="width:80px;height:80px" :src="product.image" alt=""> -->
+                       </div>
                            </div>
                            <div class="m-dialog-noi-cap">
                                <div><label for="">Hình ảnh</label></div>
-                               <div><input class="m-input loaddel"  type="text" id="txtIdentityPlace" v-model="product.image"></div>
+                               <div><input class="m-input loaddel"  type="text" id="txtIdentityPlace" v-model="product.image">
+                                <img class="" style="width:100px;height:100px" :src="product.image" alt="">
+                          
+                               </div>
                            </div>
                           
                        </div>
-                       <textarea id="comment" name="comment" style="width: 300px; height: 100px;"  v-model="product.description"></textarea>
-                       <img class="" style="width:80px;height:80px" :src="product.image" alt="">
+                       <!-- <textarea id="comment" name="comment" style="width: 300px; height: 100px;"  v-model="product.description"></textarea>
+                       <img class="" style="width:80px;height:80px" :src="product.image" alt=""> -->
                       
                    </div>
                    <div class="m-dialog-footer">
@@ -83,10 +98,10 @@ export default {
   name: "ProductDetailAD",
   components: {},
   computed: {
-    ...mapGetters(["product", "comments", "products", "isShow"])
+    ...mapGetters(["product", "comments", "products", "isShow","manufactorers","catagorys"])
   },
   methods: {
-    ...mapActions(['getProduct']),
+    ...mapActions(['getProduct','getManufactorers','getCatagorys']),
     btnClose() {
       this.$store.commit("TOGGLE_ISSHOW");
     },
@@ -96,10 +111,11 @@ export default {
       //2. build object thông tin nhân viên
       //3. gọi api thực hiện thêm mới
       //3.1 kiểm tra trạng thaasi thêm mới hay sửa
-      if (this.forMod == 1) {
+      if (this.forMode == 1) {
         // axios.post("https://localhost:7159/api/v1/Employees/",me.employee)
         // .then(function(){
         alert("thêm thành công");
+        console.log(this.product);
         // ẩn form đi
         //loading lại dữ liệu
         // })
@@ -108,6 +124,7 @@ export default {
         // axios.put(`https://localhost:7159/api/v1/Employees/${me.employeeSelectedId}`,me.employee)
         // .then(function(){
         alert("sửa thành công");
+        console.log(this.product);
         // ẩn form đi
         //loading lại dữ liệu
         // })
@@ -117,7 +134,7 @@ export default {
       // nếu có lỗi validate hoặc lỗi từ back-end thì hiển thị thông báo tương ứng
     }
   },
-  props: ["isShow", "employeeSelected", "employeeSelectedId", "forMod"],
+  props: ["isShow", "employeeSelected", "employeeSelectedId", "forMode"],
   watch: {
     employeeSelected: function(value) {
       //this.employee=value;

@@ -45,8 +45,8 @@
                                     <td>
                                        <div class="m-option">
                                         <button class="m-btn-option m-btn-de btn-info"  @click="btnDetailClick(productad.ProductId)">Chi tiết</button>
-                                        <button class="m-btn-option m-btn-ud btn-warning">Sửa</button>
-                                        <button class="m-btn-option m-btn-ud  btn-danger">Xóa</button>
+                                        <button class="m-btn-option m-btn-ud btn-warning" @click="btnUpdateClick(productad.ProductId)">Sửa</button>
+                                        <button class="m-btn-option m-btn-ud  btn-danger" @click="btnDelete(productad.ProductId)">Xóa</button>
                                        </div>
                                     </td>
                                 </tr>
@@ -83,7 +83,8 @@
                         </div>
                     </div>   
             </div>
-            <ProductDetailAD/>
+            <ProductDetailAD 
+            :forMode="forModeDetail"/>
             </div>        
 </template>
 <script>
@@ -147,6 +148,8 @@ export default {
     },
     // thêm mới sản  phẩm
     btnAddClick(){
+      this.forModeDetail=1;
+      console.log(this.forModeDetail);
      this.$store.commit('SET_PRODUCT',[] )
      this.$store.commit('TOGGLE_ISSHOW');
     },
@@ -155,6 +158,13 @@ export default {
         this.getProduct(productId);
         this.$store.commit('TOGGLE_ISSHOW');
     },
+    // sửa sản phẩm 
+    btnUpdateClick(productId){
+      this.forModeDetail=0;
+      console.log(this.forModeDetail);
+      this.getProduct(productId);
+        this.$store.commit('TOGGLE_ISSHOW');
+    }
   },
   data() {
     return {
@@ -163,6 +173,7 @@ export default {
       pageSize: 9,
       totalPages: 0,
       maxDisplayedPages: 3,
+      forModeDetail:0,
     };
   }
 };

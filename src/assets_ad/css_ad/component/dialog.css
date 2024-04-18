@@ -191,12 +191,12 @@
     flex-shrink: 0;
 }
 .m-dialog .m-dialog-content .m-dialog-body .m-row-1-left .m-dialog-employee-name .m-input{
-    width: 202px;
+    width: 352px;
     box-sizing: border-box;
 }
 .m-dialog .m-dialog-content .m-dialog-body .m-row-1-left .m-dialog-employcode .m-input{
     box-sizing: border-box;
-    width: 134px;
+    width: 352px;
 }
 .m-dialog .m-dialog-content .m-dialog-body .m-row-1-right{
     display: flex;

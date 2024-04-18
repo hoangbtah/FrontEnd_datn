@@ -15,6 +15,7 @@ import TheRegister from './components/TheRegister.vue'
 import ProductList from './layout/Admin/view/product/ProductList'
 import CatagoryList from './layout/Admin/view/catagory/CatagoryList.vue'
 import EmployeeList from './layout/Admin/view/employee/EmployeeList.vue'
+import OrderList from './layout/Admin/view/order/OrderList.vue'
 import TheUser from './components/TheUser.vue'
 
 Vue.config.productionTip = false
@@ -39,6 +40,8 @@ const routes = [
     { path: '', component: ProductList },
 { path: '/catagory', component: CatagoryList },
 { path: '/employee', component: EmployeeList },
+{ path: '/order', component: OrderList },
+
   ]
 },
 
