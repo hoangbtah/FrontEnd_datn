@@ -16,6 +16,8 @@ import ProductList from './layout/Admin/view/product/ProductList'
 import CatagoryList from './layout/Admin/view/catagory/CatagoryList.vue'
 import EmployeeList from './layout/Admin/view/employee/EmployeeList.vue'
 import OrderList from './layout/Admin/view/order/OrderList.vue'
+import OrderDetail from './layout/Admin/view/order/OrderDetail.vue'
+
 import TheUser from './components/TheUser.vue'
 
 Vue.config.productionTip = false
@@ -41,6 +43,8 @@ const routes = [
 { path: '/catagory', component: CatagoryList },
 { path: '/employee', component: EmployeeList },
 { path: '/order', component: OrderList },
+{ path: '/orderdetail', component: OrderDetail },
+
 
   ]
 },

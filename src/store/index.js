@@ -11,14 +11,16 @@ import comments from './modules/comment'
 import carts from './modules/cart'
 import isShow from './modules/product'
 import orders from './modules/order'
-import isShowOrderDetail from './modules/order'
+import orderDetails from './modules/order'
+
+//import isShowOD from './modules/order'
 
 
 
 Vue.use(Vuex)
 const storeData= {
     modules:{
-        auth,todos,catagorys,manufactorers,products,product,comments,carts,isShow,orders,isShowOrderDetail,
+        auth,todos,catagorys,manufactorers,products,product,comments,carts,isShow,orders,orderDetails
     }
   
 

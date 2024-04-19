@@ -1,197 +1,199 @@
-<template>
-    <div id="dialogadd" class="m-dialog" v-if="isShowOrderDetail">              
-               <div class="m-dialog-content">
-                   <div class="m-dialog-header">
-                       <div class="m-dialog-title">
-                           Thông tin chi tiết đơn hàng
-                       </div>
-                       <button id="dialog-close" class="m-dialog-close m-icon-cancel">
-                               
-                       </button>
-                   </div>
-                   <div class="m-dialog-body">
-                       <div class="m-row-1">
-                          <div class="m-row-1-left">
-                           <div class="m-dialog-employcode">
-                               <div><label for="">Tên sản phẩm</label><i class="required">*</i></div>
-                               <div><input class="m-input" id="txtEmployeeCode" type="input" required v-model="product.productName"></div>
-                           </div>
-                           <div class="m-dialog-employee-name">
-                               <!-- <div><label for="">Tên<i class="required">*</i></label></div>
-                               <div><input id="txtEmployeeName" class="m-input loaddel"  type="input" required v-model="employee.employeeName"></div> -->
-                           </div>
-                          </div>
-                          <div class="m-row-1-right">
-                           <div class="m-dialog-employee-dob">
-                               <div><label for="">Số lượng</label></div>
-                               <div><input class="m-input"  type="text" id="txtDateOfBrith"  v-model="product.quantity"></div>
-                           </div>
-                           <div class="m-dialog-employee-dob">
-                               <div><label for="">Đơn giá</label></div>
-                               <div><input class="m-input"  type="text" id="txtDateOfBrith"  v-model="product.price"></div>
-                           </div>
-                          
-                          </div>
-                       </div>
-                       <div class="m-row-2">
-                           <div class="m-dialog-donvi">
-                               <div><label for="">Danh mục <i class="required">*</i></label></div>
-                               <div>
-                                <select v-model="product.catagoryId">
-                                      <option value="" disabled selected>Select an option</option>
-                                      <option v-for="catagory in catagorys" :key="catagory.catagoryId" :value="catagory.catagoryId"> 
-                                        {{ catagory.catagoryName }}
-                                      </option>
-                                    </select>
-                           </div>
-                           </div>
-                           <div class="m-dialog-donvi">
-                               <div><label for="">Hãng sản xuất <i class="required">*</i></label></div>
-                               <div>
-                               <select v-model="product.manufactorerId">
-                                      <option value="" disabled selected>Select an option</option>
-                                      <option v-for="manufactorer in manufactorers" :key="manufactorer.manufactorerId" :value="manufactorer.manufactorerId">
-                                        {{ manufactorer.manufactorerName }}
-                                      </option>
-                                    </select>
-                              </div>
-                           </div>
-                          
-                       </div>
-                       <div class="m-row-3">
-                           <div class="m-dialog-chuc-danh">
-                               <div><label for="">Mô tả</label></div>
-                               <div> 
-                                 <textarea id="comment" name="comment" style="width: 352px; height: 150px;"  v-model="product.description">
-                                 </textarea>
-                       <!-- <img class="" style="width:80px;height:80px" :src="product.image" alt=""> -->
-                       </div>
-                           </div>
-                           <div class="m-dialog-noi-cap">
-                               <div><label for="">Hình ảnh</label></div>
-                               <div><input class="m-input loaddel"  type="text" id="txtIdentityPlace" v-model="product.image">
-                                <img class="" style="width:100px;height:100px" :src="product.image" alt="">
-                          
-                               </div>
-                           </div>
-                          
-                       </div>
-                       <!-- <textarea id="comment" name="comment" style="width: 300px; height: 100px;"  v-model="product.description"></textarea>
-                       <img class="" style="width:80px;height:80px" :src="product.image" alt=""> -->
-                      
-                   </div>
-                   <div class="m-dialog-footer">
-                      <div class="m-dialog-footer-left"> <button id="m-btn-add-cancle" class="m-btn m-btn-nocolor" @click="btnClose">Hủy</button></div>
-                       <div class="m-dialog-footer-right">
-                           <button id="btnSave" class="m-btn m-btn-nocolor m-btn-cat" @click="btnSave">Cất</button>
-                           <button id="btnSaveAndAdd" class="m-btn">Cất và thêm</button>
-                       </div>
-                   </div>
-               </div>
-         
-       </div>
+<template >
+  <div class="page-content">
+            <div class="m-page-header">
+                <div class="m-page-title">Chi tiết đơn hàng</div>
+                <div class="m-page-button">
+                    <!-- <button id="btn-add" class="m-btn" @click="btnAddClick()">Thêm mới</button> -->
+                </div>
+            </div>
+            <div class="m-page-toolbar">
+                <div class="m-toolbar-left">
+                    <input id="txtSearch" class="m-input m-btn-icon-right m-icon-search" placeholder="Tìm theo tên" style="width: 200px;"/>
+                </div>
+                <div class="m-toolbar-right">
+                    <button id="reload" class="m-icon-refresh"></button>
+                </div>
+            </div>
+            <div class="m-page-grid">
+                    <div class="m-grid">
+                        <table id="tblEmployee" class="m-table">
+                            <thead>
+                             <tr>
+                                <th><input type="checkbox" class="m-select-row"></th>
+                                 <!-- <th class="m-employee-code"></th> -->
+                                 <th class="m-employee-name">TÊN SẢN PHẨM</th>
+                                 <th class="m-gender">GIÁ BÁN</th>
+                                 <!-- <th class="m-dateOfbrith">MÔ TẢ</th> -->
+                                 <th class="m-identityCode">SỐ LƯỢNG</th>
+                                 <th class="m-position">LOẠI SẢN PHẨM</th>
+                                 <th class="m-department-name">HÃNG SẢN XUẤT</th>
+                                 <th class="m-account">HÌNH ẢNH</th>
+                                 <th class="m-option">CHỨC NĂNG</th>
+                             </tr>       
+                            </thead>     
+                            <tbody>
+                                <tr v-for="orderDetail in orderDetails" :key="orderDetail.ProductId">
+                                    <td><input type="checkbox" class="m-select-row"></td>
+                                    <td>{{ orderDetail.ProductName }}</td>
+                                    <td>{{ orderDetail.Price }}</td>
+                                    <td>{{ orderDetail.Quantity }}</td>
+                                    <td>{{ orderDetail.CatagoryName }}</td>
+                                    <td>{{ orderDetail.ManufactorerName }}</td>
+                                    <td> <img class="" style="width:80px;height:80px" :src="orderDetail.Image" alt=""></td>
+                                    
+                                    <!-- <td></td> -->
+                                    <td>
+                                       <div class="m-option">
+                                        <button class="m-btn-option m-btn-de btn-info"  @click="btnDetailClick()">Chi tiết</button>
+                                        <button class="m-btn-option m-btn-ud btn-warning" @click="btnUpdateClick()">Sửa</button>
+                                        <button class="m-btn-option m-btn-ud  btn-danger" @click="btnDelete()">Xóa</button>
+                                       </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            </table>
+                    </div>
+                   
+                    <div class="m-page-paging">
+                        <div class="m-page-left">
+                            <label>Tổng số : {{ orderDetails.length }} sản phẩm</label>
+                        </div>
+                        <div class="m-page-right">
+                            <div class="m-number-page">
+                                <!-- <select name="" id="">
+                                    <option>10 bản ghi trên 1 trang</option>
+                                    <option>20 bản ghi trên 1 trang</option>
+                                    <option>30 bản ghi trên 1 trang</option>
+                                    <option>50 bản ghi trên 1 trang</option>
+                                    <option>100 bản ghi trên 1 trang</option>
+                                </select> -->
+                            </div>
+                            <div class="m-number">
+                                <button @click="prevPage" :disabled="pageNumber === 1">Trước</button>
+                                <button v-for="page in displayedPages" :key="page" @click="gotoPage(page)" :class="{ 'm-page-selected': page === pageNumber }">{{ page }}</button>
+                                <button @click="nextPage" :disabled="pageNumber === totalPages">Sau</button>
+                                <!-- <button >Trước</button>
+                                <button class="m-page-selected">1</button>
+                            <button >2</button>
+                            <button >3</button>
+                            <button >4</button>
+                            <button >Sau</button> -->
+                            </div>
+                           
+                        </div>
+                    </div>   
+            </div>
+            </div>       
 </template>
 <script>
+import { mapActions, mapGetters } from "vuex";
+//import OrderDetail from './OrderDetail';
 import axios from "axios";
-import { mapGetters,mapActions } from "vuex";
 export default {
-  name: "OrderDetail",
-  components: {},
-  computed: {
-    ...mapGetters(["product", "comments", "products", "isShowOrderDetail","manufactorers","catagorys"])
-  },
-  methods: {
-    ...mapActions(['getProduct','getManufactorers','getCatagorys']),
-    btnClose() {
-     console.log(this.isShowOrderDetail);
-      this.$store.commit("TOGGLE_ISSHOWORDERDETAIL");
-    },
-    btnSave() {
-      // var me=this;
-      //1.validate dữ liệu
-      //2. build object thông tin nhân viên
-      //3. gọi api thực hiện thêm mới
-      //3.1 kiểm tra trạng thaasi thêm mới hay sửa
-      if (this.forMode == 1) {
-        // axios.post("https://localhost:7159/api/v1/Employees/",me.employee)
-        // .then(function(){
-        alert("thêm thành công");
-        console.log(this.product);
-        // ẩn form đi
-        //loading lại dữ liệu
-        // })
-        // .catch(function(){})
-      } else {
-        // axios.put(`https://localhost:7159/api/v1/Employees/${me.employeeSelectedId}`,me.employee)
-        // .then(function(){
-        alert("sửa thành công");
-        console.log(this.product);
-        // ẩn form đi
-        //loading lại dữ liệu
-        // })
-        // .catch(function(){})
+name: "OrderList",
+components:{},
+computed: {
+ ...mapGetters(["orders",'isShowOD','orderDetails']),
+ // hiển thị trang
+ displayedPages() {
+   const start = Math.max(1,this.pageNumber - Math.floor(this.maxDisplayedPages / 2)
+   );
+   const end = Math.min(this.totalPages, start + this.maxDisplayedPages - 1);
+   return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+ }
+},
+created() {
+// this.getProducts();
+this.getOrderDetail();
+//  this.fetchItems(this.pageNumber,this.pageSize);
+ this.total();
+},
+methods: {
+ ...mapActions(["getOrders","getOrderDetail"]),
+ // định dạng ngày
+ formatDate(dob)
+  {
+      if(dob)
+      {
+          dob= new Date(dob);
+          let date= dob.getDate();
+          date =date<10 ?  `0${date}`:date;
+          // lấy ngày 
+          let month= dob.getMonth()+1;
+          // lấy tháng
+          month= month <10 ? `0${month}`:month;
+          let year = dob.getFullYear();
+          //lấy giá trị là ngày tháng năm
+          dob= `${date}/${month}/${year}`;
       }
-      // nếu thêm mới thành công thì hiển thị toast thêm mới thành công
-      // nếu có lỗi validate hoặc lỗi từ back-end thì hiển thị thông báo tương ứng
-    }
-  },
-  props: ["isShow", "employeeSelected", "employeeSelectedId", "forMode"],
-  watch: {
-    employeeSelected: function(value) {
-      //this.employee=value;
-      console.log(value);
-    },
-    employeeSelectedId: function(value) {
-      // alert(value);
-      console.log(value);
-      var me = this;
-      if (value) {
-        //gọi api lấy dữ liệu
-        // hiển thị loading dữ liệu
-        axios
-          .get(
-            `https://localhost:7159/api/v1/Employees/${this.employeeSelectedId}`
-          )
-          .then(function(response) {
-            switch (response.status) {
-              case 200:
-                me.employee = response.data;
-                break;
-              case 201:
-                break;
-              default:
-            }
-            console.log(response);
-          })
-          .catch(function(response) {
-            switch (response.status) {
-              case 400:
-                break;
-              case 404:
-                break;
-              default:
-            }
-            console.log(response);
-            // ẩn loading dữ liệu
-          });
-      } else {
-        //reset lại thông tin nhân viên
-        me.employee = {};
-        // focus vào ô nhập liệu đầu tiên
-        //gọi api lấy mã nhân viên mới
-        //axios.get("").then
+      else{
+          dob = "";
       }
-    }
+      return dob;
   },
-  data() {
-    return {
-      // isShow:false
-      //không dùng data để hứng được mà phải dùng pros để hứng.
-      employee: {}
-    };
-  }
+ //lấy sản phẩm theo phân trang lọc tìm kiếm
+ async fetchItems() {
+   try {
+     const response = await axios.get(
+       `https://localhost:7159/api/v1/Product/products/search?pagenumber=${
+         this.pageNumber
+       }&pagesize=${this.pageSize}`
+     );
+     this.items = response.data;
+     console.log(this.totalPages);
+   } catch (error) {
+     console.error(error);
+   }
+ },
+ nextPage() {
+   if (this.pageNumber < this.totalPages) {
+     this.pageNumber++;
+     this.fetchItems();
+   }
+ },
+ prevPage() {
+   if (this.pageNumber > 1) {
+     this.pageNumber--;
+     this.fetchItems();
+   }
+ },
+ gotoPage(page) {
+   if (page !== this.pageNumber) {
+     this.pageNumber = page;
+     this.fetchItems();
+   }
+ },
+ total() {
+   (this.totalPages = Math.ceil(this.products.length / this.pageSize))
+ },
+ 
+ btnOrderDetailClick(){
+   //  this.getProduct();
+ //  console.log(this.isShowOD);
+     //this.$store.commit('TOGGLE_ISSHOWOD');
+    // this.isShowOD= !this.isShowOD
+    // console.log(this.isShowOD);
+ },
+ btnUpdateClick(){
+  // console.log("click update 1 ")
+  // this.$store.commit('TOGGLE_ISSHOWOD');
+ },
+
+},
+data() {
+ return {
+   items: [],
+   pageNumber: 1,
+   pageSize: 9,
+   totalPages: 0,
+   maxDisplayedPages: 3,
+   forModeDetail:0,
+ };
+}
 };
 </script>
-<style scoped>
-@import url("../../../../assets_ad/css_ad/component/dialog.css");
+<style>
+@import url("../../../../assets_ad/css_ad/layout/content.css");
+@import url("../../../../assets_ad/css_ad/page/employ.css");
+@import url("../../../../assets_ad/css_ad/component/page.css");
 </style>

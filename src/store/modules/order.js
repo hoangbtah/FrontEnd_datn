@@ -2,11 +2,13 @@ import axios from "axios";
 const orderModules={
     state:{
         orders:[],
-        isShowOrderDetail:false
+        orderDetails:[]
     },
     getters:{
         orders:state=> state.orders,
-        isShowOrderDetail:state=>state.isShowOrderDetail
+        orderDetails:state=> state.orderDetails,
+
+      //  isShowOD:state=>state.isShowOD,
     },
     actions:{
         async getOrders({commit}){
@@ -17,15 +19,33 @@ const orderModules={
                 console.log(error)
             }
            
-        }
+        },
+        async getOrderDetail({commit},orderId){
+            try {
+              const respone=await  axios.get(`https://localhost:7159/api/OrderDetail/getorderDetail/${orderId}`)
+              console.log("lấy chi tiết đơn hàng thành công")
+                commit('SET_ORDERDETAIL',respone.data)
+            } catch (error) {
+                console.log(error)
+            }
+           
+        },
+
     },
     mutations:{
         SET_ORDERS(state,orders){
             state.orders=orders
         },
-        TOGGLE_ISSHOWORDERDETAIL(state){
-            state.isShowOrderDetail=!state.isShowOrderDetail
+        SET_ORDERDETAIL(state,orderDetails){
+            state.orderDetails=orderDetails
         },
+        // TOGGLE_ISSHOWOD(state){
+        //    // state.isShowOD=!state.isShowOD
+        //    console.log("gọi 1 lần")
+        //    console.log(state.isShowOD);
+        //    state.isShowOD=!state.isShowOD
+        //    console.log(state.isShowOD);
+        // },
     }
 }
 export default orderModules

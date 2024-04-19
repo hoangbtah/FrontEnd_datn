@@ -33,7 +33,7 @@
                             </tr>       
                            </thead>     
                            <tbody>
-                               <tr v-for="order in orders" :key="order.orderProductId">
+                               <tr v-for="order in orders" :key="order.OrderProductId">
                                    <td><input type="checkbox" class="m-select-row"></td>
                                    <td>{{ order.Name }}</td>
                                    <td>{{ formatDate(order.OrderDate) }}</td>
@@ -45,7 +45,7 @@
                                    <td>{{ order.OrderAddress }}</td>
                                    <td>
                                       <div class="m-option">
-                                       <button class="m-btn-option m-btn-de btn-info"  @click="btnOrderDetailClick()">Chi tiết</button>
+                                       <button class="m-btn-option m-btn-de btn-info"  @click="btnOrderDetailClick(order.OrderProductId)">Chi tiết</button>
                                        <button class="m-btn-option m-btn-ud btn-warning" @click="btnUpdateClick()">Sửa</button>
                                        <button class="m-btn-option m-btn-ud  btn-danger" @click="btnDelete()">Xóa</button>
                                       </div>
@@ -95,7 +95,7 @@ export default {
  name: "OrderList",
  components:{OrderDetail},
  computed: {
-   ...mapGetters(["orders","isShowOrderDetail"]),
+   ...mapGetters(["orders",'isShowOD',"orderDetails"]),
    // hiển thị trang
    displayedPages() {
      const start = Math.max(1,this.pageNumber - Math.floor(this.maxDisplayedPages / 2)
@@ -107,11 +107,11 @@ export default {
  created() {
   // this.getProducts();
   this.getOrders();
-   this.fetchItems(this.pageNumber,this.pageSize);
+ //  this.fetchItems(this.pageNumber,this.pageSize);
    this.total();
  },
  methods: {
-   ...mapActions(["getOrders"]),
+   ...mapActions(["getOrders","getOrderDetail"]),
    // định dạng ngày
    formatDate(dob)
     {
@@ -167,29 +167,15 @@ export default {
    },
    total() {
      (this.totalPages = Math.ceil(this.products.length / this.pageSize))
+   }, 
+   btnOrderDetailClick(orderId){
+    console.log("lấy chi tiết đơn hàng");
+    console.log(orderId);
+    this.getOrderDetail(orderId);
+    this.$router.push('/orderdetail');      
    },
-   // thêm mới sản  phẩm
-  //  btnAddClick(){
-  //    this.forModeDetail=1;
-  //    console.log(this.forModeDetail);
-  //   this.$store.commit('SET_PRODUCT',[] )
-  //   this.$store.commit('TOGGLE_ISSHOW');
-  //  },
-   // xem chi tiết
-   btnOrderDetailClick(){
-     //  this.getProduct();
-     console.log(this.isShowOrderDetail);
-       this.$store.commit('TOGGLE_ISSHOWORDERDETAIL');
-       console.log(this.isShowOrderDetail);
-   },
-   // sửa sản phẩm 
-  //  btnUpdateClick(productId){
-  //    this.forModeDetail=0;
-  //    console.log(this.forModeDetail);
-  //    this.getProduct(productId);
-  //      this.$store.commit('TOGGLE_ISSHOW');
-  //  }
- },
+  },
+ 
  data() {
    return {
      items: [],
