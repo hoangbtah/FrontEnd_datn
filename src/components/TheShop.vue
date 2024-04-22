@@ -165,6 +165,12 @@
                     <div class="col-lg-4 col-md-6 col-sm-12 pb-1" v-for="productabc in items" :key="productabc.ProductId">
                         <div class="card product-item border-0 mb-4">
                             <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                              <div class="sale-product">
+                                <div class="product-0" v-if="productabc.Quantity==0"> <p>Đã hết hàng</p></div>
+                                <div class="sale"> <P>- 30%</P> </div>
+                              </div>
+                            
+                              <P></P>
                                 <img class="img-fluid w-100" :src="productabc.Image" alt="">
                             </div>
                             <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
@@ -352,5 +358,22 @@ export default {
 }
 </script>
 <style>
-    
+.sale-product{
+  display:flex;
+  position: relative;
+}
+.sale-product .sale{
+  position: absolute;
+  right:0;
+  padding-right:5px;
+  z-index:999;
+}
+.sale-product  p{
+  color:red;
+}
+.sale-product .product-0{
+  margin-left: 5px;
+  position: absolute;
+  z-index:999;
+}
 </style>

@@ -88,6 +88,7 @@ const cartModules = {
         console.log(respone.data);
         console.log("Thêm sản phẩm vào giỏ hàng thành công");
       } catch (error) {
+        alert(error.response.data);
         console.error("Lỗi khi thêm sản phẩm vào giỏ hàng:", error);
         throw error;
       }
@@ -115,6 +116,9 @@ const cartModules = {
       // console.log("dữ liệu truyền cho api");
       // console.log(data.cartId);
       // console.log(data);
+      // lấy sản phẩm được update
+
+
       try {
         const token = localStorage.getItem("token");
         if (!token) {
@@ -123,7 +127,7 @@ const cartModules = {
 
         // Gọi API để thêm sản phẩm vào giỏ hàng
         const respone = await axios.put(
-          `https://localhost:7159/api/ShoppingCart/${data.cartId}`, data,
+          `https://localhost:7159/api/ShoppingCart/updateShoppingCart`, data,
           {
             headers: {
               Authorization: `Bearer ${token}`
@@ -133,7 +137,9 @@ const cartModules = {
         commit('UPDATE_CART',data);
         console.log(respone.data);
         console.log("Sửa sản phẩm trong giỏ hàng thành công");
+        
       } catch (error) {
+        alert(error.response.data);
         console.error("Lỗi khi sửa sản phẩm trong giỏ hàng:", error);
         throw error;
       }

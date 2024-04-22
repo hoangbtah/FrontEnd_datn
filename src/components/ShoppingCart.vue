@@ -42,7 +42,7 @@
                                         <i class="fa fa-minus"></i>
                                         </button>
                                     </div>
-                                    <input type="text" class="form-control form-control-sm bg-secondary text-center" :value="cart.Quantity">
+                                    <input type="text" class="form-control form-control-sm bg-secondary text-center" v-model="cart.Quantity">
                                     <div class="input-group-btn">
                                         <button class="btn btn-sm btn-primary btn-plus" @click="UpdateQuantity(cart,1)">
                                             <i class="fa fa-plus"></i>
@@ -155,6 +155,8 @@ export default {
         // await this.$store.dispatch("addProductToCart", { userId, product });
         await this.updateCart(formData);
         console.log("Sản phẩm đã được thêm vào giỏ hàng!");
+        // gọi lại api lấy giỏ hàng
+        await this.getCarts();
       } catch (error) {
         console.error("Lỗi khi thêm sản phẩm vào giỏ hàng:", error);
       }
