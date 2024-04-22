@@ -167,7 +167,7 @@
                             <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
                               <div class="sale-product">
                                 <div class="product-0" v-if="productabc.Quantity==0"> <p>Đã hết hàng</p></div>
-                                <div class="sale"> <P>- 30%</P> </div>
+                                <div class="sale"  > <P>- {{ productabc.DiscountPercent }}</P> </div>
                               </div>
                             
                               <P></P>

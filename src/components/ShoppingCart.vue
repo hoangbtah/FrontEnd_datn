@@ -42,7 +42,10 @@
                                         <i class="fa fa-minus"></i>
                                         </button>
                                     </div>
-                                    <input type="text" class="form-control form-control-sm bg-secondary text-center" v-model="cart.Quantity">
+                                    <input type="text" class="form-control form-control-sm bg-secondary text-center" 
+                                    v-model="cart.Quantity"
+                                   @change="updateQuantityOnServer(cart)"
+                                    >
                                     <div class="input-group-btn">
                                         <button class="btn btn-sm btn-primary btn-plus" @click="UpdateQuantity(cart,1)">
                                             <i class="fa fa-plus"></i>
@@ -135,11 +138,10 @@ export default {
         userId: cart.UserId,
         productName: cart.ProductName,
         image: cart.Image,
-
         quantity: cart.Quantity,
         price: cart.Price
       };
-      console.log("cart");
+      console.log("cart tăng số lượng");
       console.log(formData);
       // const userId = this.auth.user.userId;
       // console.log(userId);
@@ -156,21 +158,37 @@ export default {
         await this.updateCart(formData);
         console.log("Sản phẩm đã được thêm vào giỏ hàng!");
         // gọi lại api lấy giỏ hàng
-        await this.getCarts();
+        
       } catch (error) {
+        cart.Quantity--;
         console.error("Lỗi khi thêm sản phẩm vào giỏ hàng:", error);
+        //this.getCarts(this.auth.user.userId); // Lấy lại danh sách giỏ hàng từ máy chủ
+      }
+    },
+      // Cập nhật số lượng sản phẩm trên máy chủ
+      async updateQuantityOnServer(cart) {
+      try {
+        /// tạo 1 bản sao của cart  khi thay đôi updateCart nó ko ảnh hưởng đến cart
+        const updatedCart = { ...cart };
+        console.log("cart input")
+        console.log(updatedCart);
+        await this.updateCart(updatedCart);
+        console.log("Đã cập nhật số lượng trên máy chủ!");
+      } catch (error) {
+        // Xử lý lỗi khi cập nhật không thành công
+        console.error("Lỗi khi cập nhật số lượng trên máy chủ:", error);
+        // Khôi phục lại số lượng ban đầu nếu cập nhật thất bại
+        this.getCarts(this.auth.user.userId); // Lấy lại danh sách giỏ hàng từ máy chủ
       }
     },
     // format tiền
     formatCurrency(number) {
       // Chuyển số sang chuỗi và đảm bảo là kiểu number
       number = Number(number);
-
       // Kiểm tra nếu không phải là số hợp lệ
       if (isNaN(number)) {
         return "0";
       }
-
       // Sử dụng hàm toLocaleString() để định dạng tiền tệ theo định dạng của Việt Nam
       // Ví dụ: 100000 sẽ thành "100.000"
       return number.toLocaleString("vi-VN");
@@ -196,7 +214,7 @@ export default {
     return {
       items: "",
       isShow: false,
-      thongbao: ""
+      thongbao: "",
     };
   }
 };
