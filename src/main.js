@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import App from './App.vue'
 import store from './store/index.js'
-import VueRouter from 'vue-router'
-import ShopIndex from './components/ShopIndex.vue'
+import VueRouter from 'vue-router';
+//import { Bar, Line } from 'vue-chartjs';
+import ShopIndex from './components/ShopIndex.vue';
 import ShoppingCart from './components/ShoppingCart.vue'
 import TheShop from './components/TheShop.vue'
 import ProductDetail from './components/ProductDetail.vue'
@@ -17,11 +18,34 @@ import CatagoryList from './layout/Admin/view/catagory/CatagoryList.vue'
 import EmployeeList from './layout/Admin/view/employee/EmployeeList.vue'
 import OrderList from './layout/Admin/view/order/OrderList.vue'
 import OrderDetail from './layout/Admin/view/order/OrderDetail.vue'
+import TheStatistical from './layout/Admin/view/statistical/TheStatistical.vue'
+import StatisticalDetail from './layout/Admin/view/statistical/StatisticalDetail.vue'
 
 import TheUser from './components/TheUser.vue'
 
+
+
 Vue.config.productionTip = false
 Vue.use(VueRouter)
+
+
+/// Đăng ký component BarChart và LineChart
+// Vue.component('bar-chart', {
+//   extends: Bar,
+//   props: ['chartData', 'options'],
+//   mounted() {
+//     this.renderChart(this.chartData, this.options);
+//   }
+// });
+
+// Vue.component('line-chart', {
+//   extends: Line,
+//   props: ['chartData', 'options'],
+//   mounted() {
+//     this.renderChart(this.chartData, this.options);
+//   }
+// });
+
 const routes = [
   /// điều hướng của phẩn user
   { path: '/', component: UserIndex,
@@ -44,7 +68,8 @@ const routes = [
 { path: '/employee', component: EmployeeList },
 { path: '/order', component: OrderList },
 { path: '/orderdetail', component: OrderDetail },
-
+{ path: '/statistical', component: TheStatistical },
+{ path: '/statisticaldetail', component: StatisticalDetail },
 
   ]
 },
@@ -53,10 +78,13 @@ const routes = [
   { path: '/register', component: TheRegister },
 ];
 
+
+
+
+
 const router = new VueRouter({
   routes
 });
-
 
 new Vue({
   render: h => h(App),

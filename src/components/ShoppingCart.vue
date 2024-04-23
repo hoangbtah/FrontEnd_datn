@@ -87,9 +87,9 @@
                             <h5 class="font-weight-bold">Tổng thanh toán</h5>
                             <h5 class="font-weight-bold">{{ formatCurrency(totalAmount())}} đ</h5>
                         </div>
-                        <router-link to="/checkout" >
-                         <button class="btn btn-block btn-primary my-3 py-3">Tiến hành kiểm tra</button></router-link>
-                        <!-- <button class="btn btn-block btn-primary my-3 py-3" @click="placeOrder()">Đặt hàng</button> -->
+                        <!-- <router-link to="/checkout" >
+                         <button class="btn btn-block btn-primary my-3 py-3">Tiến hành kiểm tra</button></router-link> -->
+                        <button class="btn btn-block btn-primary my-3 py-3" @click="placeOrder()">Đặt hàng</button>
                     </div>
                 </div>
             </div>
@@ -101,7 +101,7 @@
 <script>
 
 import { mapActions, mapGetters } from "vuex";
-//import axios from "axios";
+import axios from "axios";
 export default {
   name: "ShoppingCart",
   created() {
@@ -201,6 +201,108 @@ export default {
       }, 0); // Giá trị khởi tạo total là 0
     },
     // Phương thức để gọi API POST để tạo đơn hàng và chi tiết đơn hàng
+    async placeOrder() {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        // Nếu không có token, chuyển hướng đến trang đăng nhập
+        this.$router.push("/login");
+        return;
+      }
+
+      try {
+        // Tạo đối tượng đơn hàng từ danh sách carts
+        const orderData = {
+          userId: this.auth.user.userId
+          //  orderDate: new Date().toISOString()
+          // Thay bằng tên khách hàng thực tế
+          // Các trường khác của đơn hàng tùy theo yêu cầu của bạn
+        };
+
+        // Gọi API POST để tạo đơn hàng và nhận lại đối tượng đơn hàng đã được lưu vào CSDL
+        const responseOrder = await axios.post(
+          "https://localhost:7159/api/Order/createOrder",
+          orderData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}` // Gửi token qua header Authorization
+            }
+          }
+        );
+
+        // Lấy OrderId của đơn hàng đã tạo
+        const orderProductId = responseOrder.data.orderProductId;
+        console.log("ma don hang");
+        console.log(orderProductId);
+
+        // Gọi API POST để tạo từng chi tiết đơn hàng
+        for (const cart of this.carts) {
+          const orderDetail = {
+            orderId: orderProductId,
+            productId: cart.ProductId,
+            quantity: cart.Quantity,
+            price: cart.Price,
+            image: cart.Image
+            // Các trường khác của chi tiết đơn hàng tùy theo yêu cầu của bạn
+          };
+
+          console.log("Chi tiết đơn hàng:");
+          console.log(orderDetail);
+
+          // Gọi API POST để tạo chi tiết đơn hàng hiện tại
+          try {
+            const responseOrderDetail = await axios.post(
+              "https://localhost:7159/api/OrderDetail",
+              orderDetail,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}` // Gửi token qua header Authorization
+                }
+              }
+            );
+            console.log(
+              "Đã tạo chi tiết đơn hàng thành công:",
+              responseOrderDetail.data
+            );
+          } catch (error) {
+            console.error(
+              "Lỗi khi tạo chi tiết đơn hàng:",
+              error.response ? error.response.data : error.message
+            );
+            // Xử lý lỗi tại đây nếu cần thiết
+          }
+        }
+
+        // // Tạo danh sách chi tiết đơn hàng từ danh sách carts và orderId
+        // const orderDetails = this.carts.map(cart => ({
+        //   orderId: orderProductId,
+        //   productId: cart.ProductId,
+        //   quantity: cart.Quantity,
+        //   price: cart.Price,
+        //   image:cart.Image
+        //   // Các trường khác của chi tiết đơn hàng tùy theo yêu cầu của bạn
+        // }));
+        // console.log("chi tiet don hang hang");
+        // console.log(orderDetails);
+        // // Gọi API POST để tạo các chi tiết đơn hàng
+        // const responseOrderDetails = await axios.post("https://localhost:7159/api/OrderDetail", orderDetails, {
+        //   headers: {
+        //     Authorization: `Bearer ${token}` // Gửi token qua header Authorization
+        //   }
+        // });
+
+        // // Xử lý kết quả trả về nếu cần thiết
+        // console.log("Đơn hàng và chi tiết đơn hàng đã được tạo thành công:", responseOrder.data, responseOrderDetails.data);
+
+        // Xóa giỏ hàng sau khi đã đặt hàng thành công
+        await this.carts.forEach(cart => this.deleteCart(cart.CartId));
+
+        // Chuyển hướng người dùng đến trang thành công hoặc thông báo thành công
+        this.$router.push("/theshop");
+      } catch (error) {
+        console.error("Lỗi khi đặt hàng:", error);
+        // Xử lý lỗi nếu cần thiết (hiển thị thông báo lỗi, log, ...)
+      }
+    }
   
   },
   watch: {

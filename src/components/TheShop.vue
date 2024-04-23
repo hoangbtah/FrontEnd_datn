@@ -167,7 +167,7 @@
                             <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
                               <div class="sale-product">
                                 <div class="product-0" v-if="productabc.Quantity==0"> <p>Đã hết hàng</p></div>
-                                <div class="sale"  > <P>- {{ productabc.DiscountPercent }}</P> </div>
+                                <div class="sale" v-if="productabc.DiscountPercent>0"> <P>-{{productabc.DiscountPercent*100}}%</P> </div>
                               </div>
                             
                               <P></P>
@@ -177,7 +177,10 @@
                                 <h7 class="text-truncate mb-3">{{productabc.ManufactorerName}}</h7>
                                 <h6 class="text-truncate mb-3">{{productabc.ProductName}}</h6>
                                 <div class="d-flex justify-content-center">
-                                    <h6>{{ productabc.Price }}</h6><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+                                    <h6 v-if="productabc.DiscountPercent>0">{{formatCurrency(productabc.Price- productabc.Price*productabc.DiscountPercent) }}đ</h6>
+                                    <h6 class="text-muted ml-2" v-if="productabc.DiscountPercent>0"><del>{{ formatCurrency(productabc.Price) }}</del>đ</h6>
+                                    <h6 v-else>{{formatCurrency(productabc.Price)}}đ</h6>
+
                                 </div>
                             </div>
                             <div class="card-footer d-flex justify-content-between bg-light border">
@@ -311,6 +314,25 @@ export default {
         });
       }
     },
+     // format tiền
+     formatCurrency(number) {
+      // Chuyển số sang chuỗi và đảm bảo là kiểu number
+      
+      number = Number(number);
+      // Kiểm tra nếu không phải là số hợp lệ
+      if (isNaN(number)) {
+        return "0";
+      }
+       // Làm tròn số tiền theo quy tắc gần nhất
+    if (number < 1000) {
+        number = Math.round(number / 100) * 100; // Làm tròn đến hàng trăm gần nhất
+    } else {
+        number = Math.round(number / 1000) * 1000; // Làm tròn đến hàng nghìn gần nhất
+    }
+      // Sử dụng hàm toLocaleString() để định dạng tiền tệ theo định dạng của Việt Nam
+      // Ví dụ: 100000 sẽ thành "100.000"
+      return number.toLocaleString("vi-VN");
+    },
     total() {
       (this.totalPages = Math.ceil(this.products.length / this.pageSize))
     },
@@ -323,7 +345,7 @@ export default {
         quantity:product.Quantity,
         price:product.Price,
       }
-        console.log("product")
+        console.log("product add to cart")
         console.log(product);
      // const userId = this.auth.user.userId;
      // console.log(userId);
@@ -338,6 +360,7 @@ export default {
       }
       try {
        // await this.$store.dispatch("addProductToCart", { userId, product });
+       console.log(formData);
        await this.addProductToCart(formData);
         console.log("Sản phẩm đã được thêm vào giỏ hàng!");
       } catch (error) {

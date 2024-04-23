@@ -44,7 +44,7 @@
                    
                </div>
                <div class="menu-text">
-                   Quản lý nhân viên
+                   Quản lý tài khoản
                </div>
            </router-link>
            <div class="menu-item">
@@ -55,7 +55,14 @@
                    Quản lý hóa đơn 
                </div>
            </div>
-         
+           <router-link to="/statistical" class="menu-item">
+               <div class="menu-icon m-icon-sell">
+                   
+               </div>
+               <div class="menu-text">
+                   Thống kê
+               </div>
+           </router-link>
           
 
        </div>
