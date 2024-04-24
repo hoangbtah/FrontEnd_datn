@@ -1,18 +1,15 @@
 <template>
-  <div>
+  <div class="statistical">
   <p>Biểu đồ thống kê số lượng sản phẩm bán được trong 12 tháng</p>
-  <Bar
+  <Bar class="bieudo"
     refs="chart"
     :chart-options="chartOptions"
     :chart-data="chartData"
     :chart-id="chartId"
     :dataset-id-key="datasetIdKey"
-    :plugins="plugins"
-    :css-classes="cssClasses"
-    :styles="styles"
-    :width="width"
-    :height="height"
+    @click="handleBarClick"
   />
+ 
   <router-link to="/statisticaldetail">
     View Detail
   </router-link>
@@ -21,8 +18,11 @@
 
 <script>
 import { Bar } from "vue-chartjs/legacy";
+//import { Bar } from "vue-chartjs";
+import 'chartjs-plugin-datalabels';
+
 import axios from "axios";
-//import StatisticalDetail from './StatisticalDetail.vue'
+
 import {
   Chart as ChartJS,
   Title,
@@ -98,9 +98,10 @@ export default {
         ],
         datasets: [
           {
-            label: "Data One",
+            label: "Số lượng",
             backgroundColor: "#f87979",
-            data: []
+            //data: [0,0,0,0,0,0,0,0,0,0,0,0]
+            data: Array(12).fill(0) // Khởi tạo mảng 12 phần tử ban đầu là 0
           }
         ]
       },
@@ -119,38 +120,60 @@ export default {
         const monthlySalesData = response.data;
         console.log(monthlySalesData);
 
+        // // Cập nhật dữ liệu biểu đồ
+        // this.chartData.datasets[0].data = monthlySalesData.map(
+        //   item => item.Quantity
+        //   // console.log()
+        // );
+
+        // Ánh xạ dữ liệu vào mảng tháng
+        const newData = Array(12).fill(0); // Khởi tạo mảng mới
+
+        monthlySalesData.forEach(item => {
+          if (item.Month >= 1 && item.Month <= 12) {
+            newData[item.Month - 1] = item.Quantity;
+          }
+        });
+
         // Cập nhật dữ liệu biểu đồ
-        this.chartData.datasets[0].data = monthlySalesData.map(
-          item => item.Quantity
-          // console.log()
-        );
-       // console.log("log data");
-       // console.log(this.$refs.chart);
+        this.chartData.datasets[0].data = newData;
+
+        //  // Ánh xạ dữ liệu vào mảng tháng
+        //  monthlySalesData.forEach(item => {
+        //   if (item.Month >= 1 && item.Month <= 12) {
+        //     this.chartData.datasets[0].data[item.Month - 1] = item.Quantity;
+        //   }
+        // });
+        // Cập nhật biểu đồ
+        //  this.$refs.chart.update();
+
+        // console.log("log data");
+        // console.log(this.$refs.chart);
         // console.log("kiểm tra")
         // console.log(this.$refs.chart instanceof Bar);
         // console.log("tên")
         // console.log(this.$refs.chart.$el.tagName);
 
         // Gọi $nextTick để đợi Vue cập nhật
-        this.$nextTick(() => {
-          // Gọi update() trên biểu đồ để áp dụng các thay đổi
-          if (this.$refs.chart && this.$refs.chart.update) {
-            this.$refs.chart.update();
-        //     console.log("log data");
-        // console.log(this.$refs.chart);
-        // console.log("kiểm tra")
-        // console.log(this.$refs.chart instanceof Bar);
-        // console.log("tên")
-        // console.log(this.$refs.chart.$el.tagName);
-          }
-        });
-    
+        // this.$nextTick(() => {
+        //   // Gọi update() trên biểu đồ để áp dụng các thay đổi
+        //   if (this.$refs.chart && this.$refs.chart.update) {
+        //     this.$refs.chart.update();
+
+        //   }
+        // });
       } catch (error) {
         console.error("Error fetching monthly sales data:", error);
       }
+    },
+    handleBarClick(event, chartElements) {
+      if (chartElements.length > 0) {
+        const monthIndex = chartElements[0].index;
+        this.selectedMonth = monthIndex;
+      }
     }
   },
-  mounted () {
+  mounted() {
     // console.log("data cũ")
     // console.log( this.chartData.datasets);
 
@@ -158,7 +181,17 @@ export default {
     this.fetchMonthlySalesData(currentYear);
     console.log("data hiện tại");
     console.log(this.chartData.datasets);
-    //       this.$refs.chart.update();
   }
 };
 </script>
+<style scoped>
+.statistical {
+  width: 800px;
+  height: 800px;
+}
+.bieudo {
+  height: 400px;
+  width: 800px;
+}
+</style>
+
