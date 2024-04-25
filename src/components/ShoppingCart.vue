@@ -102,6 +102,12 @@
 
 import { mapActions, mapGetters } from "vuex";
 import axios from "axios";
+// Import Vue và VueToasted
+import Vue from 'vue';
+import Toasted from 'vue-toasted';
+
+// Sử dụng VueToasted với Vue
+Vue.use(Toasted);
 export default {
   name: "ShoppingCart",
   created() {
@@ -162,6 +168,11 @@ export default {
       } catch (error) {
         cart.Quantity--;
         console.error("Lỗi khi thêm sản phẩm vào giỏ hàng:", error);
+        this.$toasted.show(error.response.data, {
+        duration: 2000, // Thời gian hiển thị thông báo (ms)
+        position: 'top-center', // Vị trí hiển thị
+        type: 'error' // Kiểu thông báo (success, info, error)
+      });
         //this.getCarts(this.auth.user.userId); // Lấy lại danh sách giỏ hàng từ máy chủ
       }
     },
@@ -174,7 +185,19 @@ export default {
         console.log(updatedCart);
         await this.updateCart(updatedCart);
         console.log("Đã cập nhật số lượng trên máy chủ!");
+          // Hiển thị thông báo thành công
+      this.$toasted.show('Cập nhật giỏ hàng thành công !', {
+        duration: 2000, // Thời gian hiển thị thông báo (ms)
+        position: 'top-center', // Vị trí hiển thị
+        type: 'success' // Kiểu thông báo (success, info, error)
+      });
       } catch (error) {
+          // Hiển thị thông báo lỗi
+      this.$toasted.show(error.response.data, {
+        duration: 2000, // Thời gian hiển thị thông báo (ms)
+        position: 'top-center', // Vị trí hiển thị
+        type: 'error' // Kiểu thông báo (success, info, error)
+      });
         // Xử lý lỗi khi cập nhật không thành công
         console.error("Lỗi khi cập nhật số lượng trên máy chủ:", error);
         // Khôi phục lại số lượng ban đầu nếu cập nhật thất bại

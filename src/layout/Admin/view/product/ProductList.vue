@@ -68,18 +68,17 @@
                                     <option>100 bản ghi trên 1 trang</option>
                                 </select> -->
                             </div>
-                            <div class="m-number">
+                            <!-- <div class="m-number">
                                 <button @click="prevPage" :disabled="pageNumber === 1">Trước</button>
                                 <button v-for="page in displayedPages" :key="page" @click="gotoPage(page)" :class="{ 'm-page-selected': page === pageNumber }">{{ page }}</button>
                                 <button @click="nextPage" :disabled="pageNumber === totalPages">Sau</button>
-                                <!-- <button >Trước</button>
-                                <button class="m-page-selected">1</button>
-                            <button >2</button>
-                            <button >3</button>
-                            <button >4</button>
-                            <button >Sau</button> -->
-                            </div>
-                           
+                               
+                            </div> -->
+                            <div class="m-number">
+                            <button @click="prevPage" :disabled="pageNumber === 1">Trước</button>
+                            <button v-for="page in displayedPages" :key="page" @click="gotoPage(page)" :class="{ 'm-page-selected': page === pageNumber }">{{ page }}</button>
+                            <button @click="nextPage" :disabled="pageNumber === totalPages">Sau</button>
+                          </div>
                         </div>
                     </div>   
             </div>
@@ -90,25 +89,41 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import axios from "axios";
-import ProductDetailAD from './ProductDetailAD';
+import ProductDetailAD from "./ProductDetailAD";
 export default {
   name: "EmployeeList",
-  components:{ProductDetailAD},
+  components: { ProductDetailAD },
+ 
   computed: {
-    ...mapGetters(["product", "comments", "products","isShow"]),
+    ...mapGetters(["product", "comments", "products"]),
     // hiển thị trang
     displayedPages() {
-      const start = Math.max(1,this.pageNumber - Math.floor(this.maxDisplayedPages / 2)
+      console.log("hiển thị trang 1");
+      const start = Math.max(
+        1,
+        this.pageNumber - Math.floor(this.maxDisplayedPages / 2)
       );
       const end = Math.min(this.totalPages, start + this.maxDisplayedPages - 1);
       return Array.from({ length: end - start + 1 }, (_, i) => start + i);
     }
   },
-  created() {
+
+  mounted() {
     this.getProducts();
-    this.fetchItems(this.pageNumber,this.pageSize);
-    this.total();
+
+    // const storedProducts = localStorage.getItem("listPageAdminProduct");
+    // if (storedProducts) {
+    //   this.items = JSON.parse(storedProducts);
+    //   this.total();
+    //   this.displayedPages(); // Gọi lại displayedPages() để tính toán lại các trang hiển thị
+    // } else {
+    //   this.fetchItems(this.pageNumber, this.pageSize);
+    // }
+     this.fetchItems(this.pageNumber, this.pageSize);
+    // this.displayedPages(); // Gọi lại displayedPages() để tính toán lại các trang hiển thị
+
   },
+
   methods: {
     ...mapActions(["getProduct", "getProducts", "getComments"]),
     //lấy sản phẩm theo phân trang lọc tìm kiếm
@@ -120,11 +135,27 @@ export default {
           }&pagesize=${this.pageSize}`
         );
         this.items = response.data;
-        console.log(this.totalPages);
+        this.total();
+   
+        console.log("danh sách sản phẩm phân trang ");
+        console.log(this.items);
+        // Lưu danh sách sản phẩm phân trang vào Local Storage
+        localStorage.setItem(
+          "listPageAdminProduct",
+          JSON.stringify(response.data)
+        );
+      //  Cập nhật lại displayedPages
+        // this.$nextTick(() => {
+        //   this.displayedPages();
+        // });
+         // this.$forceUpdate();
+
+         console.log(this.totalPages);
       } catch (error) {
         console.error(error);
       }
     },
+
     nextPage() {
       if (this.pageNumber < this.totalPages) {
         this.pageNumber++;
@@ -144,26 +175,27 @@ export default {
       }
     },
     total() {
-      (this.totalPages = Math.ceil(this.products.length / this.pageSize))
+      console.log("tính lại tổng số trang")
+      this.totalPages = Math.ceil(this.products.length / this.pageSize);
     },
     // thêm mới sản  phẩm
-    btnAddClick(){
-      this.forModeDetail=1;
+    btnAddClick() {
+      this.forModeDetail = 1;
       console.log(this.forModeDetail);
-     this.$store.commit('SET_PRODUCT',[] )
-     this.$store.commit('TOGGLE_ISSHOW');
+      this.$store.commit("SET_PRODUCT", []);
+      this.$store.commit("TOGGLE_ISSHOW");
     },
     // xem chi tiết
-    btnDetailClick(productId){
-        this.getProduct(productId);
-        this.$store.commit('TOGGLE_ISSHOW');
+    btnDetailClick(productId) {
+      this.getProduct(productId);
+      this.$store.commit("TOGGLE_ISSHOW");
     },
-    // sửa sản phẩm 
-    btnUpdateClick(productId){
-      this.forModeDetail=0;
+    // sửa sản phẩm
+    btnUpdateClick(productId) {
+      this.forModeDetail = 0;
       console.log(this.forModeDetail);
       this.getProduct(productId);
-        this.$store.commit('TOGGLE_ISSHOW');
+      this.$store.commit("TOGGLE_ISSHOW");
     }
   },
   data() {
@@ -172,8 +204,8 @@ export default {
       pageNumber: 1,
       pageSize: 9,
       totalPages: 0,
-      maxDisplayedPages: 3,
-      forModeDetail:0,
+      maxDisplayedPages: 5,
+      forModeDetail: 0
     };
   }
 };

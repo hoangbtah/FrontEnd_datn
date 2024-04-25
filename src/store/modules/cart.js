@@ -88,7 +88,7 @@ const cartModules = {
         console.log(respone.data);
         console.log("Thêm sản phẩm vào giỏ hàng thành công");
       } catch (error) {
-        alert(error.response.data);
+       // alert(error.response.data);
         console.error("Lỗi khi thêm sản phẩm vào giỏ hàng:", error);
         throw error;
       }
@@ -139,7 +139,7 @@ const cartModules = {
         console.log("Sửa sản phẩm trong giỏ hàng thành công");
         
       } catch (error) {
-        alert(error.response.data);
+       // alert(error.response.data);
         console.error("Lỗi khi sửa sản phẩm trong giỏ hàng:", error);
         throw error;
       }

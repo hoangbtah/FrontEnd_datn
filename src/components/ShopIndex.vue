@@ -108,15 +108,22 @@
             <div class="col-lg-3 col-md-6 col-sm-12 pb-1" v-for="product in getGucciProducts()" :key="product.ProductId">
                 <div class="card product-item border-0 mb-4" >
                     <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                        <img class="img-fluid w-100" :src="product.Image" alt="">
+                        <div class="sale-product">
+                                <div class="product-0" v-if="product.Quantity==0"> <p>Đã hết hàng</p></div>
+                                <div class="sale" v-if="product.DiscountPercent>0"> <P>-{{product.DiscountPercent*100}}%</P> </div>
+                              </div>                            
+                              <P></P>
+                                <img class="img-fluid w-100" :src="product.Image" alt="">                        
                     </div>
                     <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
                         <h7 class="text-truncate mb-3">{{product.ManufactorerName}}</h7>
                         <h6 class="text-truncate mb-3">{{product.ProductName}}</h6>
                         <div class="d-flex justify-content-center">
-                            <h6>{{product.Price}}VNĐ</h6><h6 class="text-muted ml-2"><del>$123.00</del></h6>
-                        </div>
-                    </div>
+                                    <h6 v-if="product.DiscountPercent>0">{{formatCurrency(product.Price- product.Price*product.DiscountPercent) }}đ</h6>
+                                    <h6 class="text-muted ml-2" v-if="product.DiscountPercent>0"><del>{{ formatCurrency(product.Price) }}</del>đ</h6>
+                                    <h6 v-else>{{formatCurrency(product.Price)}}đ</h6>
+                                </div>
+                    </div>    
                     <div class="card-footer d-flex justify-content-between bg-light border">
                         <router-link to="/productdetail" class="btn btn-sm text-dark p-0" ><button @click="handleProductClick(product.ProductId)"
                          style="border: none; background-color: transparent;"><i class="fas fa-eye text-primary mr-1"></i>View Detail</button></router-link>
@@ -135,21 +142,28 @@
         </div>
         <div class="row px-xl-5 pb-3">
             <div class="col-lg-3 col-md-6 col-sm-12 pb-1"  v-for="product in getValentinoProducts()" :key="product.ProductId">
-                <div class="card product-item border-0 mb-4">
+                <div class="card product-item border-0 mb-4" >
                     <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                        <img class="img-fluid w-100" :src="product.Image" alt="">
+                        <div class="sale-product">
+                                <div class="product-0" v-if="product.Quantity==0"> <p>Đã hết hàng</p></div>
+                                <div class="sale" v-if="product.DiscountPercent>0"> <P>-{{product.DiscountPercent*100}}%</P> </div>
+                              </div>                            
+                              <P></P>
+                                <img class="img-fluid w-100" :src="product.Image" alt="">                        
                     </div>
                     <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
                         <h7 class="text-truncate mb-3">{{product.ManufactorerName}}</h7>
                         <h6 class="text-truncate mb-3">{{product.ProductName}}</h6>
                         <div class="d-flex justify-content-center">
-                            <h6>{{product.Price}}VNĐ</h6><h6 class="text-muted ml-2"><del>$123.00</del></h6>
-                        </div>
-                    </div>
+                                    <h6 v-if="product.DiscountPercent>0">{{formatCurrency(product.Price- product.Price*product.DiscountPercent) }}đ</h6>
+                                    <h6 class="text-muted ml-2" v-if="product.DiscountPercent>0"><del>{{ formatCurrency(product.Price) }}</del>đ</h6>
+                                    <h6 v-else>{{formatCurrency(product.Price)}}đ</h6>
+                                </div>
+                    </div>    
                     <div class="card-footer d-flex justify-content-between bg-light border">
-                        <router-link to="/productdetail" class="btn btn-sm text-dark p-0" ><button @click="handleProductClick(product.ProductId)" 
-                        style="border: none; background-color: transparent;"><i class="fas fa-eye text-primary mr-1"></i>View Detail</button></router-link>
-                        <a @click="addToCart(product)"  class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
+                        <router-link to="/productdetail" class="btn btn-sm text-dark p-0" ><button @click="handleProductClick(product.ProductId)"
+                         style="border: none; background-color: transparent;"><i class="fas fa-eye text-primary mr-1"></i>View Detail</button></router-link>
+                         <a @click="addToCart(product)"  class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
                     </div>
                 </div>
             </div>
@@ -185,20 +199,28 @@
         </div>
         <div class="row px-xl-5 pb-3">
             <div class="col-lg-3 col-md-6 col-sm-12 pb-1"  v-for="product in getNARCISOProducts()" :key="product.ProductId">
-                <div class="card product-item border-0 mb-4">
+                <div class="card product-item border-0 mb-4" >
                     <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                        <img class="img-fluid w-100" :src="product.Image" alt="">
+                        <div class="sale-product">
+                                <div class="product-0" v-if="product.Quantity==0"> <p>Đã hết hàng</p></div>
+                                <div class="sale" v-if="product.DiscountPercent>0"> <P>-{{product.DiscountPercent*100}}%</P> </div>
+                              </div>                            
+                              <P></P>
+                                <img class="img-fluid w-100" :src="product.Image" alt="">                        
                     </div>
                     <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
                         <h7 class="text-truncate mb-3">{{product.ManufactorerName}}</h7>
                         <h6 class="text-truncate mb-3">{{product.ProductName}}</h6>
                         <div class="d-flex justify-content-center">
-                            <h6>{{product.Price}}VNĐ</h6><h6 class="text-muted ml-2"><del>$123.00</del></h6>
-                        </div>
-                    </div>
+                                    <h6 v-if="product.DiscountPercent>0">{{formatCurrency(product.Price- product.Price*product.DiscountPercent) }}đ</h6>
+                                    <h6 class="text-muted ml-2" v-if="product.DiscountPercent>0"><del>{{ formatCurrency(product.Price) }}</del>đ</h6>
+                                    <h6 v-else>{{formatCurrency(product.Price)}}đ</h6>
+                                </div>
+                    </div>    
                     <div class="card-footer d-flex justify-content-between bg-light border">
-                        <router-link to="/productdetail" class="btn btn-sm text-dark p-0" ><button @click="handleProductClick(product.ProductId)"  style="border: none; background-color: transparent;"><i class="fas fa-eye text-primary mr-1"></i>View Detail</button></router-link>
-                        <a @click="addToCart(product)"  class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
+                        <router-link to="/productdetail" class="btn btn-sm text-dark p-0" ><button @click="handleProductClick(product.ProductId)"
+                         style="border: none; background-color: transparent;"><i class="fas fa-eye text-primary mr-1"></i>View Detail</button></router-link>
+                         <a @click="addToCart(product)"  class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
                     </div>
                 </div>
             </div>
@@ -214,20 +236,28 @@
         </div>
         <div class="row px-xl-5 pb-3">
             <div class="col-lg-3 col-md-6 col-sm-12 pb-1"  v-for="product in getBURBERRYProducts()" :key="product.ProductId">
-                <div class="card product-item border-0 mb-4">
+                <div class="card product-item border-0 mb-4" >
                     <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                        <img class="img-fluid w-100" :src="product.Image" alt="">
+                        <div class="sale-product">
+                                <div class="product-0" v-if="product.Quantity==0"> <p>Đã hết hàng</p></div>
+                                <div class="sale" v-if="product.DiscountPercent>0"> <P>-{{product.DiscountPercent*100}}%</P> </div>
+                              </div>                            
+                              <P></P>
+                                <img class="img-fluid w-100" :src="product.Image" alt="">                        
                     </div>
                     <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
                         <h7 class="text-truncate mb-3">{{product.ManufactorerName}}</h7>
                         <h6 class="text-truncate mb-3">{{product.ProductName}}</h6>
                         <div class="d-flex justify-content-center">
-                            <h6>{{product.Price}}VNĐ</h6><h6 class="text-muted ml-2"><del>$123.00</del></h6>
-                        </div>
-                    </div>
+                                    <h6 v-if="product.DiscountPercent>0">{{formatCurrency(product.Price- product.Price*product.DiscountPercent) }}đ</h6>
+                                    <h6 class="text-muted ml-2" v-if="product.DiscountPercent>0"><del>{{ formatCurrency(product.Price) }}</del>đ</h6>
+                                    <h6 v-else>{{formatCurrency(product.Price)}}đ</h6>
+                                </div>
+                    </div>    
                     <div class="card-footer d-flex justify-content-between bg-light border">
-                        <router-link to="/productdetail"  class="btn btn-sm text-dark p-0" ><button @click="handleProductClick(product.ProductId)" style="border: none; background-color: transparent;"><i class="fas fa-eye text-primary mr-1"></i>View Detail</button></router-link>
-                        <a @click="addToCart(product)"  class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
+                        <router-link to="/productdetail" class="btn btn-sm text-dark p-0" ><button @click="handleProductClick(product.ProductId)"
+                         style="border: none; background-color: transparent;"><i class="fas fa-eye text-primary mr-1"></i>View Detail</button></router-link>
+                         <a @click="addToCart(product)"  class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
                     </div>
                 </div>
             </div>
@@ -273,80 +303,146 @@
     </div>
 </template>
 <script>
-import { mapActions ,mapGetters} from 'vuex';
-import TheHeaderCur from '../layout/TheHeaderCur.vue'
+import { mapActions, mapGetters } from "vuex";
+import TheHeaderCur from "../layout/TheHeaderCur.vue";
+//import axios from "axios";
+// Import Vue và VueToasted
+import Vue from 'vue';
+import Toasted from 'vue-toasted';
+
+// Sử dụng VueToasted với Vue
+Vue.use(Toasted);
 export default {
-    name:'ShopIndex',
-    components:{TheHeaderCur},
-    computed:{...mapGetters(['products','product','comments','auth'])
+  name: "ShopIndex",
+  components: { TheHeaderCur },
+  computed: {
+    ...mapGetters(["products", "product", "comments", "auth"])
+  },
+  created() {
+    this.getProducts();
+  },
+  methods: {
+    ...mapActions([
+      "getProducts",
+      "getProduct",
+      "getComments",
+      "addProductToCart",
+      "getUser"
+    ]),
+    getValentinoProducts() {
+      return this.products
+        .filter(product => product.ManufactorerName === "VALENTINO")
+        .slice(0, 4);
     },
-    created() {
-        this.getProducts()
-     
-        
+    getGucciProducts() {
+      return this.products
+        .filter(product => product.ManufactorerName === "GUCCI")
+        .slice(0, 4);
     },
-    methods:{
-        ...mapActions(['getProducts','getProduct','getComments','addProductToCart','getUser']),
-        getValentinoProducts() {
-            return this.products.filter(product => product.ManufactorerName === 'VALENTINO').slice(0, 4);
-        },
-        getGucciProducts() {
-        return this.products.filter(product => product.ManufactorerName === 'GUCCI').slice(0, 4);
-         },       
-         getNARCISOProducts() {
-        return this.products.filter(product => product.ManufactorerName === 'NARCISO RODRIGUEZ').slice(0, 4);
-         },
-         getBURBERRYProducts() {
-        return this.products.filter(product => product.ManufactorerName === 'BURBERRY').slice(0, 4);
-         },
-  goToShoppingCart() {
-    console.log("get");
-        // this.$router.push('/productdetail');
-        // Cuộn đến đầu trang sau khi trang được tải hoàn toàn
-        this.$nextTick(() => {
-            window.scrollTo(0, 0);
-        });
+    getNARCISOProducts() {
+      return this.products
+        .filter(product => product.ManufactorerName === "NARCISO RODRIGUEZ")
+        .slice(0, 4);
+    },
+    getBURBERRYProducts() {
+      return this.products
+        .filter(product => product.ManufactorerName === "BURBERRY")
+        .slice(0, 4);
+    },
+    // format tiền
+    formatCurrency(number) {
+      // Chuyển số sang chuỗi và đảm bảo là kiểu number
+
+      number = Number(number);
+      // Kiểm tra nếu không phải là số hợp lệ
+      if (isNaN(number)) {
+        return "0";
+      }
+      // Làm tròn số tiền theo quy tắc gần nhất
+      if (number < 1000) {
+        number = Math.round(number / 100) * 100; // Làm tròn đến hàng trăm gần nhất
+      } else {
+        number = Math.round(number / 1000) * 1000; // Làm tròn đến hàng nghìn gần nhất
+      }
+      // Sử dụng hàm toLocaleString() để định dạng tiền tệ theo định dạng của Việt Nam
+      // Ví dụ: 100000 sẽ thành "100.000"
+      return number.toLocaleString("vi-VN");
+    },
+    goToShoppingCart() {
+      console.log("get");
+      // this.$router.push('/productdetail');
+      // Cuộn đến đầu trang sau khi trang được tải hoàn toàn
+      this.$nextTick(() => {
+        window.scrollTo(0, 0);
+      });
     },
     handleProductClick(productId) {
-        this.getProduct(productId);
-        this.getComments(productId);
-        this.goToShoppingCart();
+      this.getProduct(productId);
+      this.getComments(productId);
+      this.goToShoppingCart();
     },
     //thêm sản phẩm vào giỏ hàng
     async addToCart(product) {
       const formData = {
-        productId:product.ProductId,
-        userId : this.auth.user.userId,
-        productName:product.ProductName,
-        image:product.Image,
-        quantity:product.Quantity,
-        price:product.Price,
-      }
-        console.log("product")
-        console.log(product);
-     // const userId = this.auth.user.userId;
-     // console.log(userId);
-     const token = localStorage.getItem("token");
+        productId: product.ProductId,
+        userId: this.auth.user.userId,
+        productName: product.ProductName,
+        image: product.Image,
+        quantity: product.Quantity,
+        price: product.Price
+      };
+      console.log("product index");
+      console.log(product);
+      // const userId = this.auth.user.userId;
+      // console.log(userId);
+      const token = localStorage.getItem("token");
       console.log(token);
       if (!token) {
-
         // Nếu không có token, chuyển hướng đến trang đăng nhập
-         this.$router.push("/login");
-      //  commit('SET_NEED_LOGIN', true);
+        this.$router.push("/login");
+        //  commit('SET_NEED_LOGIN', true);
         return;
       }
       try {
-       // await this.$store.dispatch("addProductToCart", { userId, product });
-       await this.addProductToCart(formData);
-        console.log("Sản phẩm đã được thêm vào giỏ hàng!");
+        // await this.$store.dispatch("addProductToCart", { userId, product });
+        await this.addProductToCart(formData);
+      //  console.log("Sản phẩm đã được thêm vào giỏ hàng!");
+          // Hiển thị thông báo lỗi
+      this.$toasted.show('Thêm sản phẩm vào giỏ hàng thành công !', {
+        duration: 2000, // Thời gian hiển thị thông báo (ms)
+        position: 'top-center', // Vị trí hiển thị
+        type: 'success' // Kiểu thông báo (success, info, error)
+      });
       } catch (error) {
+          // Hiển thị thông báo lỗi
+      this.$toasted.show(error.response.data, {
+        duration: 2000, // Thời gian hiển thị thông báo (ms)
+        position: 'top-center', // Vị trí hiển thị
+        type: 'error' // Kiểu thông báo (success, info, error)
+      });
         console.error("Lỗi khi thêm sản phẩm vào giỏ hàng:", error);
       }
     }
-
-    },
-}
+  }
+};
 </script>
-<style lang="">
-    
+<style >
+.sale-product{
+  display:flex;
+  position: relative;
+}
+.sale-product .sale{
+  position: absolute;
+  right:0;
+  padding-right:5px;
+  z-index:999;
+}
+.sale-product  p{
+  color:red;
+}
+.sale-product .product-0{
+  margin-left: 5px;
+  position: absolute;
+  z-index:999;
+}
 </style>

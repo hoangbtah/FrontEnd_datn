@@ -3,14 +3,15 @@ const productModules = {
     state: {
         products: [],
         product: {},
-        isShow:false
+        isShow:false,
+        pageproducts:[],
         //  productspa:[],
     },
     getters: {
         products: state => state.products,
         product: state => state.product,
         isShow:state=>state.isShow,
-        // productspa:state=>state.productspa,
+        pageproducts:state=>state.pageproducts,
 
     },
     actions: {
@@ -20,8 +21,8 @@ const productModules = {
 
                 const respone = await axios.get('https://localhost:7159/api/v1/Product/products')
                 commit('SET_PRODUCTS', respone.data);
-                console.log("lấy sản phẩm");
-                console.log(respone.data)
+               // console.log("lấy danh sách  sản phẩm");
+              //  console.log(respone.data)
                
             } catch (error) {
                 console.log(error)
@@ -32,8 +33,8 @@ const productModules = {
             try {
 
                 const respone = await axios.get(`https://localhost:7159/api/v1/Product/${productId}`)
-                console.log("lấy sản phẩm thành công");
-                console.log(respone.data);
+             //   console.log("lấy sản phẩm thành công");
+               // console.log(respone.data);
                  // Lưu sản phẩm vào Local Storage
                  localStorage.setItem('selectedProduct', JSON.stringify(respone.data));
                 commit('SET_PRODUCT', respone.data)
@@ -58,8 +59,8 @@ const productModules = {
             try {
 
                 const respone = await axios.get(`https://localhost:7159/api/v1/Product/manufactorer/${manufactorerId}/products?pagenumber=1&pagesize=9`)
-                commit('SET_PRODUCTSBYMANUFACTORERID', respone.data)
-                // console.log(respone.data);
+                commit('SET_PAGEPRODUCTS', respone.data)
+                 console.log(respone.data);
                 // console.log(respone.data);
             } catch (error) {
                 console.log(error)
@@ -84,6 +85,9 @@ const productModules = {
         },
         TOGGLE_ISSHOW(state){
             state.isShow=!state.isShow
+        },
+        SET_PAGEPRODUCTS(state, pageproducts) {
+            state.pageproducts = pageproducts
         },
 
     }

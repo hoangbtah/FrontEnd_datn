@@ -1,83 +1,123 @@
 <template>
+<div>
+  <p>Biểu đồ thống kê chi tiết doanh thu bán hàng theo hãng  trong tháng năm </p>
     <Pie
       :chart-options="chartOptions"
       :chart-data="chartData"
       :chart-id="chartId"
       :dataset-id-key="datasetIdKey"
-      :plugins="plugins"
-      :css-classes="cssClasses"
-      :styles="styles"
-      :width="width"
-      :height="height"
+     
     />
+</div>
 </template>
   
   <script>
-  import { Pie } from 'vue-chartjs/legacy'
-  
-  import {
-    Chart as ChartJS,
-    Title,
-    Tooltip,
-    Legend,
-    ArcElement,
-    CategoryScale
-  } from 'chart.js'
-  
-  ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale)
-  
-  export default {
-    name: 'PieChart',
-    components: {
-      Pie
+import { Pie } from "vue-chartjs/legacy";
+import axios from "axios";
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
+  CategoryScale
+} from "chart.js";
+
+ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
+
+export default {
+  name: "PieChart",
+  components: {
+    Pie
+  },
+  props: {
+    chartId: {
+      type: String,
+      default: "pie-chart"
     },
-    props: {
-      chartId: {
-        type: String,
-        default: 'pie-chart'
+    datasetIdKey: {
+      type: String,
+      default: "label"
+    },
+    width: {
+      type: Number,
+      default: 400
+    },
+    height: {
+      type: Number,
+      default: 400
+    },
+    cssClasses: {
+      default: "",
+      type: String
+    },
+    styles: {
+      type: Object,
+      default: () => {}
+    },
+    plugins: {
+      // type: Array,
+      // default: () => []
+      type: Object, // Thay đổi từ Array thành Object
+      default: () => ({}) // Giá trị mặc định là một đối tượng trống
+    }
+  },
+  data() {
+    return {
+      chartData: {
+        labels: ["hoang", "viet"],
+        datasets: [
+          {
+            backgroundColor: ["#41B883", "#E46651", "#c6d917", "#DD1B16","#539bcf","#f59732","#3bd673","#552ecb"],
+            data: [50, 50]
+          }
+        ]
       },
-      datasetIdKey: {
-        type: String,
-        default: 'label'
-      },
-      width: {
-        type: Number,
-        default: 400
-      },
-      height: {
-        type: Number,
-        default: 400
-      },
-      cssClasses: {
-        default: '',
-        type: String
-      },
-      styles: {
-        type: Object,
-        default: () => {}
-      },
-      plugins: {
-        type: Array,
-        default: () => []
+      chartOptions: {
+        responsive: true,
+        maintainAspectRatio: false
       }
-    },
-    data() {
-      return {
-        chartData: {
-          labels: ['VueJs', 'EmberJs', 'ReactJs', 'AngularJs'],
-          datasets: [
-            {
-              backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
-              data: [40, 20, 80, 10]
-            }
-          ]
-        },
-        chartOptions: {
-          responsive: true,
-          maintainAspectRatio: false
+    };
+  },
+  methods: {
+    async fetchMonthlySalesData(month, year) {
+      try {
+        const response = await axios.get(
+          `https://localhost:7159/api/v1/Product/getProductSaleByMonthAndYear/${month}/${year}`
+        );
+        const monthlySalesData = response.data;
+        console.log("data detail");
+        console.log(monthlySalesData);
+
+        // Tạo mảng tên hãng và mảng số lượng bán được
+        const labels = monthlySalesData.map(item => item.Hang);
+        const quantities = monthlySalesData.map(item => item.SalesAmount);
+
+        // Cập nhật labels và data trong chartData
+        this.chartData.labels = labels;
+        this.chartData.datasets[0].data = quantities;
+
+        // Sau khi cập nhật dữ liệu, gọi update để vẽ lại biểu đồ
+        if (this.$refs.chart && this.$refs.chart.update) {
+          this.$refs.chart.update();
         }
+      } catch (error) {
+        console.error("Error fetching monthly sales data:", error);
       }
     }
+  },
+  mounted() {
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth() + 1; // Lấy tháng hiện tại (1-12)
+
+    this.fetchMonthlySalesData(currentMonth, currentYear);
   }
-  </script>
+};
+</script>
+<style scoped>
+.p {
+  background: #539bcf;
+}
+</style>
+
   

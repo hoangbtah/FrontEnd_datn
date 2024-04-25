@@ -1,25 +1,30 @@
 <template>
   <div class="statistical">
-  <p>Biểu đồ thống kê số lượng sản phẩm bán được trong 12 tháng</p>
-  <Bar class="bieudo"
+  <p>Biểu đồ thống kê doanh thu trong 12 tháng</p>
+  <div v-if="responeData.length!==0">
+    <Bar class="bieudo"
     refs="chart"
     :chart-options="chartOptions"
     :chart-data="chartData"
     :chart-id="chartId"
     :dataset-id-key="datasetIdKey"
-    @click="handleBarClick"
+    @click="handleBarClick()"
   />
+  </div>
+  <div v-if="responeData.length===0">
+    <p>Không có dữ liệu !</p>
+  </div>
  
-  <router-link to="/statisticaldetail">
+  <!-- <router-link to="/statisticaldetail">
     View Detail
-  </router-link>
+  </router-link> -->
   </div>
 </template>
 
 <script>
 import { Bar } from "vue-chartjs/legacy";
 //import { Bar } from "vue-chartjs";
-import 'chartjs-plugin-datalabels';
+//import 'chartjs-plugin-datalabels';
 
 import axios from "axios";
 
@@ -98,7 +103,7 @@ export default {
         ],
         datasets: [
           {
-            label: "Số lượng",
+            label: "Doanh số",
             backgroundColor: "#f87979",
             //data: [0,0,0,0,0,0,0,0,0,0,0,0]
             data: Array(12).fill(0) // Khởi tạo mảng 12 phần tử ban đầu là 0
@@ -108,7 +113,8 @@ export default {
       chartOptions: {
         responsive: true,
         maintainAspectRatio: false
-      }
+      },
+      responeData: []
     };
   },
   methods: {
@@ -119,6 +125,11 @@ export default {
         );
         const monthlySalesData = response.data;
         console.log(monthlySalesData);
+        this.responeData = response.data;
+        console.log("dữ liệu trả về ");
+        console.log(response.data);
+        console.log("dữ liệu gán");
+        console.log(this.responeData);
 
         // // Cập nhật dữ liệu biểu đồ
         // this.chartData.datasets[0].data = monthlySalesData.map(
@@ -131,7 +142,7 @@ export default {
 
         monthlySalesData.forEach(item => {
           if (item.Month >= 1 && item.Month <= 12) {
-            newData[item.Month - 1] = item.Quantity;
+            newData[item.Month - 1] = item.SalesAmount;
           }
         });
 
@@ -145,45 +156,47 @@ export default {
         //   }
         // });
         // Cập nhật biểu đồ
-        //  this.$refs.chart.update();
-
-        // console.log("log data");
-        // console.log(this.$refs.chart);
-        // console.log("kiểm tra")
-        // console.log(this.$refs.chart instanceof Bar);
-        // console.log("tên")
-        // console.log(this.$refs.chart.$el.tagName);
-
+        //  this.$refs.chart.update();  
         // Gọi $nextTick để đợi Vue cập nhật
-        // this.$nextTick(() => {
-        //   // Gọi update() trên biểu đồ để áp dụng các thay đổi
-        //   if (this.$refs.chart && this.$refs.chart.update) {
-        //     this.$refs.chart.update();
+        this.$nextTick(() => {
+          // Gọi update() trên biểu đồ để áp dụng các thay đổi
+          if (this.$refs.chart && this.$refs.chart.update) {
+            this.$refs.chart.update();
 
-        //   }
-        // });
+          }
+        });
       } catch (error) {
         console.error("Error fetching monthly sales data:", error);
       }
     },
+
     handleBarClick(event, chartElements) {
-      if (chartElements.length > 0) {
+      console.log("điều hương");
+      console.log(chartElements);
+      console.log("handleBarClick is triggered");
+      console.log("event:", event);
+      console.log("chartElements:", chartElements);
+      if (chartElements && chartElements.length > 0) {
         const monthIndex = chartElements[0].index;
-        this.selectedMonth = monthIndex;
+        const monthName = this.chartData.labels[monthIndex];
+        const path = `/statisticaldetail/${monthName.toLowerCase()}`;
+        this.$router.push(path);
       }
     }
   },
-  mounted() {
+  created() {
     // console.log("data cũ")
     // console.log( this.chartData.datasets);
 
     const currentYear = new Date().getFullYear(); // Lấy năm hiện tại
+    //const currentYear=2025;
     this.fetchMonthlySalesData(currentYear);
     console.log("data hiện tại");
     console.log(this.chartData.datasets);
   }
 };
 </script>
+
 <style scoped>
 .statistical {
   width: 800px;

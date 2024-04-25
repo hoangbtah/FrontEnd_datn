@@ -5,7 +5,7 @@
         <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
             <h1 class="font-weight-semi-bold text-uppercase mb-3">Our Shop</h1>
             <div class="d-inline-flex">
-                <p class="m-0"><a href="">Home</a></p>
+                <p class="m-0"><a >Home</a></p>
                 <p class="m-0 px-2">-</p>
                 <p class="m-0">Shop</p>
             </div>
@@ -55,43 +55,7 @@
                 </div>
                 <!-- Price End -->
                 
-                <!-- Color Start -->
-                <!-- <div class="border-bottom mb-4 pb-4">
-                    <h5 class="font-weight-semi-bold mb-4">Filter by color</h5>
-                    <form>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="color-all">
-                            <label class="custom-control-label" for="price-all">All Color</label>
-                            <span class="badge border font-weight-normal">1000</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-1">
-                            <label class="custom-control-label" for="color-1">Black</label>
-                            <span class="badge border font-weight-normal">150</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-2">
-                            <label class="custom-control-label" for="color-2">White</label>
-                            <span class="badge border font-weight-normal">295</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-3">
-                            <label class="custom-control-label" for="color-3">Red</label>
-                            <span class="badge border font-weight-normal">246</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-4">
-                            <label class="custom-control-label" for="color-4">Blue</label>
-                            <span class="badge border font-weight-normal">145</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
-                            <input type="checkbox" class="custom-control-input" id="color-5">
-                            <label class="custom-control-label" for="color-5">Green</label>
-                            <span class="badge border font-weight-normal">168</span>
-                        </div>
-                    </form>
-                </div> -->
-                <!-- Color End -->
+                
 
                 <!-- Size Start -->
                 <div class="mb-5">
@@ -162,7 +126,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-sm-12 pb-1" v-for="productabc in items" :key="productabc.ProductId">
+                    <div class="col-lg-4 col-md-6 col-sm-12 pb-1" v-for="productabc in pageproducts" :key="productabc.ProductId">
                         <div class="card product-item border-0 mb-4">
                             <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
                               <div class="sale-product">
@@ -190,27 +154,7 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="col-12 pb-1">
-                        <nav aria-label="Page navigation">
-                          <ul class="pagination justify-content-center mb-3">
-                            <li class="page-item disabled">
-                              <a class="page-link" href="#" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                                <span class="sr-only">Previous</span>
-                              </a>
-                            </li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                              <a class="page-link" href="#" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                                <span class="sr-only">Next</span>
-                              </a>
-                            </li>
-                          </ul>
-                        </nav>
-                    </div> -->
+                  
                     <div class="col-12 pb-1">
                         <nav aria-label="Page navigation">
                           <ul class="pagination justify-content-center mb-3">
@@ -230,11 +174,7 @@
                               </a>
                              
                             </li>
-                            <!-- <li>
-                                <button @click="prevPage" :disabled="pageNumber === 1">Prev</button>
-                                <button v-for="page in displayedPages" :key="page" @click="gotoPage(page)" :class="{ 'active': page === pageNumber }">{{ page }}</button>
-                                <button @click="nextPage" :disabled="pageNumber === totalPages">Next</button>
-                            </li> -->
+                           
                           </ul>
                           
                         </nav>
@@ -251,9 +191,15 @@
 <script>
 import { mapActions ,mapGetters} from 'vuex';
 import axios from "axios";
+// Import Vue và VueToasted
+import Vue from 'vue';
+import Toasted from 'vue-toasted';
+
+// Sử dụng VueToasted với Vue
+Vue.use(Toasted);
 export default {
     name:'TheShop',
-    computed:{...mapGetters(['products','product','carts','auth']),
+    computed:{...mapGetters(['products','product','carts','auth','pageproducts']),
       // hiển thị trang
       displayedPages() {
       const start = Math.max(1,this.pageNumber - Math.floor(this.maxDisplayedPages / 2)
@@ -262,11 +208,11 @@ export default {
       return Array.from({ length: end - start + 1 }, (_, i) => start + i);
     }
     },
-    created() {
-        this.getProducts();
-        this.fetchItems();
-        this.total();
-        
+    mounted() {
+      this.getProducts();
+     this.fetchItems(this.pageNumber,this.pageSize);
+    this.total();
+
     },
     methods:{
         ...mapActions(['getProducts','getProduct','getComments','fetchItems','addProductToCart','getUser']),
@@ -283,10 +229,18 @@ export default {
           `https://localhost:7159/api/v1/Product/products/search?pagenumber=${this.pageNumber
           }&pagesize=${this.pageSize}`
         );
-        this.items= response.data;
-        this.products= this.items;
-        // Update total pages based on response or some other logic
-        // this.totalPages = response.headers['x-total-pages'];
+        console.log("dữ liệu phân trang")
+        console.log(response.data);
+       // this.pageproducts= response.data;
+     this.$store.commit('SET_PAGEPRODUCTS', response.data);
+      console.log("trạng thái ban đầu");
+      console.log(this.pageproducts);
+
+          this.total();
+        //  this.displayedPages();
+          // Lưu danh sách sản phẩm phân trang vào Local Storage
+        //  localStorage.setItem('listPageProduct', JSON.stringify(response.data));
+        console.log("tong só trang")
         console.log(this.totalPages);
       } catch (error) {
         console.error(error);
@@ -363,7 +317,19 @@ export default {
        console.log(formData);
        await this.addProductToCart(formData);
         console.log("Sản phẩm đã được thêm vào giỏ hàng!");
+        // Hiển thị thông báo thành công
+      this.$toasted.show('Thêm sản phẩm vào giỏ hàng thành công!', {
+        duration: 2000, // Thời gian hiển thị thông báo (ms)
+        position: 'top-center', // Vị trí hiển thị
+        type: 'success' // Kiểu thông báo (success, info, error)
+      });
       } catch (error) {
+           // Hiển thị thông báo lỗi
+      this.$toasted.show(error.response.data, {
+        duration: 2000, // Thời gian hiển thị thông báo (ms)
+        position: 'top-center', // Vị trí hiển thị
+        type: 'error' // Kiểu thông báo (success, info, error)
+      });
         console.error("Lỗi khi thêm sản phẩm vào giỏ hàng:", error);
       }
     }
@@ -371,7 +337,7 @@ export default {
     },
     data() {
     return {
-      items: [],
+     // items: [],
       pageNumber: 1,
       pageSize: 9,
       totalPages: 0,

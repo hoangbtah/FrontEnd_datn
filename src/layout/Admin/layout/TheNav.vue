@@ -63,6 +63,14 @@
                    Thống kê
                </div>
            </router-link>
+           <router-link to="/statisticaldetail" class="menu-item">
+               <div class="menu-icon m-icon-sell">
+                   
+               </div>
+               <div class="menu-text">
+                   Thống kê chi tiết
+               </div>
+           </router-link>
           
 
        </div>
