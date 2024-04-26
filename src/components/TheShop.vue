@@ -215,21 +215,32 @@ export default {
     }
     },
     created() {
-      this.getProducts();
+  //    this.getProducts();
      this.fetchItems();
-     this.getProductsByManufactorerId=null;
-    this.total();
+    // this.getProductsByManufactorerId=null;
+  //  this.total();
 
     },
     // sử dụng watch để cập nhật khi thay phát hiện có thay đổi dữ liệu
     watch: {
-    products() {
+    // products() {
+    //   console.log("thay đổi data");
+    //  this.fetchItems(this.selectedManufacturerId);
+    // //  this.total(); // Gọi lại hàm total() để tính lại totalPages
+    // //  this.displayedPages();
+    //   console.log("tông số trang theo nhà sản xuất");
+    //   this.pageNumber = 1; // Đặt lại pageNumber về trang đầu tiên
+    //   console.log(this.totalPages);
+    //  // this.gotoPage();
+    // },
+    selectedManufacturerId() {
+      console.log("mã nhà sản xuất thay đổi ",this.selectedManufacturerId);
      this.fetchItems(this.selectedManufacturerId);
-      this.total(); // Gọi lại hàm total() để tính lại totalPages
+    //  this.total(); // Gọi lại hàm total() để tính lại totalPages
     //  this.displayedPages();
-      console.log("tông số trang theo nhà sản xuất");
+    //  console.log("tông số trang theo nhà sản xuất");
       this.pageNumber = 1; // Đặt lại pageNumber về trang đầu tiên
-      console.log(this.totalPages);
+    //  console.log(this.totalPages);
      // this.gotoPage();
     },
     searchKeyword(){
@@ -248,21 +259,25 @@ export default {
     },
     async fetchItems(manufactorerId) {
       try {
-        let url =  `https://localhost:7159/api/v1/Product/products/search?pagenumber=${this.pageNumber
+        let url =  `https://localhost:7159/api/v1/Product/manufactorer/products?pagenumber=${this.pageNumber
           }&pagesize=${this.pageSize}`;
     if (manufactorerId) {
-      url = `https://localhost:7159/api/v1/Product/manufactorer/${manufactorerId}/products?pagenumber=${this.pageNumber
+      url = `https://localhost:7159/api/v1/Product/manufactorer/products?manufactorerId=${manufactorerId}&pagenumber=${this.pageNumber
           }&pagesize=${this.pageSize}`;
     }
         const response = await axios.get(url);
+        console.log("mã hãng",manufactorerId);
+        console.log("trang số",this.pageNumber);
+        console.log("kích thước trang",this.pageSize);
         console.log("dữ liệu phân trang")
-        console.log(response.data);
+        console.log(response.data.data);
        // this.pageproducts= response.data;
-     this.$store.commit('SET_PAGEPRODUCTS', response.data);
+    await this.$store.commit('SET_PAGEPRODUCTS', response.data.data);
     //  console.log("trạng thái ban đầu");
      // console.log(this.pageproducts);
 
-          this.total();
+       //   this.total(response.data.totalPages);
+       this.totalPages= response.data.totalPages;
         //  this.displayedPages();
           // Lưu danh sách sản phẩm phân trang vào Local Storage
         //  localStorage.setItem('listPageProduct', JSON.stringify(response.data));
@@ -321,36 +336,36 @@ export default {
       }
     },
     ///tìm kiếm sản phẩm 
-   async searchProduct(){
-    console.log("tìm kiếm ");
-    console.log(this.searchKeyword);
-      try {
-        let url =  `https://localhost:7159/api/v1/Product/products/search?search=${this.searchKeyword}&pagenumber=${this.pageNumber
-          }&pagesize=${this.pageSize}`;
-    // if (manufactorerId) {
-    //   url = `https://localhost:7159/api/v1/Product/manufactorer/${manufactorerId}/products?pagenumber=${this.pageNumber
-    //       }&pagesize=${this.pageSize}`;
-    // }
-        const response = await axios.get(url);
-        console.log("dữ liệu phân trang tìm kiếm")
-        console.log(response.data);
-       // this.pageproducts= response.data;
-     this.$store.commit('SET_PAGEPRODUCTS', response.data);
-    //  console.log("trạng thái ban đầu");
-     // console.log(this.pageproducts);
+  //  async searchProduct(){
+  //   console.log("tìm kiếm ");
+  //   console.log(this.searchKeyword);
+  //     try {
+  //       let url =  `https://localhost:7159/api/v1/Product/products/search?search=${this.searchKeyword}&pagenumber=${this.pageNumber
+  //         }&pagesize=${this.pageSize}`;
+  //   // if (manufactorerId) {
+  //   //   url = `https://localhost:7159/api/v1/Product/manufactorer/${manufactorerId}/products?pagenumber=${this.pageNumber
+  //   //       }&pagesize=${this.pageSize}`;
+  //   // }
+  //       const response = await axios.get(url);
+  //       console.log("dữ liệu phân trang tìm kiếm")
+  //       console.log(response.data);
+  //      // this.pageproducts= response.data;
+  //    this.$store.commit('SET_PAGEPRODUCTS', response.data);
+  //   //  console.log("trạng thái ban đầu");
+  //    // console.log(this.pageproducts);
 
-          this.total();
-        //  this.displayedPages();
-          // Lưu danh sách sản phẩm phân trang vào Local Storage
-        //  localStorage.setItem('listPageProduct', JSON.stringify(response.data));
-        console.log("tong só trang")
-        console.log(this.totalPages);
-    //  this.pageNumber = 1; // Đặt lại pageNumber về trang đầu tiên
+  //         this.total();
+  //       //  this.displayedPages();
+  //         // Lưu danh sách sản phẩm phân trang vào Local Storage
+  //       //  localStorage.setItem('listPageProduct', JSON.stringify(response.data));
+  //       console.log("tong só trang")
+  //       console.log(this.totalPages);
+  //   //  this.pageNumber = 1; // Đặt lại pageNumber về trang đầu tiên
 
-      } catch (error) {
-        console.error(error);
-      }
-    },
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   },
      // format tiền
      formatCurrency(number) {
       // Chuyển số sang chuỗi và đảm bảo là kiểu number
@@ -370,8 +385,9 @@ export default {
       // Ví dụ: 100000 sẽ thành "100.000"
       return number.toLocaleString("vi-VN");
     },
-    total() {
-      (this.totalPages = Math.ceil(this.products.length / this.pageSize))
+    total(totalPage) {
+      //(this.totalPages = Math.ceil(this.products.length / this.pageSize))
+      this.totalPages=totalPage;
     },
     async addToCart(product) {
       const formData = {

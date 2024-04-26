@@ -67,7 +67,7 @@ const productModules = {
                 commit('SET_SELECTEDMANUFACTORERID', manufactorerId);
 
 
-                console.log("danh sách sản phẩm phân trang theo nhà sản xuất",manufactorerId);
+                console.log("mã nhà sản xuất",manufactorerId);
             //     console.log(respone.data);
                 // console.log(respone.data);
             } catch (error) {
@@ -75,19 +75,19 @@ const productModules = {
             }
         },
         // lấy toàn bộ danh sach sản phẩm theo nhà sản xuất 
-        async getTotalProductsByManufactorerId({ commit }, manufactorerId) {
+        // async getTotalProductsByManufactorerId({ commit }, manufactorerId) {
 
-            try {
+        //     try {
 
-                const respone = await axios.get(`https://localhost:7159/api/v1/Product/${manufactorerId}/products`)
-                commit('SET_PRODUCTS', respone.data)
-                console.log("tổng số sản phẩm theo nhà sản xuất");
-                 console.log(respone.data);
-                // console.log(respone.data);
-            } catch (error) {
-                console.log(error)
-            }
-        },
+        //         const respone = await axios.get(`https://localhost:7159/api/v1/Product/${manufactorerId}/products`)
+        //         commit('SET_PRODUCTS', respone.data)
+        //         console.log("tổng số sản phẩm theo nhà sản xuất");
+        //          console.log(respone.data);
+        //         // console.log(respone.data);
+        //     } catch (error) {
+        //         console.log(error)
+        //     }
+        // },
 
 
 

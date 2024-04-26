@@ -187,11 +187,11 @@ export default {
       "getUser",
       "resetCarts",
       "getCarts",
-      "getTotalProductsByManufactorerId"
+      
     ]),
     handleGetProductsByManufactorer(manufactorerId){
         this.getProductsByManufactorerId(manufactorerId);
-        this.getTotalProductsByManufactorerId(manufactorerId);
+      //  this.getTotalProductsByManufactorerId(manufactorerId);
     },
     // kiểm tra xem đã đăng nhập chưa trước khi xem giỏ hàng
     checkLogin() {
