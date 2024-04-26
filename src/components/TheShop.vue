@@ -199,7 +199,7 @@ import Toasted from 'vue-toasted';
 Vue.use(Toasted);
 export default {
     name:'TheShop',
-    computed:{...mapGetters(['products','product','carts','auth','pageproducts']),
+    computed:{...mapGetters(['products','product','carts','auth','pageproducts','selectedManufacturerId']),
       // hiển thị trang
       displayedPages() {
       const start = Math.max(1,this.pageNumber - Math.floor(this.maxDisplayedPages / 2)
@@ -208,14 +208,23 @@ export default {
       return Array.from({ length: end - start + 1 }, (_, i) => start + i);
     }
     },
-    mounted() {
+    created() {
       this.getProducts();
      this.fetchItems(this.pageNumber,this.pageSize);
     this.total();
 
     },
+    // sử dụng watch để cập nhật khi thay phát hiện có thay đổi dữ liệu
+    watch: {
+    products() {
+      this.total(); // Gọi lại hàm total() để tính lại totalPages
+      console.log("tông số trang theo nhà sản xuất");
+      console.log(this.totalPages);
+     // this.gotoPage();
+    }
+  },
     methods:{
-        ...mapActions(['getProducts','getProduct','getComments','fetchItems','addProductToCart','getUser']),
+        ...mapActions(['getProducts','getProduct','getComments','fetchItems','addProductToCart','getUser','getProductsByManufactorerId']),
         handleProductClick(productId) {
         this.getProduct(productId);
         this.getComments(productId);
@@ -246,22 +255,42 @@ export default {
         console.error(error);
       }
     },
-    nextPage() {
+ async  nextPage() {
       if (this.pageNumber < this.totalPages) {
         this.pageNumber++;
-        this.fetchItems();
+       // this.fetchItems();
+       if (this.selectedManufacturerId) {
+    //  await this.fetchItems(this.selectedManufacturerId);
+    await this.getProductsByManufactorerId(this.selectedManufacturerId);
+    } else {
+      await this.fetchItems();
+    }
       }
     },
-    prevPage() {
+  async  prevPage() {
       if (this.pageNumber > 1) {
         this.pageNumber--;
-        this.fetchItems();
+       // this.fetchItems();
+       if (this.selectedManufacturerId) {
+     // await this.fetchItems(this.selectedManufacturerId);
+    await this.getProductsByManufactorerId(this.selectedManufacturerId);
+
+    } else {
+      await this.fetchItems();
+    }
       }
     },
-    gotoPage(page) {
+  async  gotoPage(page) {
       if (page !== this.pageNumber) {
         this.pageNumber = page;
-        this.fetchItems();
+       // this.fetchItems();
+       if (this.selectedManufacturerId) {
+      //await this.fetchItems(this.selectedManufacturerId);
+    await this.getProductsByManufactorerId(this.selectedManufacturerId);
+
+    } else {
+      await this.fetchItems();
+    }
         // khi chuyển sang trang di chuyển lên vị trí đầu trang
         this.$nextTick(() => {
             window.scrollTo(0, 0);
@@ -339,7 +368,7 @@ export default {
     return {
      // items: [],
       pageNumber: 1,
-      pageSize: 9,
+      pageSize: 3,
       totalPages: 0,
       maxDisplayedPages: 5
     };

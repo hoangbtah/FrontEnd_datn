@@ -87,7 +87,7 @@
                             </div>
                         </div> -->
                         <a class="nav-item nav-link"  v-for="manufactorer in manufactorers" :key="manufactorer.manufactorerId"
-                        @click="getProductsByManufactorerId(manufactorer.manufactorerId)"
+                        @click="handleGetProductsByManufactorer(manufactorer.manufactorerId)"
                        > <router-link to="/theshop">{{ manufactorer.manufactorerName }}</router-link></a>
                         <!-- <a href="" class="nav-item nav-link">Jeans</a> -->
                         <!-- <a href="" class="nav-item nav-link">Swimwear</a>
@@ -186,8 +186,13 @@ export default {
       "getProductsByManufactorerId",
       "getUser",
       "resetCarts",
-      "getCarts"
+      "getCarts",
+      "getTotalProductsByManufactorerId"
     ]),
+    handleGetProductsByManufactorer(manufactorerId){
+        this.getProductsByManufactorerId(manufactorerId);
+        this.getTotalProductsByManufactorerId(manufactorerId);
+    },
     // kiểm tra xem đã đăng nhập chưa trước khi xem giỏ hàng
     checkLogin() {
        

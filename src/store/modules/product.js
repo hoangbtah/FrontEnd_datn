@@ -5,6 +5,7 @@ const productModules = {
         product: {},
         isShow:false,
         pageproducts:[],
+        selectedManufacturerId: null
         //  productspa:[],
     },
     getters: {
@@ -12,6 +13,8 @@ const productModules = {
         product: state => state.product,
         isShow:state=>state.isShow,
         pageproducts:state=>state.pageproducts,
+        selectedManufacturerId:state=>state.selectedManufacturerId,
+
 
     },
     actions: {
@@ -46,7 +49,7 @@ const productModules = {
 
             try {
                 // console.log(catagoryId);
-                const respone = await axios.get(`https://localhost:7159/api/v1/Product/catagory/${catagoryId}/products?pagenumber=1&pagesize=9`)
+                const respone = await axios.get(`https://localhost:7159/api/v1/Product/catagory/${catagoryId}/products?pagenumber=1&pagesize=3`)
                 commit('SET_PRODUCTSBYCATAGORYID', respone.data)
                 // console.log(respone.data);
                 // console.log(respone.data);
@@ -54,12 +57,30 @@ const productModules = {
                 console.log(error)
             }
         },
+        // lấy danh sách sản phẩm theo nhà sản xuất theo phân trang
         async getProductsByManufactorerId({ commit }, manufactorerId) {
 
             try {
 
-                const respone = await axios.get(`https://localhost:7159/api/v1/Product/manufactorer/${manufactorerId}/products?pagenumber=1&pagesize=9`)
+                const respone = await axios.get(`https://localhost:7159/api/v1/Product/manufactorer/${manufactorerId}/products?pagenumber=1&pagesize=3`)
                 commit('SET_PAGEPRODUCTS', respone.data)
+                commit('SET_SELECTEDMANUFACTORERID', manufactorerId)
+
+                console.log("danh sách sản phẩm phân trang theo nhà sản xuất");
+                 console.log(respone.data);
+                // console.log(respone.data);
+            } catch (error) {
+                console.log(error)
+            }
+        },
+        // lấy toàn bộ danh sach sản phẩm theo nhà sản xuất 
+        async getTotalProductsByManufactorerId({ commit }, manufactorerId) {
+
+            try {
+
+                const respone = await axios.get(`https://localhost:7159/api/v1/Product/${manufactorerId}/products`)
+                commit('SET_PRODUCTS', respone.data)
+                console.log("tổng số sản phẩm theo nhà sản xuất");
                  console.log(respone.data);
                 // console.log(respone.data);
             } catch (error) {
@@ -89,6 +110,9 @@ const productModules = {
         SET_PAGEPRODUCTS(state, pageproducts) {
             state.pageproducts = pageproducts
         },
+        SET_SELECTEDMANUFACTORERID(state,selectedManufacturerId){
+            state.selectedManufacturerId=selectedManufacturerId
+        }
 
     }
 }
