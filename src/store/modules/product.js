@@ -62,12 +62,13 @@ const productModules = {
 
             try {
 
-                const respone = await axios.get(`https://localhost:7159/api/v1/Product/manufactorer/${manufactorerId}/products?pagenumber=1&pagesize=3`)
-                commit('SET_PAGEPRODUCTS', respone.data)
-                commit('SET_SELECTEDMANUFACTORERID', manufactorerId)
+               // const respone = await axios.get(`https://localhost:7159/api/v1/Product/manufactorer/${manufactorerId}/products?pagenumber=1&pagesize=3`)
+               // commit('SET_PAGEPRODUCTS', respone.data)
+                commit('SET_SELECTEDMANUFACTORERID', manufactorerId);
 
-                console.log("danh sách sản phẩm phân trang theo nhà sản xuất");
-                 console.log(respone.data);
+
+                console.log("danh sách sản phẩm phân trang theo nhà sản xuất",manufactorerId);
+            //     console.log(respone.data);
                 // console.log(respone.data);
             } catch (error) {
                 console.log(error)

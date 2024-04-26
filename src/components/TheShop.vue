@@ -103,13 +103,18 @@
                 <div class="row pb-3">
                     <div class="col-12 pb-1">
                         <div class="d-flex align-items-center justify-content-between mb-4">
-                            <form action="">
+                            <form action="" @submit.prevent="searchProduct">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Search by name">
+                                    <input type="text" class="form-control" v-model="searchKeyword" placeholder="Search by name">
                                     <div class="input-group-append">
-                                        <span class="input-group-text bg-transparent text-primary">
+                                        <!-- <span class="input-group-text bg-transparent text-primary">
+                                            <i class="fa fa-search"></i>
+                                        </span> -->
+                                        <button type="submit" style="border: none; background-color: bg-transparent;" > 
+                                           <span class="input-group-text bg-transparent text-primary">
                                             <i class="fa fa-search"></i>
                                         </span>
+                                        </button>
                                     </div>
                                 </div>
                             </form>
@@ -155,7 +160,7 @@
                         </div>
                     </div>
                   
-                    <div class="col-12 pb-1">
+                    <div class="col-12 pb-1" v-if="pageproducts.length>0">
                         <nav aria-label="Page navigation">
                           <ul class="pagination justify-content-center mb-3">
                             <li class="page-item">
@@ -179,6 +184,7 @@
                           
                         </nav>
                     </div>
+                    <div v-else><p>Không có dữ liệu !</p></div>
                 </div>
             </div>
             <!-- Shop Product End -->
@@ -210,21 +216,29 @@ export default {
     },
     created() {
       this.getProducts();
-     this.fetchItems(this.pageNumber,this.pageSize);
+     this.fetchItems();
+     this.getProductsByManufactorerId=null;
     this.total();
 
     },
     // sử dụng watch để cập nhật khi thay phát hiện có thay đổi dữ liệu
     watch: {
     products() {
+     this.fetchItems(this.selectedManufacturerId);
       this.total(); // Gọi lại hàm total() để tính lại totalPages
+    //  this.displayedPages();
       console.log("tông số trang theo nhà sản xuất");
+      this.pageNumber = 1; // Đặt lại pageNumber về trang đầu tiên
       console.log(this.totalPages);
      // this.gotoPage();
+    },
+    searchKeyword(){
+      this.pageproducts={};
     }
+
   },
     methods:{
-        ...mapActions(['getProducts','getProduct','getComments','fetchItems','addProductToCart','getUser','getProductsByManufactorerId']),
+        ...mapActions(['getProducts','getProduct','getComments','fetchItems','addProductToCart','getUser']),
         handleProductClick(productId) {
         this.getProduct(productId);
         this.getComments(productId);
@@ -232,18 +246,21 @@ export default {
             window.scrollTo(0, 0);
         });
     },
-    async fetchItems() {
+    async fetchItems(manufactorerId) {
       try {
-        const response = await axios.get(
-          `https://localhost:7159/api/v1/Product/products/search?pagenumber=${this.pageNumber
-          }&pagesize=${this.pageSize}`
-        );
+        let url =  `https://localhost:7159/api/v1/Product/products/search?pagenumber=${this.pageNumber
+          }&pagesize=${this.pageSize}`;
+    if (manufactorerId) {
+      url = `https://localhost:7159/api/v1/Product/manufactorer/${manufactorerId}/products?pagenumber=${this.pageNumber
+          }&pagesize=${this.pageSize}`;
+    }
+        const response = await axios.get(url);
         console.log("dữ liệu phân trang")
         console.log(response.data);
        // this.pageproducts= response.data;
      this.$store.commit('SET_PAGEPRODUCTS', response.data);
-      console.log("trạng thái ban đầu");
-      console.log(this.pageproducts);
+    //  console.log("trạng thái ban đầu");
+     // console.log(this.pageproducts);
 
           this.total();
         //  this.displayedPages();
@@ -251,6 +268,8 @@ export default {
         //  localStorage.setItem('listPageProduct', JSON.stringify(response.data));
         console.log("tong só trang")
         console.log(this.totalPages);
+    //  this.pageNumber = 1; // Đặt lại pageNumber về trang đầu tiên
+
       } catch (error) {
         console.error(error);
       }
@@ -260,9 +279,11 @@ export default {
         this.pageNumber++;
        // this.fetchItems();
        if (this.selectedManufacturerId) {
-    //  await this.fetchItems(this.selectedManufacturerId);
-    await this.getProductsByManufactorerId(this.selectedManufacturerId);
+      //  console.log("lấy theo nhà sản xuất")
+      await this.fetchItems(this.selectedManufacturerId);
+   // await this.getProductsByManufactorerId(this.selectedManufacturerId);
     } else {
+    //  console.log("lấy tất cả")
       await this.fetchItems();
     }
       }
@@ -270,10 +291,10 @@ export default {
   async  prevPage() {
       if (this.pageNumber > 1) {
         this.pageNumber--;
-       // this.fetchItems();
+      //  this.fetchItems();
        if (this.selectedManufacturerId) {
-     // await this.fetchItems(this.selectedManufacturerId);
-    await this.getProductsByManufactorerId(this.selectedManufacturerId);
+      await this.fetchItems(this.selectedManufacturerId);
+    //await this.getProductsByManufactorerId(this.selectedManufacturerId);
 
     } else {
       await this.fetchItems();
@@ -283,18 +304,51 @@ export default {
   async  gotoPage(page) {
       if (page !== this.pageNumber) {
         this.pageNumber = page;
-       // this.fetchItems();
+     //   this.fetchItems();
        if (this.selectedManufacturerId) {
-      //await this.fetchItems(this.selectedManufacturerId);
-    await this.getProductsByManufactorerId(this.selectedManufacturerId);
+      await this.fetchItems(this.selectedManufacturerId);
+    
+    console.log("lấy theo nhà sản xuất")
 
     } else {
       await this.fetchItems();
+      console.log("lấy tất cả")
     }
         // khi chuyển sang trang di chuyển lên vị trí đầu trang
         this.$nextTick(() => {
             window.scrollTo(0, 0);
         });
+      }
+    },
+    ///tìm kiếm sản phẩm 
+   async searchProduct(){
+    console.log("tìm kiếm ");
+    console.log(this.searchKeyword);
+      try {
+        let url =  `https://localhost:7159/api/v1/Product/products/search?search=${this.searchKeyword}&pagenumber=${this.pageNumber
+          }&pagesize=${this.pageSize}`;
+    // if (manufactorerId) {
+    //   url = `https://localhost:7159/api/v1/Product/manufactorer/${manufactorerId}/products?pagenumber=${this.pageNumber
+    //       }&pagesize=${this.pageSize}`;
+    // }
+        const response = await axios.get(url);
+        console.log("dữ liệu phân trang tìm kiếm")
+        console.log(response.data);
+       // this.pageproducts= response.data;
+     this.$store.commit('SET_PAGEPRODUCTS', response.data);
+    //  console.log("trạng thái ban đầu");
+     // console.log(this.pageproducts);
+
+          this.total();
+        //  this.displayedPages();
+          // Lưu danh sách sản phẩm phân trang vào Local Storage
+        //  localStorage.setItem('listPageProduct', JSON.stringify(response.data));
+        console.log("tong só trang")
+        console.log(this.totalPages);
+    //  this.pageNumber = 1; // Đặt lại pageNumber về trang đầu tiên
+
+      } catch (error) {
+        console.error(error);
       }
     },
      // format tiền
@@ -370,7 +424,8 @@ export default {
       pageNumber: 1,
       pageSize: 3,
       totalPages: 0,
-      maxDisplayedPages: 5
+      maxDisplayedPages: 5,
+      searchKeyword: '', // Biến lưu từ khóa tìm kiếm
     };
   }
 }
