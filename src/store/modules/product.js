@@ -5,7 +5,9 @@ const productModules = {
         product: {},
         isShow:false,
         pageproducts:[],
-        selectedManufacturerId: null
+        selectedManufacturerId: null,
+        selectedCatagoryId: null,
+
         //  productspa:[],
     },
     getters: {
@@ -14,6 +16,8 @@ const productModules = {
         isShow:state=>state.isShow,
         pageproducts:state=>state.pageproducts,
         selectedManufacturerId:state=>state.selectedManufacturerId,
+        selectedCatagoryId:state=>state.selectedCatagoryId,
+
 
 
     },
@@ -49,8 +53,10 @@ const productModules = {
 
             try {
                 // console.log(catagoryId);
-                const respone = await axios.get(`https://localhost:7159/api/v1/Product/catagory/${catagoryId}/products?pagenumber=1&pagesize=3`)
-                commit('SET_PRODUCTSBYCATAGORYID', respone.data)
+                // const respone = await axios.get(`https://localhost:7159/api/v1/Product/catagory/${catagoryId}/products?pagenumber=1&pagesize=3`)
+                 commit('SET_SELECTEDCATAGORYID', catagoryId)
+                console.log("mã danh muc",catagoryId);
+
                 // console.log(respone.data);
                 // console.log(respone.data);
             } catch (error) {
@@ -74,20 +80,13 @@ const productModules = {
                 console.log(error)
             }
         },
-        // lấy toàn bộ danh sach sản phẩm theo nhà sản xuất 
-        // async getTotalProductsByManufactorerId({ commit }, manufactorerId) {
-
-        //     try {
-
-        //         const respone = await axios.get(`https://localhost:7159/api/v1/Product/${manufactorerId}/products`)
-        //         commit('SET_PRODUCTS', respone.data)
-        //         console.log("tổng số sản phẩm theo nhà sản xuất");
-        //          console.log(respone.data);
-        //         // console.log(respone.data);
-        //     } catch (error) {
-        //         console.log(error)
-        //     }
-        // },
+        resetGetProductsByManufactorerId({ commit }) {
+            commit('RESET_SELECTEDMANUFACTORERID');
+          },
+          resetGetProductsByCatagoryId({ commit }) {
+            commit('RESET_SELECTEDCATAGORYID');
+          }
+        
 
 
 
@@ -113,7 +112,17 @@ const productModules = {
         },
         SET_SELECTEDMANUFACTORERID(state,selectedManufacturerId){
             state.selectedManufacturerId=selectedManufacturerId
+        },
+        RESET_SELECTEDMANUFACTORERID(state){
+            state.selectedManufacturerId=null
+        },
+        SET_SELECTEDCATAGORYID(state,selectedCatagoryId){
+            state.selectedCatagoryId=selectedCatagoryId
+        },
+        RESET_SELECTEDCATAGORYID(state){
+            state.selectedCatagoryId=null
         }
+
 
     }
 }

@@ -22,32 +22,38 @@
                     <h5 class="font-weight-semi-bold mb-4">Filter by price</h5>
                     <form>
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="price-all">
+                            <!-- <input type="checkbox" class="custom-control-input" checked id="price-all"> -->
+                            <input type="checkbox" class="custom-control-input" checked id="price-all" ref="priceAll" @change="handlePriceRangeChange">
                             <label class="custom-control-label" for="price-all">All Price</label>
                             <!-- <span class="badge border font-weight-normal">1000</span> -->
                         </div>
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="price-1">
+                            <!-- <input type="checkbox" class="custom-control-input" id="price-1"> -->
+                            <input type="checkbox" class="custom-control-input" id="price-1" ref="price1" @change="handlePriceRangeChange">
                             <label class="custom-control-label" for="price-1">199 k - 399k</label>
                             <!-- <span class="badge border font-weight-normal">150</span> -->
                         </div>
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="price-2">
+                            <!-- <input type="checkbox" class="custom-control-input" id="price-2"> -->
+                            <input type="checkbox" class="custom-control-input" id="price-2" ref="price2" @change="handlePriceRangeChange">
                             <label class="custom-control-label" for="price-2">400k - 599k</label>
                             <!-- <span class="badge border font-weight-normal">295</span> -->
                         </div>
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="price-3">
+                            <!-- <input type="checkbox" class="custom-control-input" id="price-3"> -->
+                            <input type="checkbox" class="custom-control-input" id="price-3" ref="price3" @change="handlePriceRangeChange">
                             <label class="custom-control-label" for="price-3">600k - 999k</label>
                             <!-- <span class="badge border font-weight-normal">246</span> -->
                         </div>
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="price-4">
+                            <!-- <input type="checkbox" class="custom-control-input" id="price-4"> -->
+                            <input type="checkbox" class="custom-control-input" id="price-4" ref="price4" @change="handlePriceRangeChange">
                             <label class="custom-control-label" for="price-4">1000k - 1999k</label>
                             <!-- <span class="badge border font-weight-normal">145</span> -->
                         </div>
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
-                            <input type="checkbox" class="custom-control-input" id="price-5">
+                            <!-- <input type="checkbox" class="custom-control-input" id="price-5"> -->
+                            <input type="checkbox" class="custom-control-input" id="price-5" ref="price5" @change="handlePriceRangeChange">
                             <label class="custom-control-label" for="price-5">2000k - $</label>
                             <!-- <span class="badge border font-weight-normal">168</span> -->
                         </div>
@@ -195,34 +201,48 @@
     </div>
 </template>
 <script>
-import { mapActions ,mapGetters} from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 import axios from "axios";
 // Import Vue và VueToasted
-import Vue from 'vue';
-import Toasted from 'vue-toasted';
+import Vue from "vue";
+import Toasted from "vue-toasted";
 
 // Sử dụng VueToasted với Vue
 Vue.use(Toasted);
 export default {
-    name:'TheShop',
-    computed:{...mapGetters(['products','product','carts','auth','pageproducts','selectedManufacturerId']),
-      // hiển thị trang
-      displayedPages() {
-      const start = Math.max(1,this.pageNumber - Math.floor(this.maxDisplayedPages / 2)
+  name: "TheShop",
+  computed: {
+    ...mapGetters([
+      "products",
+      "product",
+      "carts",
+      "auth",
+      "pageproducts",
+      "selectedManufacturerId",
+      "selectedCatagoryId"
+    ]),
+    // hiển thị trang
+    displayedPages() {
+      const start = Math.max(
+        1,
+        this.pageNumber - Math.floor(this.maxDisplayedPages / 2)
       );
       const end = Math.min(this.totalPages, start + this.maxDisplayedPages - 1);
       return Array.from({ length: end - start + 1 }, (_, i) => start + i);
     }
-    },
-    created() {
-  //    this.getProducts();
-     this.fetchItems();
-    // this.getProductsByManufactorerId=null;
-  //  this.total();
-
-    },
-    // sử dụng watch để cập nhật khi thay phát hiện có thay đổi dữ liệu
-    watch: {
+  },
+  created() {
+    //    this.getProducts();
+    console.log("chạy lại");
+    this.resetGetProductsByManufactorerId();
+    this.resetGetProductsByCatagoryId();
+    console.log("mã nhà sản xuất ", this.selectedManufacturerId);
+    console.log("mã danh muc ", this.selectedCatagoryId);
+    this.fetchItems();
+ 
+  },
+  // sử dụng watch để cập nhật khi thay phát hiện có thay đổi dữ liệu
+  watch: {
     // products() {
     //   console.log("thay đổi data");
     //  this.fetchItems(this.selectedManufacturerId);
@@ -234,235 +254,277 @@ export default {
     //  // this.gotoPage();
     // },
     selectedManufacturerId() {
-      console.log("mã nhà sản xuất thay đổi ",this.selectedManufacturerId);
-     this.fetchItems(this.selectedManufacturerId);
-    //  this.total(); // Gọi lại hàm total() để tính lại totalPages
-    //  this.displayedPages();
-    //  console.log("tông số trang theo nhà sản xuất");
       this.pageNumber = 1; // Đặt lại pageNumber về trang đầu tiên
-    //  console.log(this.totalPages);
-     // this.gotoPage();
-    },
-    searchKeyword(){
-      this.pageproducts={};
-    }
 
+      console.log("mã nhà sản xuất thay đổi ", this.selectedManufacturerId);
+      this.fetchItems(this.selectedManufacturerId);
+      
+    },
+    selectedCatagoryId() {
+      this.pageNumber = 1; // Đặt lại pageNumber về trang đầu tiên
+
+      console.log("mã danh muc thay đổi ", this.selectedCatagoryId);
+      console.log("gọi lại theo danh mục")
+      this.fetchItems(this.selectedManufacturerId, this.searchKeyword,this.selectedCatagoryId);
+      
+    },
+    searchKeyword() {
+      this.pageNumber = 1; // Đặt lại pageNumber về trang đầu tiên
+
+      // this.pageproducts={};
+      // Gọi hàm fetchItems với manufactorerId và searchKeyword được truyền vào
+      this.fetchItems(this.selectedManufacturerId, this.searchKeyword);
+    }
   },
-    methods:{
-        ...mapActions(['getProducts','getProduct','getComments','fetchItems','addProductToCart','getUser']),
-        handleProductClick(productId) {
-        this.getProduct(productId);
-        this.getComments(productId);
-        this.$nextTick(() => {
-            window.scrollTo(0, 0);
-        });
-    },
-    async fetchItems(manufactorerId) {
-      try {
-        let url =  `https://localhost:7159/api/v1/Product/manufactorer/products?pagenumber=${this.pageNumber
-          }&pagesize=${this.pageSize}`;
-    if (manufactorerId) {
-      url = `https://localhost:7159/api/v1/Product/manufactorer/products?manufactorerId=${manufactorerId}&pagenumber=${this.pageNumber
-          }&pagesize=${this.pageSize}`;
+  methods: {
+    ...mapActions([
+      "getProducts",
+      "getProduct",
+      "getComments",
+      "fetchItems",
+      "addProductToCart",
+      "getUser",
+      "resetGetProductsByManufactorerId",
+      "resetGetProductsByCatagoryId"
+    ]),
+    handlePriceRangeChange() {
+    // Khởi tạo priceRange từ moneyFirst và moneyLast
+  //  const priceRange = { min: this.moneyFirst, max: this.moneyLast };
+
+    if (this.$refs.price1.checked) {
+      this.moneyFirst = 199000;
+      this.moneyLast = 399000;
+    } else if (this.$refs.price2.checked) {
+      this.moneyFirst = 400000;
+      this.moneyLast = 599000;
+    } else if (this.$refs.price3.checked) {
+      this.moneyFirst = 600000;
+      this.moneyLast = 999000;
+    } else if (this.$refs.price4.checked) {
+      this.moneyFirst = 1000000;
+      this.moneyLast = 1999000;
+    } else if (this.$refs.price5.checked) {
+      this.moneyFirst = 2000000;
+      // moneyLast sẽ không được cập nhật, vẫn giữ nguyên là Infinity
     }
+    console.log("khoảng giá vừa chọn",this.firstMoney,"+",this.lastMoney);
+    this.pageNumber=1;
+    // Gọi lại phương thức fetchItems với priceRange mới
+    this.fetchItems(this.manufactorerId, this.searchKeyword, this.catagoryId, this.moneyFirst,this.moneyLast);
+  },
+    handleProductClick(productId) {
+      this.getProduct(productId);
+      this.getComments(productId);
+      this.$nextTick(() => {
+        window.scrollTo(0, 0);
+      });
+    },
+    async fetchItems(manufactorerId, searchKeyword,catagoryId,firstM,lastM) {
+      try {
+        let url = `https://localhost:7159/api/v1/Product/manufactorer/products?pagenumber=${
+          this.pageNumber
+        }&pagesize=${this.pageSize}`;
+        if (manufactorerId) {
+        
+          url += `&manufactorerId=${manufactorerId}`;
+          console.log("mã hãng", manufactorerId);
+        }
+        if (searchKeyword) {
+         
+         url += `&search=${searchKeyword}`;
+         console.log("chuỗi tìm kiếm",searchKeyword);
+       }
+        if (catagoryId) {
+        
+          url += `&catagoryId=${catagoryId}`;
+          console.log("mã hãng", catagoryId);
+        }
+        // if (searchKeyword) {
+         
+        //   url += `&search=${searchKeyword}`;
+        //   console.log("chuỗi tìm kiếm",searchKeyword);
+        // }
+        if(firstM && lastM)
+        {
+          url += `&from=${firstM}&to=${lastM}`;
+          console.log("khoảng tìm kiếm",firstM,"+",lastM);
+        }
         const response = await axios.get(url);
-        console.log("mã hãng",manufactorerId);
-        console.log("trang số",this.pageNumber);
-        console.log("kích thước trang",this.pageSize);
-        console.log("dữ liệu phân trang")
+        // console.log("mã hãng",manufactorerId);
+        console.log("trang số", this.pageNumber);
+        console.log("kích thước trang", this.pageSize);
+        console.log("dữ liệu phân trang");
         console.log(response.data.data);
-       // this.pageproducts= response.data;
-    await this.$store.commit('SET_PAGEPRODUCTS', response.data.data);
-    //  console.log("trạng thái ban đầu");
-     // console.log(this.pageproducts);
+        // this.pageproducts= response.data;
+        await this.$store.commit("SET_PAGEPRODUCTS", response.data.data);
+        //  console.log("trạng thái ban đầu");
+        // console.log(this.pageproducts);
 
-       //   this.total(response.data.totalPages);
-       this.totalPages= response.data.totalPages;
+        //   this.total(response.data.totalPages);
+        this.totalPages = response.data.totalPages;
         //  this.displayedPages();
-          // Lưu danh sách sản phẩm phân trang vào Local Storage
+        // Lưu danh sách sản phẩm phân trang vào Local Storage
         //  localStorage.setItem('listPageProduct', JSON.stringify(response.data));
-        console.log("tong só trang")
+        console.log("tong só trang");
         console.log(this.totalPages);
-    //  this.pageNumber = 1; // Đặt lại pageNumber về trang đầu tiên
-
+        //  this.pageNumber = 1; // Đặt lại pageNumber về trang đầu tiên
       } catch (error) {
         console.error(error);
       }
     },
- async  nextPage() {
+    async nextPage() {
       if (this.pageNumber < this.totalPages) {
         this.pageNumber++;
-       // this.fetchItems();
-       if (this.selectedManufacturerId) {
-      //  console.log("lấy theo nhà sản xuất")
-      await this.fetchItems(this.selectedManufacturerId);
-   // await this.getProductsByManufactorerId(this.selectedManufacturerId);
-    } else {
-    //  console.log("lấy tất cả")
-      await this.fetchItems();
-    }
+        // this.fetchItems();
+        if (this.selectedManufacturerId) {
+          //  console.log("lấy theo nhà sản xuất")
+          await this.fetchItems(this.selectedManufacturerId);
+          // await this.getProductsByManufactorerId(this.selectedManufacturerId);
+        } else {
+          //  console.log("lấy tất cả")
+          await this.fetchItems();
+        }
       }
     },
-  async  prevPage() {
+    async prevPage() {
       if (this.pageNumber > 1) {
         this.pageNumber--;
-      //  this.fetchItems();
-       if (this.selectedManufacturerId) {
-      await this.fetchItems(this.selectedManufacturerId);
-    //await this.getProductsByManufactorerId(this.selectedManufacturerId);
-
-    } else {
-      await this.fetchItems();
-    }
+        //  this.fetchItems();
+        if (this.selectedManufacturerId) {
+          await this.fetchItems(this.selectedManufacturerId);
+          //await this.getProductsByManufactorerId(this.selectedManufacturerId);
+        } else {
+          await this.fetchItems();
+        }
       }
     },
-  async  gotoPage(page) {
+    async gotoPage(page) {
       if (page !== this.pageNumber) {
         this.pageNumber = page;
-     //   this.fetchItems();
-       if (this.selectedManufacturerId) {
-      await this.fetchItems(this.selectedManufacturerId);
-    
-    console.log("lấy theo nhà sản xuất")
+        //  this.fetchItems();
+        if (this.selectedManufacturerId) {
+          await this.fetchItems(this.selectedManufacturerId);
 
-    } else {
-      await this.fetchItems();
-      console.log("lấy tất cả")
-    }
+          console.log("lấy theo nhà sản xuất");
+        } else {
+          await this.fetchItems();
+          console.log("lấy tất cả");
+        }
+   // this.fetchItems(this.manufactorerId, this.searchKeyword, this.catagoryId, this.moneyFirst,this.moneyLast);
+
         // khi chuyển sang trang di chuyển lên vị trí đầu trang
         this.$nextTick(() => {
-            window.scrollTo(0, 0);
+          window.scrollTo(0, 0);
         });
       }
     },
-    ///tìm kiếm sản phẩm 
-  //  async searchProduct(){
-  //   console.log("tìm kiếm ");
-  //   console.log(this.searchKeyword);
-  //     try {
-  //       let url =  `https://localhost:7159/api/v1/Product/products/search?search=${this.searchKeyword}&pagenumber=${this.pageNumber
-  //         }&pagesize=${this.pageSize}`;
-  //   // if (manufactorerId) {
-  //   //   url = `https://localhost:7159/api/v1/Product/manufactorer/${manufactorerId}/products?pagenumber=${this.pageNumber
-  //   //       }&pagesize=${this.pageSize}`;
-  //   // }
-  //       const response = await axios.get(url);
-  //       console.log("dữ liệu phân trang tìm kiếm")
-  //       console.log(response.data);
-  //      // this.pageproducts= response.data;
-  //    this.$store.commit('SET_PAGEPRODUCTS', response.data);
-  //   //  console.log("trạng thái ban đầu");
-  //    // console.log(this.pageproducts);
+    ///tìm kiếm sản phẩm
+    async searchProduct() {
+      try {
+        // Gọi hàm fetchItems với manufactorerId và searchKeyword được truyền vào
+        await this.fetchItems(this.selectedManufacturerId, this.searchKeyword);
+      } catch (error) {
+        console.error(error);
+      }
+    },
 
-  //         this.total();
-  //       //  this.displayedPages();
-  //         // Lưu danh sách sản phẩm phân trang vào Local Storage
-  //       //  localStorage.setItem('listPageProduct', JSON.stringify(response.data));
-  //       console.log("tong só trang")
-  //       console.log(this.totalPages);
-  //   //  this.pageNumber = 1; // Đặt lại pageNumber về trang đầu tiên
-
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   },
-     // format tiền
-     formatCurrency(number) {
+    // format tiền
+    formatCurrency(number) {
       // Chuyển số sang chuỗi và đảm bảo là kiểu number
-      
+
       number = Number(number);
       // Kiểm tra nếu không phải là số hợp lệ
       if (isNaN(number)) {
         return "0";
       }
-       // Làm tròn số tiền theo quy tắc gần nhất
-    if (number < 1000) {
+      // Làm tròn số tiền theo quy tắc gần nhất
+      if (number < 1000) {
         number = Math.round(number / 100) * 100; // Làm tròn đến hàng trăm gần nhất
-    } else {
+      } else {
         number = Math.round(number / 1000) * 1000; // Làm tròn đến hàng nghìn gần nhất
-    }
+      }
       // Sử dụng hàm toLocaleString() để định dạng tiền tệ theo định dạng của Việt Nam
       // Ví dụ: 100000 sẽ thành "100.000"
       return number.toLocaleString("vi-VN");
     },
     total(totalPage) {
       //(this.totalPages = Math.ceil(this.products.length / this.pageSize))
-      this.totalPages=totalPage;
+      this.totalPages = totalPage;
     },
     async addToCart(product) {
       const formData = {
-        productId:product.ProductId,
-        userId : this.auth.user.userId,
-        productName:product.ProductName,
-        image:product.Image,
-        quantity:product.Quantity,
-        price:product.Price,
-      }
-        console.log("product add to cart")
-        console.log(product);
-     // const userId = this.auth.user.userId;
-     // console.log(userId);
-     const token = localStorage.getItem("token");
+        productId: product.ProductId,
+        userId: this.auth.user.userId,
+        productName: product.ProductName,
+        image: product.Image,
+        quantity: product.Quantity,
+        price: product.Price
+      };
+      console.log("product add to cart");
+      console.log(product);
+      // const userId = this.auth.user.userId;
+      // console.log(userId);
+      const token = localStorage.getItem("token");
       console.log(token);
       if (!token) {
-
         // Nếu không có token, chuyển hướng đến trang đăng nhập
-         this.$router.push("/login");
-      //  commit('SET_NEED_LOGIN', true);
+        this.$router.push("/login");
+        //  commit('SET_NEED_LOGIN', true);
         return;
       }
       try {
-       // await this.$store.dispatch("addProductToCart", { userId, product });
-       console.log(formData);
-       await this.addProductToCart(formData);
+        // await this.$store.dispatch("addProductToCart", { userId, product });
+        console.log(formData);
+        await this.addProductToCart(formData);
         console.log("Sản phẩm đã được thêm vào giỏ hàng!");
         // Hiển thị thông báo thành công
-      this.$toasted.show('Thêm sản phẩm vào giỏ hàng thành công!', {
-        duration: 2000, // Thời gian hiển thị thông báo (ms)
-        position: 'top-center', // Vị trí hiển thị
-        type: 'success' // Kiểu thông báo (success, info, error)
-      });
+        this.$toasted.show("Thêm sản phẩm vào giỏ hàng thành công!", {
+          duration: 2000, // Thời gian hiển thị thông báo (ms)
+          position: "top-center", // Vị trí hiển thị
+          type: "success" // Kiểu thông báo (success, info, error)
+        });
       } catch (error) {
-           // Hiển thị thông báo lỗi
-      this.$toasted.show(error.response.data, {
-        duration: 2000, // Thời gian hiển thị thông báo (ms)
-        position: 'top-center', // Vị trí hiển thị
-        type: 'error' // Kiểu thông báo (success, info, error)
-      });
+        // Hiển thị thông báo lỗi
+        this.$toasted.show(error.response.data, {
+          duration: 2000, // Thời gian hiển thị thông báo (ms)
+          position: "top-center", // Vị trí hiển thị
+          type: "error" // Kiểu thông báo (success, info, error)
+        });
         console.error("Lỗi khi thêm sản phẩm vào giỏ hàng:", error);
       }
     }
-      
-    },
-    data() {
+  },
+  data() {
     return {
-     // items: [],
+      // items: [],
       pageNumber: 1,
       pageSize: 3,
       totalPages: 0,
       maxDisplayedPages: 5,
-      searchKeyword: '', // Biến lưu từ khóa tìm kiếm
+      searchKeyword: "", // Biến lưu từ khóa tìm kiếm,
+      moneyFirst: 0,
+    moneyLast: Infinity
     };
   }
-}
+};
 </script>
 <style>
-.sale-product{
-  display:flex;
+.sale-product {
+  display: flex;
   position: relative;
 }
-.sale-product .sale{
+.sale-product .sale {
   position: absolute;
-  right:0;
-  padding-right:5px;
-  z-index:999;
+  right: 0;
+  padding-right: 5px;
+  z-index: 999;
 }
-.sale-product  p{
-  color:red;
+.sale-product p {
+  color: red;
 }
-.sale-product .product-0{
+.sale-product .product-0 {
   margin-left: 5px;
   position: absolute;
-  z-index:999;
+  z-index: 999;
 }
 </style>
