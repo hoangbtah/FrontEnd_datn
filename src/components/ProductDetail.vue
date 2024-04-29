@@ -21,29 +21,16 @@
                 <div id="product-carousel" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner border">
                         <div class="carousel-item active">
-                            <img class="w-100 h-100" :src="product.image" alt="Image">
+                            <img class="w-100 h-100" :src="product.Image" alt="Image">
                         </div>
-                        <!-- <div class="carousel-item">
-                            <img class="w-100 h-100" src="img/product-2.jpg" alt="Image">
-                        </div>
-                        <div class="carousel-item">
-                            <img class="w-100 h-100" src="img/product-3.jpg" alt="Image">
-                        </div>
-                        <div class="carousel-item">
-                            <img class="w-100 h-100" src="img/product-4.jpg" alt="Image">
-                        </div> -->
+                    
                     </div>
-                    <!-- <a class="carousel-control-prev" href="#product-carousel" data-slide="prev">
-                        <i class="fa fa-2x fa-angle-left text-dark"></i>
-                    </a>
-                    <a class="carousel-control-next" href="#product-carousel" data-slide="next">
-                        <i class="fa fa-2x fa-angle-right text-dark"></i>
-                    </a> -->
+                 
                 </div>
             </div>
 
             <div class="col-lg-7 pb-5">
-                <h3 class="font-weight-semi-bold">{{product.productName}}</h3>
+                <h3 class="font-weight-semi-bold">{{product.ProductName}}</h3>
                 <div class="d-flex mb-3">
                     <div class="text-primary mr-2">
                         <small class="fas fa-star"></small>
@@ -54,8 +41,8 @@
                     </div>
                     <small class="pt-1">(50 Reviews)</small>
                 </div>
-                <h3 class="font-weight-semi-bold mb-4">{{product.price}}</h3>
-                <p class="mb-4">{{product.decription}}</p>
+                <h3 class="font-weight-semi-bold mb-4">{{formatCurrency(product.Price-product.Price*product.DiscountPercent)}}đ</h3>
+                <p class="mb-4">{{product.Decription}}</p>
                 <div class="d-flex mb-3">
                     <p class="text-dark font-weight-medium mb-0 mr-3">Sizes:</p>
                     <form>
@@ -82,29 +69,7 @@
                     </form>
                 </div>
                 <div class="d-flex mb-4">
-                    <!-- <p class="text-dark font-weight-medium mb-0 mr-3">Colors:</p>
-                    <form>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="color-1" name="color">
-                            <label class="custom-control-label" for="color-1">Black</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="color-2" name="color">
-                            <label class="custom-control-label" for="color-2">White</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="color-3" name="color">
-                            <label class="custom-control-label" for="color-3">Red</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="color-4" name="color">
-                            <label class="custom-control-label" for="color-4">Blue</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="color-5" name="color">
-                            <label class="custom-control-label" for="color-5">Green</label>
-                        </div>
-                    </form> -->
+                    
                 </div>
                 <div class="d-flex align-items-center mb-4 pt-2">
                     <div class="input-group quantity mr-3" style="width: 130px;">
@@ -113,14 +78,15 @@
                             <i class="fa fa-minus"></i>
                             </button>
                         </div>
-                        <input type="text" class="form-control bg-secondary text-center" value="1">
+                        <input type="text" class="form-control bg-secondary text-center" v-model="quantity"
+                        @change="updateQuantity(product)"  >
                         <div class="input-group-btn">
                             <button class="btn btn-primary btn-plus">
                                 <i class="fa fa-plus"></i>
                             </button>
                         </div>
                     </div>
-                    <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
+                    <button class="btn btn-primary px-3" @click="addToCart(product)"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
                 </div>
                 <div class="d-flex pt-2">
                     <p class="text-dark font-weight-medium mb-0 mr-2">Share on:</p>
@@ -151,11 +117,11 @@
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="tab-pane-1">
                         <h4 class="mb-3">Mô tả sản phẩm</h4>
-                        <p>{{product.description}}</p>
+                        <p>{{product.Description}}</p>
                     </div>
                     <div class="tab-pane fade" id="tab-pane-2">
                         <h4 class="mb-3">Sử dụng và bảo quản</h4>
-                        <!-- <p>Eos no lorem eirmod diam diam, eos elitr et gubergren diam sea. Consetetur vero aliquyam invidunt duo dolores et duo sit. Vero diam ea vero et dolore rebum, dolor rebum eirmod consetetur invidunt sed sed et, lorem duo et eos elitr, sadipscing kasd ipsum rebum diam. Dolore diam stet rebum sed tempor kasd eirmod. Takimata kasd ipsum accusam sadipscing, eos dolores sit no ut diam consetetur duo justo est, sit sanctus diam tempor aliquyam eirmod nonumy rebum dolor accusam, ipsum kasd eos consetetur at sit rebum, diam kasd invidunt tempor lorem, ipsum lorem elitr sanctus eirmod takimata dolor ea invidunt.</p> -->
+                      
                         <div class="row">
                             <div class="col-md-6">
                                 <ul class="list-group list-group-flush">
@@ -265,7 +231,8 @@
                         <h7 class="text-truncate mb-3">{{product.ManufactorerName}}</h7>
                         <h6 class="text-truncate mb-3">{{product.ProductName}}</h6>
                         <div class="d-flex justify-content-center">
-                            <h6>{{product.Price}}VNĐ</h6><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+                            <h6>{{formatCurrency(product.Price)}}VNĐ</h6>
+                            <!-- <h6 class="text-muted ml-2"><del>$123.00</del></h6> -->
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between bg-light border">
@@ -282,6 +249,13 @@
 </template>
 <script>
 import { mapActions ,mapGetters} from 'vuex';
+//import axios from "axios";
+// Import Vue và VueToasted
+import Vue from "vue";
+import Toasted from "vue-toasted";
+
+// Sử dụng VueToasted với Vue
+Vue.use(Toasted);
 export default {
     name:'ProductDetail',
     created() {
@@ -308,27 +282,115 @@ export default {
     }
 
     },
-    computed:{...mapGetters(["product",'comments','products'])},
+    computed:{...mapGetters(["product",'comments','products','auth'])},
   
     methods:{
-        ...mapActions(["getProduct",'getProducts','getComments']),
-    //     async fetchData(productId) {
-    //   await this.getProduct(productId); // Gọi action để lấy sản phẩm từ Store
+        ...mapActions(["getProduct",'getProducts','getComments','addProductToCart']),
+    //     goToShoppingCart() {
+    // console.log("get");
+    //     // this.$router.push('/productdetail');
+    //     // Cuộn đến đầu trang sau khi trang được tải hoàn toàn
+    //     this.$nextTick(() => {
+    //         window.scrollTo(0, 0);
+    //     });
     // },
-        goToShoppingCart() {
-    console.log("get");
-        // this.$router.push('/productdetail');
-        // Cuộn đến đầu trang sau khi trang được tải hoàn toàn
-        this.$nextTick(() => {
-            window.scrollTo(0, 0);
-        });
-    },
     handleProductClick(productId) {
         this.getProduct(productId);
         this.getComments(productId);
-        this.goToShoppingCart();
-    }
-    }
+     //   this.goToShoppingCart();
+    },
+    
+    // format tiền
+    formatCurrency(number) {
+      // Chuyển số sang chuỗi và đảm bảo là kiểu number
+
+      number = Number(number);
+      // Kiểm tra nếu không phải là số hợp lệ
+      if (isNaN(number)) {
+        return "0";
+      }
+      // Làm tròn số tiền theo quy tắc gần nhất
+      if (number < 1000) {
+        number = Math.round(number / 100) * 100; // Làm tròn đến hàng trăm gần nhất
+      } else {
+        number = Math.round(number / 1000) * 1000; // Làm tròn đến hàng nghìn gần nhất
+      }
+      // Sử dụng hàm toLocaleString() để định dạng tiền tệ theo định dạng của Việt Nam
+      // Ví dụ: 100000 sẽ thành "100.000"
+      return number.toLocaleString("vi-VN");
+    },
+    async addToCart(product) {
+        console.log("sản phẩm thêm vào giỏ",product);
+      const formData = {
+        productId: product.ProductId,
+        userId: this.auth.user.userId,
+        productName: product.ProductName,
+        image: product.Image,
+        quantity: product.Quantity,
+       // price: this.formatCurrency(product.Price-product.Price*product.DiscountPercent)
+       price:product.Price-product.Price*product.DiscountPercent
+      };
+      console.log("product add to cart");
+      console.log(product);
+      // const userId = this.auth.user.userId;
+      // console.log(userId);
+      const token = localStorage.getItem("token");
+      console.log(token);
+      if (!token) {
+        // Nếu không có token, chuyển hướng đến trang đăng nhập
+        this.$router.push("/login");
+        //  commit('SET_NEED_LOGIN', true);
+        return;
+      }
+      try {
+        // await this.$store.dispatch("addProductToCart", { userId, product });
+        console.log(formData);
+        await this.addProductToCart(formData);
+        console.log("Sản phẩm đã được thêm vào giỏ hàng!");
+        // Hiển thị thông báo thành công
+        this.$toasted.show("Thêm sản phẩm vào giỏ hàng thành công!", {
+          duration: 2000, // Thời gian hiển thị thông báo (ms)
+          position: "top-center", // Vị trí hiển thị
+          type: "success" // Kiểu thông báo (success, info, error)
+        });
+      } catch (error) {
+        // Hiển thị thông báo lỗi
+        this.$toasted.show(error.response.data, {
+          duration: 2000, // Thời gian hiển thị thông báo (ms)
+          position: "top-center", // Vị trí hiển thị
+          type: "error" // Kiểu thông báo (success, info, error)
+        });
+        console.error("Lỗi khi thêm sản phẩm vào giỏ hàng:", error);
+      }
+    },
+       // Cập nhật số lượng sản phẩm trước khi thêm vào giỏ hàng
+       async updateQuantity(product) {
+      try {
+        /// tạo 1 bản sao của product  khi thay đôi update nó 
+        const updatedCart = { ...product };
+        console.log("product input")
+        console.log(updatedCart);
+        await this.updateCart(updatedCart);
+        console.log("Đã cập nhật số lượng trên máy chủ!");
+          // Hiển thị thông báo thành công
+      this.$toasted.show('Cập nhật số lượng thành công !', {
+        duration: 2000, // Thời gian hiển thị thông báo (ms)
+        position: 'top-center', // Vị trí hiển thị
+        type: 'success' // Kiểu thông báo (success, info, error)
+      });
+      } catch (error) {
+          // Hiển thị thông báo lỗi
+      this.$toasted.show(error.response.data, {
+        duration: 2000, // Thời gian hiển thị thông báo (ms)
+        position: 'top-center', // Vị trí hiển thị
+        type: 'error' // Kiểu thông báo (success, info, error)
+      });
+    }}},
+    data() {
+    return {
+    quantity:1
+    };
+  }
    
 }
 </script>

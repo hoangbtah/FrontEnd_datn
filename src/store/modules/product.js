@@ -7,6 +7,7 @@ const productModules = {
         pageproducts:[],
         selectedManufacturerId: null,
         selectedCatagoryId: null,
+        searchProduct:"",
 
         //  productspa:[],
     },
@@ -17,6 +18,7 @@ const productModules = {
         pageproducts:state=>state.pageproducts,
         selectedManufacturerId:state=>state.selectedManufacturerId,
         selectedCatagoryId:state=>state.selectedCatagoryId,
+        searchProduct:state=>state.searchProduct,
 
 
 
@@ -39,9 +41,9 @@ const productModules = {
 
             try {
 
-                const respone = await axios.get(`https://localhost:7159/api/v1/Product/${productId}`)
+                const respone = await axios.get(`https://localhost:7159/api/v1/Product/product/${productId}`)
              //   console.log("lấy sản phẩm thành công");
-               // console.log(respone.data);
+                console.log(respone.data);
                  // Lưu sản phẩm vào Local Storage
                  localStorage.setItem('selectedProduct', JSON.stringify(respone.data));
                 commit('SET_PRODUCT', respone.data)
@@ -52,13 +54,10 @@ const productModules = {
         async getProductsByCatagoryId({ commit }, catagoryId) {
 
             try {
-                // console.log(catagoryId);
-                // const respone = await axios.get(`https://localhost:7159/api/v1/Product/catagory/${catagoryId}/products?pagenumber=1&pagesize=3`)
+               
                  commit('SET_SELECTEDCATAGORYID', catagoryId)
                 console.log("mã danh muc",catagoryId);
 
-                // console.log(respone.data);
-                // console.log(respone.data);
             } catch (error) {
                 console.log(error)
             }
@@ -66,16 +65,8 @@ const productModules = {
         // lấy danh sách sản phẩm theo nhà sản xuất theo phân trang
         async getProductsByManufactorerId({ commit }, manufactorerId) {
 
-            try {
-
-               // const respone = await axios.get(`https://localhost:7159/api/v1/Product/manufactorer/${manufactorerId}/products?pagenumber=1&pagesize=3`)
-               // commit('SET_PAGEPRODUCTS', respone.data)
+            try {  
                 commit('SET_SELECTEDMANUFACTORERID', manufactorerId);
-
-
-                console.log("mã nhà sản xuất",manufactorerId);
-            //     console.log(respone.data);
-                // console.log(respone.data);
             } catch (error) {
                 console.log(error)
             }
@@ -85,7 +76,17 @@ const productModules = {
           },
           resetGetProductsByCatagoryId({ commit }) {
             commit('RESET_SELECTEDCATAGORYID');
-          }
+          },
+            // lấy từ khóa tìm kiếm
+        async getProductSearch({ commit }, search_product) {
+
+            try {  
+                commit('SET_SEARCHPRODUCT', search_product);
+                console.log("search product",search_product)
+            } catch (error) {
+                console.log(error)
+            }
+        },
         
 
 
@@ -121,7 +122,10 @@ const productModules = {
         },
         RESET_SELECTEDCATAGORYID(state){
             state.selectedCatagoryId=null
-        }
+        },
+        SET_SEARCHPRODUCT(state, searchProduct) {
+            state.searchProduct = searchProduct
+        },
 
 
     }
