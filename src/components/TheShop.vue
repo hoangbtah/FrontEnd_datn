@@ -533,7 +533,8 @@ export default {
         userId: this.auth.user.userId,
         productName: product.ProductName,
         image: product.Image,
-        quantity: product.Quantity,
+       // quantity: product.Quantity,
+       quantity:1,
        // price: this.formatCurrency(product.Price-product.Price*product.DiscountPercent)
        price:product.Price-product.Price*product.DiscountPercent
       };
@@ -551,9 +552,10 @@ export default {
       }
       try {
         // await this.$store.dispatch("addProductToCart", { userId, product });
+        console.log("sản phẩm thêm vào giỏ hàng",formData);
         console.log(formData);
         await this.addProductToCart(formData);
-        console.log("Sản phẩm đã được thêm vào giỏ hàng!");
+      //  console.log("Sản phẩm đã được thêm vào giỏ hàng!");
         // Hiển thị thông báo thành công
         this.$toasted.show("Thêm sản phẩm vào giỏ hàng thành công!", {
           duration: 2000, // Thời gian hiển thị thông báo (ms)

@@ -19,33 +19,33 @@
         <div class="row px-xl-5">
             <div class="col-lg-8">
                 <div class="mb-4">
-                    <h4 class="font-weight-semi-bold mb-4">Billing Address</h4>
+                    <h4 class="font-weight-semi-bold mb-4">Địa chỉ thanh toán</h4>
                     <div class="row">
                         <div class="col-md-6 form-group">
-                            <label>First Name</label>
-                            <input class="form-control" type="text" placeholder="John">
+                            <label>Họ và tên</label>
+                            <input class="form-control" type="text" placeholder="Họ và tên">
                         </div>
-                        <div class="col-md-6 form-group">
+                        <!-- <div class="col-md-6 form-group">
                             <label>Last Name</label>
                             <input class="form-control" type="text" placeholder="Doe">
-                        </div>
+                        </div> -->
                         <div class="col-md-6 form-group">
                             <label>E-mail</label>
                             <input class="form-control" type="text" placeholder="example@email.com">
                         </div>
                         <div class="col-md-6 form-group">
-                            <label>Mobile No</label>
-                            <input class="form-control" type="text" placeholder="+123 456 789">
+                            <label>Số điện thoại</label>
+                            <input class="form-control" type="text" placeholder="Số điện thoại">
                         </div>
                         <div class="col-md-6 form-group">
-                            <label>Address Line 1</label>
+                            <label>Địa chỉ giao hàng</label>
                             <input class="form-control" type="text" placeholder="123 Street">
                         </div>
-                        <div class="col-md-6 form-group">
+                        <!-- <div class="col-md-6 form-group">
                             <label>Address Line 2</label>
                             <input class="form-control" type="text" placeholder="123 Street">
-                        </div>
-                        <div class="col-md-6 form-group">
+                        </div> -->
+                        <!-- <div class="col-md-6 form-group">
                             <label>Country</label>
                             <select class="custom-select">
                                 <option selected>United States</option>
@@ -77,10 +77,10 @@
                                 <input type="checkbox" class="custom-control-input" id="shipto">
                                 <label class="custom-control-label" for="shipto"  data-toggle="collapse" data-target="#shipping-address">Ship to different address</label>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
-                <div class="collapse mb-4" id="shipping-address">
+                <!-- <div class="collapse mb-4" id="shipping-address">
                     <h4 class="font-weight-semi-bold mb-4">Shipping Address</h4>
                     <div class="row">
                         <div class="col-md-6 form-group">
@@ -129,7 +129,7 @@
                             <input class="form-control" type="text" placeholder="123">
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
             <div class="col-lg-4">
                 <div class="card border-secondary mb-5">
@@ -161,7 +161,7 @@
                 </div>
                 <div class="card border-secondary mb-5">
                     <div class="card-header bg-secondary border-0">
-                        <h4 class="font-weight-semi-bold m-0">Payment</h4>
+                        <h4 class="font-weight-semi-bold m-0">Hình thức thanh toán</h4>
                     </div>
                     <div class="card-body">
                         <div class="form-group">

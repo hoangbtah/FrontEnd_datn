@@ -130,11 +130,11 @@ export default {
     async fetchItems() {
       try {
         const response = await axios.get(
-          `https://localhost:7159/api/v1/Product/products/search?pagenumber=${
+          `https://localhost:7159/api/v1/Product/manufactorer/products?pagenumber=${
             this.pageNumber
           }&pagesize=${this.pageSize}`
         );
-        this.items = response.data;
+        this.items = response.data.data;
         this.total();
    
         console.log("danh sách sản phẩm phân trang ");

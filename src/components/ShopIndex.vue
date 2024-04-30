@@ -388,7 +388,8 @@ export default {
         userId: this.auth.user.userId,
         productName: product.ProductName,
         image: product.Image,
-        quantity: product.Quantity,
+      //  quantity: product.Quantity,
+      quantity:1,
         price: product.Price
       };
       console.log("product index");

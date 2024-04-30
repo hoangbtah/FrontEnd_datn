@@ -74,14 +74,14 @@
                 <div class="d-flex align-items-center mb-4 pt-2">
                     <div class="input-group quantity mr-3" style="width: 130px;">
                         <div class="input-group-btn">
-                            <button class="btn btn-primary btn-minus" >
+                            <button class="btn btn-primary btn-minus"  @click="UpdateClickQuantity(cart,-1)" >
                             <i class="fa fa-minus"></i>
                             </button>
                         </div>
                         <input type="text" class="form-control bg-secondary text-center" v-model="quantity"
                         @change="updateQuantity(product)"  >
                         <div class="input-group-btn">
-                            <button class="btn btn-primary btn-plus">
+                            <button class="btn btn-primary btn-plus"  @click="UpdateClickQuantity(cart,1)">
                                 <i class="fa fa-plus"></i>
                             </button>
                         </div>
@@ -326,7 +326,8 @@ export default {
         userId: this.auth.user.userId,
         productName: product.ProductName,
         image: product.Image,
-        quantity: product.Quantity,
+      //  quantity: product.Quantity,
+      quantity:this.quantity,
        // price: this.formatCurrency(product.Price-product.Price*product.DiscountPercent)
        price:product.Price-product.Price*product.DiscountPercent
       };
@@ -364,28 +365,56 @@ export default {
       }
     },
        // Cập nhật số lượng sản phẩm trước khi thêm vào giỏ hàng
-       async updateQuantity(product) {
-      try {
+       updateQuantity(product) {
+     // try {
         /// tạo 1 bản sao của product  khi thay đôi update nó 
         const updatedCart = { ...product };
-        console.log("product input")
-        console.log(updatedCart);
-        await this.updateCart(updatedCart);
-        console.log("Đã cập nhật số lượng trên máy chủ!");
+        // kiểm tra xem số lượng mà người dùng muốn thêm vào giỏ hàng có lớn hơn số lượng trong kho không 
+        // nếu lớn hơn thì đưa ra cảnh báo , 
+        //nếu nhỏ hơn hoặc bằng thì cho phép thực hiện
+      //  var dataQuantity= updatedCart.Quantity;
+        if(  updatedCart.Quantity>this.quantity)
+        {
+            updatedCart.Quantity=this.quantity;
+          //  console.log("Cập nhật số lượng thành công!");
           // Hiển thị thông báo thành công
       this.$toasted.show('Cập nhật số lượng thành công !', {
         duration: 2000, // Thời gian hiển thị thông báo (ms)
         position: 'top-center', // Vị trí hiển thị
         type: 'success' // Kiểu thông báo (success, info, error)
       });
-      } catch (error) {
-          // Hiển thị thông báo lỗi
-      this.$toasted.show(error.response.data, {
+        }
+        else {
+              //       // Hiển thị thông báo lỗi
+        this.$toasted.show("Rất tiếc số lượng trong kho không đủ cung cấp !", {
         duration: 2000, // Thời gian hiển thị thông báo (ms)
         position: 'top-center', // Vị trí hiển thị
         type: 'error' // Kiểu thông báo (success, info, error)
       });
-    }}},
+      // gán lại số lượng về 1 
+      this.quantity=1;
+        }
+      //  updatedCart.Quantity=this.quantity;
+        console.log("product input")
+        console.log(updatedCart);
+    
+  
+    },
+     UpdateClickQuantity(cart, action) {
+      console.log("lấy 1 sản phẩm trong giỏ hàng");
+      console.log(cart);
+      if (action === 1) {
+        this.quantity++;
+      } else if (action === -1) {
+       
+        this.quantity--;
+        if(this.quantity<1)
+        {
+            this.quantity=1;
+        }
+      }
+    }
+},
     data() {
     return {
     quantity:1
