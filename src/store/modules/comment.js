@@ -22,12 +22,48 @@ const commentModules={
                 console.log(error)
             }
         },
+         // thêm mới bình luận
+    async addComment({ commit }, data) {
+        try {
+          const token = localStorage.getItem("token");
+          if (!token) {
+            this.$router.push("/login");
+          }
+  
+          // Gọi API để thêm bình luân
+          const respone = await axios.post(
+            "https://localhost:7159/api/Comment", data,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            }
+          );
+          commit('ADD_COMMENT',data);
+          console.log(respone.data);
+          console.log("Thêm bình luận thành công");
+        } catch (error) {
+         // alert(error.response.data);
+          console.error("Lỗi khi thêm bình luận:", error);
+          throw error;
+        }
+      },
       
     },
     mutations:{
         SET_COMMENTS(state,comments){
             state.comments=comments
         },
+        ADD_COMMENT(state,newComment) {
+            const formData={
+                UserId : newComment.userId,
+                PostDate:newComment.postDate,
+                ProductId:newComment.productId,
+                CommentContent:newComment.commentContent,
+                Rating:newComment.rating
+            }
+            state.comments.unshift(formData);
+           },
       
         
     }

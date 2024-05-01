@@ -159,29 +159,46 @@
                     </div>
                     <div class="tab-pane fade" id="tab-pane-3">
                         <div class="row">
-                            <div class="col-md-6" >
+                            <!-- <div class="col-md-6" >
                                 <h4 class="mb-4">Có {{comments.length}} đánh giá cho sản phẩm này</h4>
                                
                                 <div class="media mb-4" v-for="comment in comments" :key="comment.CommentId">
-                                    <!-- <img src="img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;"> -->
+                                    <img src="img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
                                     <div class="media-body">
-                                        <h6>John Doe<small> - <i>01 Jan 2045</i></small></h6>
+                                        <h6>{{comment.Name}}<small> - <i>{{formatDate(comment.PostDate)}}</i></small></h6>
                                         <div class="text-primary mb-2">
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star-half-alt"></i>
-                                            <i class="far fa-star"></i>
+                                           
+                                        <template v-for="index in 5" :key="index">
+                                            <i class="fas fa-star" v-if="index <= comment.Rating"></i>
+                                            <i class="far fa-star" v-else></i>
+                                        </template>
                                         </div>
                                         <p>{{comment.CommentContent}}</p>
                                     </div>
                                 </div>
+                            </div> -->
+                            <div class="col-md-6">
+                            <h4 class="mb-4">Có {{comments.length}} đánh giá cho sản phẩm này</h4>
+                            <div class="media mb-4" v-for="(comment, index) in comments" :key="index">
+                                <div class="media-body">
+                                    <h6>{{comment.Name}}<small> - <i>{{formatDate(comment.PostDate)}}</i></small></h6>
+                                    <div class="text-primary mb-2">
+                                        <!-- Sử dụng vòng lặp để hiển thị số lượng ngôi sao dựa trên comment.Rating -->
+                                        <template v-for="starIndex in 5">
+                                            <i class="fas fa-star" v-if="starIndex <= comment.Rating" :key="starIndex"></i>
+                                            <i class="far fa-star" v-else :key="starIndex"></i>
+                                        </template>
+                                    </div>
+                                    <p>{{comment.CommentContent}}</p>
+                                </div>
                             </div>
+                        </div>
+
                            
                             <div class="col-md-6">
                                 <h4 class="mb-4">Để lại đánh giá</h4>
                                 <!-- <small>Your email address will not be published. Required fields are marked *</small> -->
-                                <div class="d-flex my-3">
+                                <!-- <div class="d-flex my-3">
                                     <p class="mb-0 mr-2">Đánh giá * :</p>
                                     <div class="text-primary">
                                         <i class="far fa-star"></i>
@@ -190,11 +207,22 @@
                                         <i class="far fa-star"></i>
                                         <i class="far fa-star"></i>
                                     </div>
+                                </div> -->
+                                <div class="d-flex my-3">
+                                <p class="mb-0 mr-2">Đánh giá * :</p>
+                                <div class="text-primary">
+                                    <i class="far fa-star" @click="rate(1)" :class="{ 'fas fa-star': rating >= 1, 'far fa-star': rating < 1 }"></i>
+                                    <i class="far fa-star" @click="rate(2)" :class="{ 'fas fa-star': rating >= 2, 'far fa-star': rating < 2 }"></i>
+                                    <i class="far fa-star" @click="rate(3)" :class="{ 'fas fa-star': rating >= 3, 'far fa-star': rating < 3 }"></i>
+                                    <i class="far fa-star" @click="rate(4)" :class="{ 'fas fa-star': rating >= 4, 'far fa-star': rating < 4 }"></i>
+                                    <i class="far fa-star" @click="rate(5)" :class="{ 'fas fa-star': rating >= 5, 'far fa-star': rating < 5 }"></i>
                                 </div>
-                                <form @submit.prevent>
+                            </div>
+
+                                <div>
                                     <div class="form-group">
                                         <label for="message">Bình luận *</label>
-                                        <textarea id="message" cols="30" rows="5" class="form-control"></textarea>
+                                        <textarea id="message" cols="30" rows="5" class="form-control" v-model="commentContent"></textarea>
                                     </div>
                                     <!-- <div class="form-group">
                                         <label for="name">Your Name *</label>
@@ -205,9 +233,9 @@
                                         <input type="email" class="form-control" id="email">
                                     </div> -->
                                     <div class="form-group mb-0">
-                                        <button type="submit"  class="btn btn-primary px-3" @click="addComment(product)">Để lại đánh giá</button>
+                                        <button class="btn btn-primary px-3" @click="addCommentContent(product)">Để lại đánh giá</button>
                                     </div>
-                                </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -259,7 +287,7 @@ Vue.use(Toasted);
 export default {
     name:'ProductDetail',
     created() {
-        this.getProducts();
+      //  this.getProducts();
         //lấy sản phẩm
         const storedProduct = localStorage.getItem('selectedProduct');
     
@@ -278,14 +306,14 @@ export default {
       this.$store.commit('SET_COMMENTS', JSON.parse(commentedProduct));
     } else {
       // Nếu chưa có, gọi API để lấy sản phẩm
-      this.getComments(this.product.productId);
+      this.getComments(this.product.ProductId);
     }
 
     },
     computed:{...mapGetters(["product",'comments','products','auth'])},
   
     methods:{
-        ...mapActions(["getProduct",'getProducts','getComments','addProductToCart']),
+        ...mapActions(["getProduct",'getProducts','getComments','addProductToCart','addComment']),
   
     handleProductClick(productId) {
         this.getProduct(productId);
@@ -407,18 +435,80 @@ export default {
         }
       }
     },
+      // định dạng ngày
+   formatDate(dob)
+    {
+        if(dob)
+        {
+            dob= new Date(dob);
+            let date= dob.getDate();
+            date =date<10 ?  `0${date}`:date;
+            // lấy ngày 
+            let month= dob.getMonth()+1;
+            // lấy tháng
+            month= month <10 ? `0${month}`:month;
+            let year = dob.getFullYear();
+            //lấy giá trị là ngày tháng năm
+            dob= `${date}/${month}/${year}`;
+        }
+        else{
+            dob = "";
+        }
+        return dob;
+    },
     // thêm mới bình luận 
-    async addComment(product){
-        // const formData={
-        //     productId:product.ProductId,
-        //     userId
-        // }
+    async addCommentContent(product){
+        const formData={
+            productId:product.ProductId,
+            userId:this.auth.user.userId,
+            commentContent:this.commentContent,
+            postDate:new Date() ,// Lấy ngày giờ hiện tại,
+            rating:this.rating
+        } ;
+        console.log("new comment");
+      console.log(formData);
+      try {    
+
+        await this.addComment(formData);
+        this.$toasted.show("Thêm bình luận thành công !", {
+        duration: 2000, // Thời gian hiển thị thông báo (ms)
+        position: 'top-center', // Vị trí hiển thị
+        type: 'success' // Kiểu thông báo (success, info, error)
+        // await this.getComments(this.product.productId)
+      });
+      console.log("productId 12");
+      console.log(formData.productId);
+      await this.getComments(product.ProductId);
+    //   console.log("danh sách bình luận mới");
+    //   console.log(this.comments);
+      // Đặt lại nội dung bình luận về trống sau khi đã thêm thành công
+      this.commentContent = "";
+      this.rating=5;
+        
+      } catch (error) {
+       console.log(error);
+       
+        this.$toasted.show("Lỗi khi thêm bình luận !", {
+        duration: 2000, // Thời gian hiển thị thông báo (ms)
+        position: 'top-center', // Vị trí hiển thị
+        type: 'error' // Kiểu thông báo (success, info, error)
+      });
+       
+      }
+   
+
+    },
+    rate(stars) {
+        this.rating = stars; // Cập nhật số sao đánh giá với số sao mà người dùng đã click
+        console.log("sao đánh giá")
+        console.log(this.rating);
     }
 },
     data() {
     return {
     quantity:1,
     commentContent:"",
+    rating: 5 // Khởi tạo số sao đánh giá là 5
 
     };
   }
