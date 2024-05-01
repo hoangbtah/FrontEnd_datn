@@ -87,9 +87,9 @@
                             <h5 class="font-weight-bold">Tổng thanh toán</h5>
                             <h5 class="font-weight-bold">{{ formatCurrency(totalAmount())}} đ</h5>
                         </div>
-                        <!-- <router-link to="/checkout" >
-                         <button class="btn btn-block btn-primary my-3 py-3">Tiến hành kiểm tra</button></router-link> -->
-                        <button class="btn btn-block btn-primary my-3 py-3" @click="placeOrder()">Đặt hàng</button>
+                        <router-link to="/checkout" >
+                         <button class="btn btn-block btn-primary my-3 py-3">Tiến hành kiểm tra</button></router-link>
+                        <!-- <button class="btn btn-block btn-primary my-3 py-3" @click="placeOrder()">Đặt hàng</button> -->
                     </div>
                 </div>
             </div>

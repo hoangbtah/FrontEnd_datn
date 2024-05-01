@@ -20,15 +20,17 @@
                            <thead>
                             <tr>
                                <th><input type="checkbox" class="m-select-row"></th>
-                                <!-- <th class="m-employee-code"></th> -->
-                                <th class="m-employee-name">NGƯỜI MUA HÀNG</th>
+                              
+                                <th class="m-employee-name">NGƯỜI ĐẶT HÀNG</th>
+                                <th class="m-employee-name">NGƯỜI NHẬN</th>
+
                                 <th class="m-gender">NGÀY ĐẶT</th>
 
-                                <!-- <th class="m-dateOfbrith">ĐỊA CHỈ ĐƠN HÀNG</th> -->
-                                <!-- <th class="m-identityCode">NGÀY GIAO</th> -->
-                                <th class="m-position">TÌNH TRANG</th>
+                                
                                 <th class="m-department-name">ĐỊA CHỈ</th>
                                 <th class="m-account">SỐ ĐT</th>
+                                <th class="m-position">TÌNH TRANG</th>
+
                                 <th class="m-option">CHỨC NĂNG</th> 
                             </tr>       
                            </thead>     
@@ -36,18 +38,23 @@
                                <tr v-for="order in orders" :key="order.OrderProductId">
                                    <td><input type="checkbox" class="m-select-row"></td>
                                    <td>{{ order.Name }}</td>
+                                   <td>{{ order.ReceiVer }}</td>
+
                                    <td>{{ formatDate(order.OrderDate) }}</td>
-                                   <!-- <td>{{ formatDate(order.deliveryDate) }}</td> -->
-                                   <td>{{ order.Status }}</td>
-                                   <td>{{ order.Phone }}</td>
-                                   <!-- <td> <img class="" style="width:80px;height:80px" :src="productad.Image" alt=""></td> -->
-                                   
+                                 
                                    <td>{{ order.OrderAddress }}</td>
+
+                                   <td>{{ order.Phone }}</td>
+                                 
+                                   
+                                 
+                                   <td>{{ order.Status }}</td>
+                                  
                                    <td>
                                       <div class="m-option">
                                        <button class="m-btn-option m-btn-de btn-info"  @click="btnOrderDetailClick(order.OrderProductId)">Chi tiết</button>
-                                       <button class="m-btn-option m-btn-ud btn-warning" @click="btnUpdateClick()">Sửa</button>
-                                       <button class="m-btn-option m-btn-ud  btn-danger" @click="btnDelete()">Xóa</button>
+                                       <!-- <button class="m-btn-option m-btn-ud btn-warning" @click="btnUpdateClick()">Sửa</button>
+                                       <button class="m-btn-option m-btn-ud  btn-danger" @click="btnDelete()">Xóa</button> -->
                                       </div>
                                    </td>
                                </tr>

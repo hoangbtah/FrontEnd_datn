@@ -163,7 +163,7 @@
                                 <h4 class="mb-4">Có {{comments.length}} đánh giá cho sản phẩm này</h4>
                                
                                 <div class="media mb-4" v-for="comment in comments" :key="comment.CommentId">
-                                    <img src="img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
+                                    <!-- <img src="img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;"> -->
                                     <div class="media-body">
                                         <h6>John Doe<small> - <i>01 Jan 2045</i></small></h6>
                                         <div class="text-primary mb-2">
@@ -179,10 +179,10 @@
                             </div>
                            
                             <div class="col-md-6">
-                                <h4 class="mb-4">Leave a review</h4>
-                                <small>Your email address will not be published. Required fields are marked *</small>
+                                <h4 class="mb-4">Để lại đánh giá</h4>
+                                <!-- <small>Your email address will not be published. Required fields are marked *</small> -->
                                 <div class="d-flex my-3">
-                                    <p class="mb-0 mr-2">Your Rating * :</p>
+                                    <p class="mb-0 mr-2">Đánh giá * :</p>
                                     <div class="text-primary">
                                         <i class="far fa-star"></i>
                                         <i class="far fa-star"></i>
@@ -191,21 +191,21 @@
                                         <i class="far fa-star"></i>
                                     </div>
                                 </div>
-                                <form>
+                                <form @submit.prevent>
                                     <div class="form-group">
-                                        <label for="message">Your Review *</label>
+                                        <label for="message">Bình luận *</label>
                                         <textarea id="message" cols="30" rows="5" class="form-control"></textarea>
                                     </div>
-                                    <div class="form-group">
+                                    <!-- <div class="form-group">
                                         <label for="name">Your Name *</label>
                                         <input type="text" class="form-control" id="name">
                                     </div>
                                     <div class="form-group">
                                         <label for="email">Your Email *</label>
                                         <input type="email" class="form-control" id="email">
-                                    </div>
+                                    </div> -->
                                     <div class="form-group mb-0">
-                                        <input type="submit" value="Leave Your Review" class="btn btn-primary px-3">
+                                        <button type="submit"  class="btn btn-primary px-3" @click="addComment(product)">Để lại đánh giá</button>
                                     </div>
                                 </form>
                             </div>
@@ -286,18 +286,11 @@ export default {
   
     methods:{
         ...mapActions(["getProduct",'getProducts','getComments','addProductToCart']),
-    //     goToShoppingCart() {
-    // console.log("get");
-    //     // this.$router.push('/productdetail');
-    //     // Cuộn đến đầu trang sau khi trang được tải hoàn toàn
-    //     this.$nextTick(() => {
-    //         window.scrollTo(0, 0);
-    //     });
-    // },
+  
     handleProductClick(productId) {
         this.getProduct(productId);
         this.getComments(productId);
-     //   this.goToShoppingCart();
+    
     },
     
     // format tiền
@@ -413,11 +406,20 @@ export default {
             this.quantity=1;
         }
       }
+    },
+    // thêm mới bình luận 
+    async addComment(product){
+        // const formData={
+        //     productId:product.ProductId,
+        //     userId
+        // }
     }
 },
     data() {
     return {
-    quantity:1
+    quantity:1,
+    commentContent:"",
+
     };
   }
    

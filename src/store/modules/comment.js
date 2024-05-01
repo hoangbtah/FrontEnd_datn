@@ -13,6 +13,7 @@ const commentModules={
             try {
                 console.log("productId");
               const respone=await  axios.get(`https://localhost:7159/api/Comment/comment/${productId}`)
+              console.log("lấy bình luận")
               console.log(respone.data);
                 commit('SET_COMMENTS',respone.data);
                  // Lưu comment vào Local Storage

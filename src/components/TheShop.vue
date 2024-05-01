@@ -267,7 +267,7 @@ export default {
 
       // console.log("mã danh muc thay đổi ", this.selectedCatagoryId);
       // console.log("gọi lại theo danh mục");
-      // this.fetchItems(this.selectedManufacturerId, this.searchProduct,this.selectedCatagoryId);
+     
       this.fetchItems(
         this.selectedManufacturerId,
         this.searchProduct,
@@ -276,15 +276,7 @@ export default {
         this.moneyLast
       );
     }
-    // searchProduct() {
-    //   this.pageNumber = 1; // Đặt lại pageNumber về trang đầu tiên
-
-    //   // this.pageproducts={};
-    //   // Gọi hàm fetchItems với manufactorerId và searchProduct được truyền vào
-    // //  this.fetchItems(this.selectedManufacturerId, this.searchProduct);
-    // this.fetchItems(this.selectedManufacturerId, this.searchProduct, this.selectedCatagoryId, this.moneyFirst,this.moneyLast);
-
-    // }
+   
   },
   methods: {
     ...mapActions([
@@ -309,26 +301,7 @@ export default {
 
     // Đặt trạng thái checked của ô input mới được chọn
     event.target.checked = true;
-      // Khởi tạo priceRange từ moneyFirst và moneyLast
-      //  const priceRange = { min: this.moneyFirst, max: this.moneyLast };
-
-      // if (this.$refs.price1.checked) {
-      //   this.moneyFirst = 199000;
-      //   this.moneyLast = 399000;
-      // } else if (this.$refs.price2.checked) {
-      //   this.moneyFirst = 400000;
-      //   this.moneyLast = 599000;
-      // } else if (this.$refs.price3.checked) {
-      //   this.moneyFirst = 600000;
-      //   this.moneyLast = 999000;
-      // } else if (this.$refs.price4.checked) {
-      //   this.moneyFirst = 1000000;
-      //   this.moneyLast = 1999000;
-      // } else if (this.$refs.price5.checked) {
-      //   this.moneyFirst = 2000000;
-      //   this.moneyLast = 10000000;
-      //   // moneyLast sẽ không được cập nhật, vẫn giữ nguyên là Infinity
-      // }
+     
 
           // Cập nhật giá tiền đầu và giá tiền cuối
     if (event.target === this.$refs.price1) {
@@ -449,15 +422,7 @@ export default {
     async gotoPage(page) {
       if (page !== this.pageNumber) {
         this.pageNumber = page;
-        //// this.fetchItems();
-        // if (this.selectedManufacturerId) {
-        //   await this.fetchItems(this.selectedManufacturerId);
-
-        //   console.log("lấy theo nhà sản xuất");
-        // } else {
-        //   await this.fetchItems();
-        //   console.log("lấy tất cả");
-        // }
+     
         await this.fetchItems(
           this.selectedManufacturerId,
           this.searchProduct,

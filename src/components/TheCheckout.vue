@@ -22,114 +22,30 @@
                     <h4 class="font-weight-semi-bold mb-4">Địa chỉ thanh toán</h4>
                     <div class="row">
                         <div class="col-md-6 form-group">
-                            <label>Họ và tên</label>
-                            <input class="form-control" type="text" placeholder="Họ và tên">
+                            <label>Họ và tên người nhận <i class="required">*</i></label>
+                            <input class="form-control" type="text" placeholder="Họ và tên" v-model='receiver' >
                         </div>
-                        <!-- <div class="col-md-6 form-group">
-                            <label>Last Name</label>
-                            <input class="form-control" type="text" placeholder="Doe">
-                        </div> -->
+                     
                         <div class="col-md-6 form-group">
-                            <label>E-mail</label>
-                            <input class="form-control" type="text" placeholder="example@email.com">
+                            <!-- <label>E-mail</label>
+                            <input class="form-control" type="text" placeholder="example@email.com"> -->
                         </div>
                         <div class="col-md-6 form-group">
-                            <label>Số điện thoại</label>
-                            <input class="form-control" type="text" placeholder="Số điện thoại">
+                            <label>Số điện thoại <i class="required">*</i></label>
+                            <input class="form-control" type="text" placeholder="Số điện thoại" v-model='phoneNumber' >
+                        </div>
+                          <div class="col-md-6 form-group">
+                            <!-- <label>Address Line 2</label>
+                            <input class="form-control" type="text" placeholder="123 Street"> -->
                         </div>
                         <div class="col-md-6 form-group">
-                            <label>Địa chỉ giao hàng</label>
-                            <input class="form-control" type="text" placeholder="123 Street">
+                            <label>Địa chỉ giao hàng <i class="required">*</i></label>
+                            <input class="form-control" type="text" placeholder="123 Street" v-model='orderAddress' >
                         </div>
-                        <!-- <div class="col-md-6 form-group">
-                            <label>Address Line 2</label>
-                            <input class="form-control" type="text" placeholder="123 Street">
-                        </div> -->
-                        <!-- <div class="col-md-6 form-group">
-                            <label>Country</label>
-                            <select class="custom-select">
-                                <option selected>United States</option>
-                                <option>Afghanistan</option>
-                                <option>Albania</option>
-                                <option>Algeria</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>City</label>
-                            <input class="form-control" type="text" placeholder="New York">
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>State</label>
-                            <input class="form-control" type="text" placeholder="New York">
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>ZIP Code</label>
-                            <input class="form-control" type="text" placeholder="123">
-                        </div>
-                        <div class="col-md-12 form-group">
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="newaccount">
-                                <label class="custom-control-label" for="newaccount">Create an account</label>
-                            </div>
-                        </div>
-                        <div class="col-md-12 form-group">
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="shipto">
-                                <label class="custom-control-label" for="shipto"  data-toggle="collapse" data-target="#shipping-address">Ship to different address</label>
-                            </div>
-                        </div> -->
+                      
                     </div>
                 </div>
-                <!-- <div class="collapse mb-4" id="shipping-address">
-                    <h4 class="font-weight-semi-bold mb-4">Shipping Address</h4>
-                    <div class="row">
-                        <div class="col-md-6 form-group">
-                            <label>First Name</label>
-                            <input class="form-control" type="text" placeholder="John">
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Last Name</label>
-                            <input class="form-control" type="text" placeholder="Doe">
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>E-mail</label>
-                            <input class="form-control" type="text" placeholder="example@email.com">
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Mobile No</label>
-                            <input class="form-control" type="text" placeholder="+123 456 789">
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Address Line 1</label>
-                            <input class="form-control" type="text" placeholder="123 Street">
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Address Line 2</label>
-                            <input class="form-control" type="text" placeholder="123 Street">
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>Country</label>
-                            <select class="custom-select">
-                                <option selected>United States</option>
-                                <option>Afghanistan</option>
-                                <option>Albania</option>
-                                <option>Algeria</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>City</label>
-                            <input class="form-control" type="text" placeholder="New York">
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>State</label>
-                            <input class="form-control" type="text" placeholder="New York">
-                        </div>
-                        <div class="col-md-6 form-group">
-                            <label>ZIP Code</label>
-                            <input class="form-control" type="text" placeholder="123">
-                        </div>
-                    </div>
-                </div> -->
+              
             </div>
             <div class="col-lg-4">
                 <div class="card border-secondary mb-5">
@@ -165,21 +81,21 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <div class="custom-control custom-radio">
+                            <!-- <div class="custom-control custom-radio">
                                 <input type="radio" class="custom-control-input" name="payment" id="paypal">
                                 <label class="custom-control-label" for="paypal">Paypal</label>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="form-group">
                             <div class="custom-control custom-radio">
                                 <input type="radio" class="custom-control-input" name="payment" id="directcheck">
-                                <label class="custom-control-label" for="directcheck">Direct Check</label>
+                                <label class="custom-control-label" for="directcheck">Thanh toán trực tiếp</label>
                             </div>
                         </div>
                         <div class="">
                             <div class="custom-control custom-radio">
                                 <input type="radio" class="custom-control-input" name="payment" id="banktransfer">
-                                <label class="custom-control-label" for="banktransfer">Bank Transfer</label>
+                                <label class="custom-control-label" for="banktransfer">Thanh toán online</label>
                             </div>
                         </div>
                     </div>
@@ -197,6 +113,11 @@
 <script>
 import axios from "axios";
 import { mapActions, mapGetters } from "vuex";
+// Import Vue và VueToasted
+import Vue from "vue";
+import Toasted from "vue-toasted";
+Vue.use(Toasted);
+
 export default {
     name:'TheCheckout',
     computed: {
@@ -227,6 +148,35 @@ export default {
       }, 0); // Giá trị khởi tạo total là 0
     },
     async placeOrder() {
+         // Kiểm tra xem các ô input có được điền đầy đủ thông tin hay không
+    if (!this.receiver ) {
+        // Hiển thị thông báo lỗi nếu có bất kỳ ô input nào để trống
+        this.$toasted.show("Thông tin người nhận hàng không được để trống !", {
+            duration: 2000,
+            position: "top-center",
+            type: "error"
+        });
+        return; // Dừng phương thức nếu có ô input để trống
+    }
+    else if (!this.phoneNumber ) {
+        // Hiển thị thông báo lỗi nếu có bất kỳ ô input nào để trống
+        this.$toasted.show("Thông tin số điện thoại không được !", {
+            duration: 2000,
+            position: "top-center",
+            type: "error"
+        });
+        return; // Dừng phương thức nếu có ô input để trống
+    }
+    else if (!this.orderAddress ) {
+        // Hiển thị thông báo lỗi nếu có bất kỳ ô input nào để trống
+        this.$toasted.show("Thông tin địa chỉ không được để trống !", {
+            duration: 2000,
+            position: "top-center",
+            type: "error"
+        });
+        return; // Dừng phương thức nếu có ô input để trống
+    }
+
       const token = localStorage.getItem("token");
       if (!token) {
         // Nếu không có token, chuyển hướng đến trang đăng nhập
@@ -237,11 +187,15 @@ export default {
       try {
         // Tạo đối tượng đơn hàng từ danh sách carts
         const orderData = {
-          userId: this.auth.user.userId
+          userId: this.auth.user.userId,
+          receiver:this.receiver ,
+          phone:this.phoneNumber,
+          orderAddress:this.orderAddress
           //  orderDate: new Date().toISOString()
           // Thay bằng tên khách hàng thực tế
           // Các trường khác của đơn hàng tùy theo yêu cầu của bạn
         };
+        console.log("tạo đơn hàng",orderData);
 
         // Gọi API POST để tạo đơn hàng và nhận lại đối tượng đơn hàng đã được lưu vào CSDL
         const responseOrder = await axios.post(
@@ -297,40 +251,41 @@ export default {
           }
         }
 
-        // // Tạo danh sách chi tiết đơn hàng từ danh sách carts và orderId
-        // const orderDetails = this.carts.map(cart => ({
-        //   orderId: orderProductId,
-        //   productId: cart.ProductId,
-        //   quantity: cart.Quantity,
-        //   price: cart.Price,
-        //   image:cart.Image
-        //   // Các trường khác của chi tiết đơn hàng tùy theo yêu cầu của bạn
-        // }));
-        // console.log("chi tiet don hang hang");
-        // console.log(orderDetails);
-        // // Gọi API POST để tạo các chi tiết đơn hàng
-        // const responseOrderDetails = await axios.post("https://localhost:7159/api/OrderDetail", orderDetails, {
-        //   headers: {
-        //     Authorization: `Bearer ${token}` // Gửi token qua header Authorization
-        //   }
-        // });
-
-        // // Xử lý kết quả trả về nếu cần thiết
-        // console.log("Đơn hàng và chi tiết đơn hàng đã được tạo thành công:", responseOrder.data, responseOrderDetails.data);
+      
 
         // Xóa giỏ hàng sau khi đã đặt hàng thành công
         await this.carts.forEach(cart => this.deleteCart(cart.CartId));
-
+          // Hiển thị thông báo thành công
+          this.$toasted.show("Đặt hàng thành công!", {
+          duration: 4000, // Thời gian hiển thị thông báo (ms)
+          position: "top-center", // Vị trí hiển thị
+          type: "success" // Kiểu thông báo (success, info, error)
+        });
         // Chuyển hướng người dùng đến trang thành công hoặc thông báo thành công
-        this.$router.push("/theshop");
+      await  this.$router.push("/theshop");
       } catch (error) {
         console.error("Lỗi khi đặt hàng:", error);
+          // Hiển thị thông báo thành công
+          this.$toasted.show("Có lỗi trong quá trình đặt hàng", {
+          duration: 3000, // Thời gian hiển thị thông báo (ms)
+          position: "top-center", // Vị trí hiển thị
+          type: "success" // Kiểu thông báo (success, info, error)
+        });
         // Xử lý lỗi nếu cần thiết (hiển thị thông báo lỗi, log, ...)
       }
     }
+  },
+  data() {
+    return {
+     phoneNumber:'',
+     orderAddress:'',
+     receiver:''
+    };
   }
 }
 </script>
-<style lang="">
-    
+<style scoped>
+.required{
+color: red
+}    
 </style>
