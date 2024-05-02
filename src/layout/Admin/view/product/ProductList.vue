@@ -24,7 +24,7 @@
                                  <th class="m-employee-name">TÊN SẢN PHẨM</th>
                                  <th class="m-gender">GIÁ BÁN</th>
                                  <!-- <th class="m-dateOfbrith">MÔ TẢ</th> -->
-                                 <th class="m-identityCode">SỐ LƯỢNG</th>
+                                 <th class="m-gender">SỐ LƯỢNG</th>
                                  <th class="m-position">LOẠI SẢN PHẨM</th>
                                  <th class="m-department-name">HÃNG SẢN XUẤT</th>
                                  <th class="m-account">HÌNH ẢNH</th>
@@ -107,8 +107,15 @@ export default {
       return Array.from({ length: end - start + 1 }, (_, i) => start + i);
     }
   },
+  watch:{
+    product(){
+      console.log("sản phẩm thay đổi");
+      //gọi lại api 
+     this.fetchItems(this.pageNumber, this.pageSize);
+    }
+  },
 
-  mounted() {
+  created() {
     this.getProducts();
 
     // const storedProducts = localStorage.getItem("listPageAdminProduct");
@@ -123,6 +130,7 @@ export default {
     // this.displayedPages(); // Gọi lại displayedPages() để tính toán lại các trang hiển thị
 
   },
+
 
   methods: {
     ...mapActions(["getProduct", "getProducts", "getComments"]),

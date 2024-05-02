@@ -14,7 +14,7 @@
                           <div class="m-row-1-left">
                            <div class="m-dialog-employcode">
                                <div><label for="">Tên sản phẩm</label><i class="required">*</i></div>
-                               <div><input class="m-input" id="txtEmployeeCode" type="input" required v-model="product.productName"></div>
+                               <div><input class="m-input" id="txtEmployeeCode" type="input" required v-model="product.ProductName"></div>
                            </div>
                            <div class="m-dialog-employee-name">
                                <!-- <div><label for="">Tên<i class="required">*</i></label></div>
@@ -24,11 +24,11 @@
                           <div class="m-row-1-right">
                            <div class="m-dialog-employee-dob">
                                <div><label for="">Số lượng</label></div>
-                               <div><input class="m-input"  type="text" id="txtDateOfBrith"  v-model="product.quantity"></div>
+                               <div><input class="m-input"  type="text" id="txtDateOfBrith"  v-model="product.Quantity"></div>
                            </div>
                            <div class="m-dialog-employee-dob">
                                <div><label for="">Đơn giá</label></div>
-                               <div><input class="m-input"  type="text" id="txtDateOfBrith"  v-model="product.price"></div>
+                               <div><input class="m-input"  type="text" id="txtDateOfBrith"  v-model="product.Price"></div>
                            </div>
                           
                           </div>
@@ -37,7 +37,7 @@
                            <div class="m-dialog-donvi">
                                <div><label for="">Danh mục <i class="required">*</i></label></div>
                                <div>
-                                <select v-model="product.catagoryId">
+                                <select v-model="product.CatagoryId">
                                       <option value="" disabled selected>Select an option</option>
                                       <option v-for="catagory in catagorys" :key="catagory.catagoryId" :value="catagory.catagoryId"> 
                                         {{ catagory.catagoryName }}
@@ -48,7 +48,7 @@
                            <div class="m-dialog-donvi">
                                <div><label for="">Hãng sản xuất <i class="required">*</i></label></div>
                                <div>
-                               <select v-model="product.manufactorerId">
+                               <select v-model="product.ManufactorerId">
                                       <option value="" disabled selected>Select an option</option>
                                       <option v-for="manufactorer in manufactorers" :key="manufactorer.manufactorerId" :value="manufactorer.manufactorerId">
                                         {{ manufactorer.manufactorerName }}
@@ -62,15 +62,15 @@
                            <div class="m-dialog-chuc-danh">
                                <div><label for="">Mô tả</label></div>
                                <div> 
-                                 <textarea id="comment" name="comment" style="width: 352px; height: 150px;"  v-model="product.description">
+                                 <textarea id="comment" name="comment" style="width: 352px; height: 150px;"  v-model="product.Description">
                                  </textarea>
                        <!-- <img class="" style="width:80px;height:80px" :src="product.image" alt=""> -->
                        </div>
                            </div>
                            <div class="m-dialog-noi-cap">
                                <div><label for="">Hình ảnh</label></div>
-                               <div><input class="m-input loaddel"  type="text" id="txtIdentityPlace" v-model="product.image">
-                                <img class="" style="width:100px;height:100px" :src="product.image" alt="">
+                               <div><input class="m-input loaddel"  type="text" id="txtIdentityPlace" v-model="product.Image">
+                                <img class="" style="width:100px;height:100px" :src="product.Image" alt="">
                           
                                </div>
                            </div>
@@ -83,8 +83,8 @@
                    <div class="m-dialog-footer">
                       <div class="m-dialog-footer-left"> <button id="m-btn-add-cancle" class="m-btn m-btn-nocolor" @click="btnClose">Hủy</button></div>
                        <div class="m-dialog-footer-right">
-                           <button id="btnSave" class="m-btn m-btn-nocolor m-btn-cat" @click="btnSave">Cất</button>
-                           <button id="btnSaveAndAdd" class="m-btn">Cất và thêm</button>
+                           <button id="btnSave" class="m-btn " @click="btnSave(product)">Cất</button>
+                           <!-- <button id="btnSaveAndAdd" class="m-btn">Cất và thêm</button> -->
                        </div>
                    </div>
                </div>
@@ -93,46 +93,98 @@
 </template>
 <script>
 import axios from "axios";
-import { mapGetters,mapActions } from "vuex";
+import { mapGetters, mapActions } from "vuex";
+// Import Vue và VueToasted
+import Vue from "vue";
+import Toasted from "vue-toasted";
+Vue.use(Toasted);
 export default {
   name: "ProductDetailAD",
   components: {},
-  created(){
+  created() {
     this.getManufactorers();
     this.getCatagorys();
   },
   computed: {
-    ...mapGetters(["product", "comments", "products", "isShow","manufactorers","catagorys"])
+    ...mapGetters([
+      "product",
+      "comments",
+      "products",
+      "isShow",
+      "manufactorers",
+      "catagorys"
+    ])
   },
   methods: {
-    ...mapActions(['getProduct','getManufactorers','getCatagorys']),
+    ...mapActions(["getProduct", "getManufactorers", "getCatagorys","getProducts"]),
     btnClose() {
       this.$store.commit("TOGGLE_ISSHOW");
     },
-    btnSave() {
+    async btnSave(product) {
       // var me=this;
+      const dataProduct = {
+        productId: product.ProductId,
+        productName: product.ProductName,
+        quantity: product.Quantity,
+        price: product.Price,
+        image: product.Image,
+        catagoryId: product.CatagoryId,
+        manufactorerId: product.ManufactorerId,
+        description: product.Description
+      };
+      console.log("dữ liệu thêm hoặc sửa ", dataProduct);
       //1.validate dữ liệu
       //2. build object thông tin nhân viên
       //3. gọi api thực hiện thêm mới
       //3.1 kiểm tra trạng thaasi thêm mới hay sửa
       if (this.forMode == 1) {
+        await axios.post(
+          `https://localhost:7159/api/v1/Product`,
+          dataProduct
+        );
+
+       
+
+        // Hiển thị thông báo thành công
+        this.$toasted.show("Thêm thành công!", {
+          duration: 4000, // Thời gian hiển thị thông báo (ms)
+          position: "top-center", // Vị trí hiển thị
+          type: "success" // Kiểu thông báo (success, info, error)
+        });
+
+        // console.log(this.product);
+        // ẩn form đi
+        this.$store.commit("TOGGLE_ISSHOW");
+        //loading lại dữ liệu
+        this.$store.commit("ADD_PRODUCT",dataProduct);
+        // this.product={};
+           this.getProducts();
+    //  this.fetchItems(this.pageNumber, this.pageSize);
+      } else {
+        await axios.put(
+          `https://localhost:7159/api/v1/Product/${dataProduct.productId}`,
+          dataProduct
+        );
+
         // axios.post("https://localhost:7159/api/v1/Employees/",me.employee)
         // .then(function(){
-        alert("thêm thành công");
-        console.log(this.product);
+
+        // Hiển thị thông báo thành công
+        this.$toasted.show("Sửa thành công!", {
+          duration: 4000, // Thời gian hiển thị thông báo (ms)
+          position: "top-right", // Vị trí hiển thị
+          type: "success" // Kiểu thông báo (success, info, error)
+        });
+
+        // console.log(this.product);
         // ẩn form đi
+        this.$store.commit("TOGGLE_ISSHOW");
+      //  this.product={};
+      this.$store.commit("SET_PRODUCT",dataProduct);
         //loading lại dữ liệu
-        // })
-        // .catch(function(){})
-      } else {
-        // axios.put(`https://localhost:7159/api/v1/Employees/${me.employeeSelectedId}`,me.employee)
-        // .then(function(){
-        alert("sửa thành công");
-        console.log(this.product);
-        // ẩn form đi
-        //loading lại dữ liệu
-        // })
-        // .catch(function(){})
+            this.getProducts();
+    //  this.fetchItems(this.pageNumber, this.pageSize);
+
       }
       // nếu thêm mới thành công thì hiển thị toast thêm mới thành công
       // nếu có lỗi validate hoặc lỗi từ back-end thì hiển thị thông báo tương ứng
@@ -190,7 +242,7 @@ export default {
     return {
       // isShow:false
       //không dùng data để hứng được mà phải dùng pros để hứng.
-      employee: {}
+      employee: {},
     };
   }
 };

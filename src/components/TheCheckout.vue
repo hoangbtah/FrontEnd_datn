@@ -195,7 +195,7 @@ export default {
           // Thay bằng tên khách hàng thực tế
           // Các trường khác của đơn hàng tùy theo yêu cầu của bạn
         };
-        console.log("tạo đơn hàng",orderData);
+      //  console.log("tạo đơn hàng",orderData);
 
         // Gọi API POST để tạo đơn hàng và nhận lại đối tượng đơn hàng đã được lưu vào CSDL
         const responseOrder = await axios.post(
@@ -210,8 +210,8 @@ export default {
 
         // Lấy OrderId của đơn hàng đã tạo
         const orderProductId = responseOrder.data.orderProductId;
-        console.log("ma don hang");
-        console.log(orderProductId);
+    //    console.log("ma don hang");
+      //  console.log(orderProductId);
 
         // Gọi API POST để tạo từng chi tiết đơn hàng
         for (const cart of this.carts) {
@@ -224,8 +224,8 @@ export default {
             // Các trường khác của chi tiết đơn hàng tùy theo yêu cầu của bạn
           };
 
-          console.log("Chi tiết đơn hàng:");
-          console.log(orderDetail);
+         // console.log("Chi tiết đơn hàng:");
+         // console.log(orderDetail);
 
           // Gọi API POST để tạo chi tiết đơn hàng hiện tại
           try {
@@ -269,7 +269,7 @@ export default {
             // Các trường khác của chi tiết đơn hàng tùy theo yêu cầu của bạn
           };
            // Gọi API POST để cập nhật lại số lượng trong database
-            console.log("cập nhật lại sản phẩm",updateProduct);
+         //   console.log("cập nhật lại sản phẩm",updateProduct);
            try {
              await axios.put(
               `https://localhost:7159/api/v1/Product/${updateProduct.productId}`,updateProduct,

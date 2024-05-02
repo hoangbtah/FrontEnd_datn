@@ -542,7 +542,7 @@ export default {
     return {
       // items: [],
       pageNumber: 1,
-      pageSize: 3,
+      pageSize: 9,
       totalPages: 0,
       maxDisplayedPages: 5,
       searchKey: "", // Biến lưu từ khóa tìm kiếm,

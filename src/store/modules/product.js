@@ -126,6 +126,11 @@ const productModules = {
         SET_SEARCHPRODUCT(state, searchProduct) {
             state.searchProduct = searchProduct
         },
+        ADD_PRODUCT(state,newProduct)
+        {
+            state.products.unshift(newProduct);
+        },
+     
 
 
     }
