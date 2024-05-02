@@ -31,7 +31,7 @@
 
             <div class="col-lg-7 pb-5">
                 <h3 class="font-weight-semi-bold">{{product.ProductName}}</h3>
-                <div class="d-flex mb-3">
+                <!-- <div class="d-flex mb-3">
                     <div class="text-primary mr-2">
                         <small class="fas fa-star"></small>
                         <small class="fas fa-star"></small>
@@ -39,8 +39,27 @@
                         <small class="fas fa-star-half-alt"></small>
                         <small class="far fa-star"></small>
                     </div>
-                    <small class="pt-1">(50 Reviews)</small>
+                    <small class="pt-1">{{comments.length}} Reviews</small>
+                </div> -->
+                            <div class="d-flex mb-3">
+                <div class="text-primary mr-2">
+                    <!-- Hiển thị số sao trung bình -->
+                    <template v-for="index in 5" >
+                        <!-- Kiểm tra điểm trung bình và hiển thị sao tương ứng -->
+                        <!-- <i class="fas fa-star" v-if="index <= averageRating()" :key="index"></i>
+                        <i class="far fa-star" v-else :key="index"></i> -->
+                         <!-- Kiểm tra điểm trung bình và hiển thị sao tương ứng -->
+            <i class="fas fa-star" v-if="index <= averageRating()" :key="index"></i>
+            <!-- <i class="fas fa-star-half-alt" v-else-if="index === averageRating() && averageRating() % 1 !== 0" :key="index"></i>
+             -->
+             <i class="fas fa-star-half-alt" v-else-if="index === Math.ceil(averageRating()) && averageRating() % 1 !== 0" :key="index"></i>
+            <i class="far fa-star" v-else :key="index"></i>
+                    </template>
                 </div>
+                <!-- Hiển thị số lượng đánh giá -->
+                <small class="pt-1">{{ comments.length }} Reviews</small>
+            </div>
+
                 <h3 class="font-weight-semi-bold mb-4">{{formatCurrency(product.Price-product.Price*product.DiscountPercent)}}đ</h3>
                 <p class="mb-4">{{product.Decription}}</p>
                 <div class="d-flex mb-3">
@@ -308,6 +327,8 @@ export default {
       // Nếu chưa có, gọi API để lấy sản phẩm
       this.getComments(this.product.ProductId);
     }
+  //  this.averageRating();
+    
 
     },
     computed:{...mapGetters(["product",'comments','products','auth'])},
@@ -500,8 +521,23 @@ export default {
     },
     rate(stars) {
         this.rating = stars; // Cập nhật số sao đánh giá với số sao mà người dùng đã click
-        console.log("sao đánh giá")
-        console.log(this.rating);
+     //   console.log("sao đánh giá")
+       // console.log(this.rating);
+    },
+    // tính số sao đánh giá trung bình 
+      averageRating() {
+        if (this.comments.length === 0) {
+            return 0; // Trả về 0 nếu không có đánh giá nào
+        }
+        // Tính tổng điểm của tất cả các đánh giá
+         const totalRating = this.comments.reduce((acc, comment) => acc + comment.Rating, 0);
+        
+      //  console.log("tổng bình luận",this.comments.length);
+        //console.log("đánh giá trung bình",totalRating);
+        // Chia tổng điểm cho số lượng đánh giá để tính điểm trung bình
+        //console.log(totalRating / this.comments.length);
+        // return Math.round(totalRating / this.comments.length);
+        return totalRating/ this.comments.length;
     }
 },
     data() {
