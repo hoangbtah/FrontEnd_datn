@@ -8,10 +8,10 @@
             </div>
             <div class="m-page-toolbar">
                 <div class="m-toolbar-left">
-                    <input id="txtSearch" class="m-input m-btn-icon-right m-icon-search" placeholder="Tìm theo tên" style="width: 200px;"/>
+                    <input id="txtSearch" class="m-input m-btn-icon-right m-icon-search" v-model="searchKey" placeholder="Tìm theo tên" style="width: 200px;"/>
                 </div>
                 <div class="m-toolbar-right">
-                    <button id="reload" class="m-icon-refresh"></button>
+                    <button @click="getSearchProduct(searchKey)" class="m-icon-refresh"></button>
                 </div>
             </div>
             <div class="m-page-grid">
@@ -32,10 +32,10 @@
                              </tr>       
                             </thead>     
                             <tbody>
-                                <tr v-for="productad in items" :key="productad.ProductId">
+                                <tr v-for="productad in pageproducts" :key="productad.ProductId">
                                     <td><input type="checkbox" class="m-select-row"></td>
                                     <td>{{ productad.ProductName }}</td>
-                                    <td>{{ productad.Price }}</td>
+                                    <td>{{ formatCurrency(productad.Price) }} đ</td>
                                     <td>{{ productad.Quantity }}</td>
                                     <td>{{ productad.CatagoryName }}</td>
                                     <td>{{ productad.ManufactorerName }}</td>
@@ -56,7 +56,7 @@
                    
                     <div class="m-page-paging">
                         <div class="m-page-left">
-                            <label>Tổng số : {{ products.length }} sản phẩm</label>
+                            <label>Tổng số : {{ datatotal }} sản phẩm</label>
                         </div>
                         <div class="m-page-right">
                             <div class="m-number-page">
@@ -84,18 +84,28 @@
             </div>
             <ProductDetailAD 
             :forMode="forModeDetail"/>
-            </div>        
+            <TheDialog/>        
+            </div>
+                    
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
 import axios from "axios";
 import ProductDetailAD from "./ProductDetailAD";
+import TheDialog from "../../../../components/TheDialog";
 export default {
   name: "EmployeeList",
-  components: { ProductDetailAD },
- 
+  components: { ProductDetailAD, TheDialog },
+
   computed: {
-    ...mapGetters(["product", "comments", "products"]),
+    ...mapGetters([
+      "product",
+      "comments",
+      "products",
+      "isShowDialog",
+      "pageproducts",
+      "searchProduct"
+    ]),
     // hiển thị trang
     displayedPages() {
       console.log("hiển thị trang 1");
@@ -107,16 +117,20 @@ export default {
       return Array.from({ length: end - start + 1 }, (_, i) => start + i);
     }
   },
-  watch:{
-    product(){
-      console.log("sản phẩm thay đổi");
-      //gọi lại api 
-     this.fetchItems(this.pageNumber, this.pageSize);
+  watch: {
+    product() {
+      this.fetchItems( this.searchProduct);
+    },
+    products() {
+      this.fetchItems( this.searchProduct);
+    },
+    pageproducts() {
+      this.fetchItems( this.searchProduct);
     }
   },
 
   created() {
-    this.getProducts();
+    //this.getProducts();
 
     // const storedProducts = localStorage.getItem("listPageAdminProduct");
     // if (storedProducts) {
@@ -126,39 +140,122 @@ export default {
     // } else {
     //   this.fetchItems(this.pageNumber, this.pageSize);
     // }
-     this.fetchItems(this.pageNumber, this.pageSize);
+    this.fetchItems();
     // this.displayedPages(); // Gọi lại displayedPages() để tính toán lại các trang hiển thị
-
   },
 
-
   methods: {
-    ...mapActions(["getProduct", "getProducts", "getComments"]),
-    //lấy sản phẩm theo phân trang lọc tìm kiếm
-    async fetchItems() {
+    ...mapActions([
+      "getProduct",
+      "getProducts",
+      "getComments",
+      "getProductSearch"
+    ]),
+    // format tiền
+    formatCurrency(number) {
+      // Chuyển số sang chuỗi và đảm bảo là kiểu number
+
+      number = Number(number);
+      // Kiểm tra nếu không phải là số hợp lệ
+      if (isNaN(number)) {
+        return "0";
+      }
+      // Làm tròn số tiền theo quy tắc gần nhất
+      if (number < 1000) {
+        number = Math.round(number / 100) * 100; // Làm tròn đến hàng trăm gần nhất
+      } else {
+        number = Math.round(number / 1000) * 1000; // Làm tròn đến hàng nghìn gần nhất
+      }
+      // Sử dụng hàm toLocaleString() để định dạng tiền tệ theo định dạng của Việt Nam
+      // Ví dụ: 100000 sẽ thành "100.000"
+      return number.toLocaleString("vi-VN");
+    },
+    ///tìm kiếm sản phẩm
+    async getSearchProduct(searchKey) {
+      // // Lấy danh sách tìm kiếm từ Local Storage
+      // let searchHistory =
+      //   JSON.parse(localStorage.getItem("searchHistory")) || [];
+
+      // // Kiểm tra xem chuỗi tìm kiếm đã tồn tại trong danh sách chưa
+      // if (!searchHistory.includes(searchKey)) {
+      //   // Nếu chưa tồn tại, thêm vào danh sách
+      //   searchHistory.push(searchKey);
+      //   // Lưu danh sách mới vào Local Storage
+      //   localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
+      // }
+
+      await this.getProductSearch(searchKey);
+      console.log("chuỗi nhập vào", this.searchProduct);
+
       try {
-        const response = await axios.get(
-          `https://localhost:7159/api/v1/Product/manufactorer/products?pagenumber=${
-            this.pageNumber
-          }&pagesize=${this.pageSize}`
+        // Gọi hàm fetchItems với manufactorerId và searchProduct được truyền vào
+        //  await this.fetchItems(this.selectedManufacturerId, this.searchProduct);
+        await this.fetchItems(
+          // this.selectedManufacturerId,
+          this.searchProduct
+          // this.selectedCatagoryId,
+          // this.moneyFirst,
+          // this.moneyLast
         );
-        this.items = response.data.data;
-        this.total();
-   
-        console.log("danh sách sản phẩm phân trang ");
-        console.log(this.items);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    //lấy sản phẩm theo phân trang lọc tìm kiếm
+    async fetchItems(searchProduct) {
+      try {
+        // const response = await axios.get(
+        //   `https://localhost:7159/api/v1/Product/manufactorer/products?pagenumber=${
+        //     this.pageNumber
+        //   }&pagesize=${this.pageSize}`
+        // );
+        let url = `https://localhost:7159/api/v1/Product/manufactorer/products?pagenumber=${
+          this.pageNumber
+        }&pagesize=${this.pageSize}`;
+
+        // if (manufactorerId) {
+        //   url += `&manufactorerId=${manufactorerId}`;
+        //   console.log("mã hãng", manufactorerId);
+        // }
+        if (searchProduct) {
+          url += `&search=${searchProduct}`;
+          // console.log("chuỗi tìm kiếm", searchProduct);
+        }
+        // if (catagoryId) {
+        //   url += `&catagoryId=${catagoryId}`;
+        //   console.log("mã hãng", catagoryId);
+        // }
+        // if (searchProduct) {
+
+        //   url += `&search=${searchProduct}`;
+        //   console.log("chuỗi tìm kiếm",searchProduct);
+        // }
+        // if (firstM && lastM) {
+        //   url += `&from=${firstM}&to=${lastM}`;
+        //   console.log("khoảng tìm kiếm", firstM, "+", lastM);
+        // }
+        const response = await axios.get(url);
+
+        await this.$store.commit("SET_PAGEPRODUCTS", response.data.data);
+
+        //this.total();
+        this.totalPages = response.data.totalPages;
+        this.datatotal = response.data.total;
+
+       // console.log("danh sách sản phẩm phân trang ");
+        // console.log(this.items);
         // Lưu danh sách sản phẩm phân trang vào Local Storage
         localStorage.setItem(
           "listPageAdminProduct",
           JSON.stringify(response.data)
         );
-      //  Cập nhật lại displayedPages
+        //  Cập nhật lại displayedPages
         // this.$nextTick(() => {
         //   this.displayedPages();
         // });
-         // this.$forceUpdate();
+        // this.$forceUpdate();
 
-         console.log(this.totalPages);
+       // console.log(this.totalPages);
       } catch (error) {
         console.error(error);
       }
@@ -183,7 +280,7 @@ export default {
       }
     },
     total() {
-      console.log("tính lại tổng số trang")
+      console.log("tính lại tổng số trang");
       this.totalPages = Math.ceil(this.products.length / this.pageSize);
     },
     // thêm mới sản  phẩm
@@ -198,6 +295,16 @@ export default {
       this.getProduct(productId);
       this.$store.commit("TOGGLE_ISSHOW");
     },
+    //xóa sản phẩm
+    async btnDelete(productId) {
+      console.log("is show dialog 1", this.isShowDialog);
+      this.$store.commit("TOGGLE_DIALOG");
+      console.log("is show dialog 2", this.isShowDialog);
+      console.log("mã sản phẩm ", productId);
+      // lấy sản phẩm cần xóa
+      await this.getProduct(productId);
+      console.log("sản phẩm cần xóa là ", this.product);
+    },
     // sửa sản phẩm
     btnUpdateClick(productId) {
       this.forModeDetail = 0;
@@ -208,12 +315,14 @@ export default {
   },
   data() {
     return {
-      items: [],
+      //  items: [],
       pageNumber: 1,
       pageSize: 9,
       totalPages: 0,
       maxDisplayedPages: 5,
-      forModeDetail: 0
+      forModeDetail: 0,
+      searchKey: "",
+      datatotal: 0 // Biến lưu từ khóa tìm kiếm,
     };
   }
 };

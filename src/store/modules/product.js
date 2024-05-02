@@ -4,24 +4,23 @@ const productModules = {
         products: [],
         product: {},
         isShow:false,
+        isShowDialog:false,
         pageproducts:[],
+      //  pageProductsAdmin:[],
         selectedManufacturerId: null,
         selectedCatagoryId: null,
-        searchProduct:"",
-
-        //  productspa:[],
+        searchProduct:""
     },
     getters: {
         products: state => state.products,
         product: state => state.product,
         isShow:state=>state.isShow,
+        isShowDialog:state=>state.isShowDialog,
         pageproducts:state=>state.pageproducts,
+       // pageProductsAdmin:state=>state.pageproducts,
         selectedManufacturerId:state=>state.selectedManufacturerId,
         selectedCatagoryId:state=>state.selectedCatagoryId,
         searchProduct:state=>state.searchProduct,
-
-
-
     },
     actions: {
 
@@ -108,6 +107,10 @@ const productModules = {
         TOGGLE_ISSHOW(state){
             state.isShow=!state.isShow
         },
+        TOGGLE_DIALOG(state){
+            console.log("lật is show dialog ");
+            state.isShowDialog= !state.isShowDialog
+        },
         SET_PAGEPRODUCTS(state, pageproducts) {
             state.pageproducts = pageproducts
         },
@@ -129,6 +132,9 @@ const productModules = {
         ADD_PRODUCT(state,newProduct)
         {
             state.products.unshift(newProduct);
+        },
+        DELETE_PRODUCT(state, productId) {
+            state.pageproducts = state.pageproducts.filter(product => product.ProductId !== productId)
         },
      
 

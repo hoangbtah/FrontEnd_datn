@@ -13,7 +13,8 @@ import selectedCatagoryId from './modules/product'
 import searchProduct from './modules/product'
 import comments from './modules/comment'
 import carts from './modules/cart'
-import isShow from './modules/product'
+//import isShow from './modules/product'
+import isShowDialog from './modules/product'
 import orders from './modules/order'
 import orderDetails from './modules/order'
 
@@ -24,7 +25,7 @@ import orderDetails from './modules/order'
 Vue.use(Vuex)
 const storeData= {
     modules:{
-        auth,todos,catagorys,manufactorers,products,product,comments,carts,isShow,orders,orderDetails,pageproducts,selectedCatagoryId,selectedManufacturerId,searchProduct
+        auth,todos,catagorys,manufactorers,products,product,comments,carts,orders,orderDetails,pageproducts,selectedCatagoryId,selectedManufacturerId,searchProduct,isShowDialog
     }
   
 

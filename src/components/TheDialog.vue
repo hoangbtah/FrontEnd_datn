@@ -1,0 +1,71 @@
+<template >
+    
+         <!-- form xác nhận xóa -->
+    <div class="m-dialog" v-if="isShowDialog">
+        <div class="m-dialog-confirm-del-content">
+            <div class="m-dialog-confirm-del-header">
+                <div class="m-icon-confirm-delete"></div>
+                <div class="infor-warning"><label>Bạn có chắc muốn xóa sản phẩm {{product.ProductName}} không</label></div>
+            </div>
+            <div class="m-dialog-confirm-del-btn">
+                <div class="m-dialog-confirm-del-no">
+                    <button id="m-dialog-confirm-del-no" class="m-btn m-btn-nocolor" @click="hideIsShowDialog()">Không</button>
+                </div>
+                <div class="m-dialog-confirm-del-yes">
+                    <button id="m-dialog-confirm-del-yes" class="m-btn" @click="btnDelProduct(product)">Có</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</template>
+<script>
+import { mapGetters ,mapActions} from "vuex";
+import axios from "axios";
+// Import Vue và VueToasted
+import Vue from "vue";
+import Toasted from "vue-toasted";
+Vue.use(Toasted);
+export default {
+    name:"TheDialog",
+    created(){
+        this.getProduct();
+    },
+    computed: {
+    ...mapGetters([
+      "product",
+      "isShowDialog",    
+    ])
+  },
+  methods: {
+    ...mapActions(["getProduct"]),
+    // ẩn dialog xác nhận xóa 
+    hideIsShowDialog() {
+      this.$store.commit("TOGGLE_DIALOG");
+    },
+    async btnDelProduct(product){
+        console.log("sản phẩm cần xóa ",product);
+        try{
+            await axios.delete(`https://localhost:7159/api/v1/Product/${product.ProductId}`)
+            // hiển thị thông báo thành công
+             // Hiển thị thông báo thành công
+        this.$toasted.show("Xóa thành công!", {
+          duration: 3000, // Thời gian hiển thị thông báo (ms)
+          position: "top-center", // Vị trí hiển thị
+          type: "success" // Kiểu thông báo (success, info, error)
+        });
+        // ấn dialog đi 
+        this.$store.commit("TOGGLE_DIALOG");
+        this.$store.commit("DELETE_PRODUCT",product.ProductId);
+        }
+        catch(error){
+            console.log("xóa thất bại");
+        }
+    },
+  }
+}
+</script>
+<style>
+@import url("../assets_ad/css_ad/component/dialog.css");
+@import url("../assets_ad/css_ad/main.css");   
+</style>

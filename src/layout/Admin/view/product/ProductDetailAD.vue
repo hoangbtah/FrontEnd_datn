@@ -98,6 +98,7 @@ import { mapGetters, mapActions } from "vuex";
 import Vue from "vue";
 import Toasted from "vue-toasted";
 Vue.use(Toasted);
+
 export default {
   name: "ProductDetailAD",
   components: {},
@@ -157,9 +158,6 @@ export default {
         this.$store.commit("TOGGLE_ISSHOW");
         //loading lại dữ liệu
         this.$store.commit("ADD_PRODUCT",dataProduct);
-        // this.product={};
-           this.getProducts();
-    //  this.fetchItems(this.pageNumber, this.pageSize);
       } else {
         await axios.put(
           `https://localhost:7159/api/v1/Product/${dataProduct.productId}`,
@@ -182,7 +180,7 @@ export default {
       //  this.product={};
       this.$store.commit("SET_PRODUCT",dataProduct);
         //loading lại dữ liệu
-            this.getProducts();
+        //    this.getProducts();
     //  this.fetchItems(this.pageNumber, this.pageSize);
 
       }

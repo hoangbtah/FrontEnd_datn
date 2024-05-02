@@ -397,26 +397,40 @@ export default {
       if (this.pageNumber < this.totalPages) {
         this.pageNumber++;
         // this.fetchItems();
-        if (this.selectedManufacturerId) {
-          //  console.log("lấy theo nhà sản xuất")
-          await this.fetchItems(this.selectedManufacturerId);
-          // await this.getProductsByManufactorerId(this.selectedManufacturerId);
-        } else {
-          //  console.log("lấy tất cả")
-          await this.fetchItems();
-        }
+        // if (this.selectedManufacturerId) {
+        //   //  console.log("lấy theo nhà sản xuất")
+        //   await this.fetchItems(this.selectedManufacturerId);
+        //   // await this.getProductsByManufactorerId(this.selectedManufacturerId);
+        // } else {
+        //   //  console.log("lấy tất cả")
+        //   await this.fetchItems();
+        // }
+        await this.fetchItems(
+          this.selectedManufacturerId,
+          this.searchProduct,
+          this.selectedCatagoryId,
+          this.moneyFirst,
+          this.moneyLast
+        );
       }
     },
     async prevPage() {
       if (this.pageNumber > 1) {
         this.pageNumber--;
         //  this.fetchItems();
-        if (this.selectedManufacturerId) {
-          await this.fetchItems(this.selectedManufacturerId);
-          //await this.getProductsByManufactorerId(this.selectedManufacturerId);
-        } else {
-          await this.fetchItems();
-        }
+        // if (this.selectedManufacturerId) {
+        //   await this.fetchItems(this.selectedManufacturerId);
+        //   //await this.getProductsByManufactorerId(this.selectedManufacturerId);
+        // } else {
+        //   await this.fetchItems();
+        // }
+        await this.fetchItems(
+          this.selectedManufacturerId,
+          this.searchProduct,
+          this.selectedCatagoryId,
+          this.moneyFirst,
+          this.moneyLast
+        );
       }
     },
     async gotoPage(page) {
