@@ -1,5 +1,5 @@
 <template >
-    <div>    
+    <div class="m-statis">    
         <div class="form-container">
             <label for="year">Năm</label>
             <select id="year" v-model="selectedYear">
@@ -130,7 +130,7 @@ export default {
         position: sticky;
         background-color:#e5e5e5; 
     top: 0;
-    z-index: 1;
+    z-index: 10;
 }
 
 .form-container label {
@@ -159,6 +159,10 @@ export default {
 
 .form-container button:hover {
         background-color: #41d379;
+}
+.m-statis{
+  
+    overflow-y: auto;
 }
 
 </style>

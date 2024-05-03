@@ -95,7 +95,7 @@ export default {
     catch (error) {
         console.error(error);
         console.error('Đăng nhập thất bại:', error.response.data);
-          this.registrationError = 'Tên đăng nhập hoặc mật khẩu không đúng.';
+          this.registrationError =  error.response.data;
       }
     },
     toggleShowPassword() {

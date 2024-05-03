@@ -6,6 +6,8 @@
     font-family: Googlesand Mediums ;
     background-color: #FFFFFF;
     overflow-y: auto;
+    /* position: sticky;
+    left:0; */
 }
 .navbaradmin .menu-item{
     display: flex;

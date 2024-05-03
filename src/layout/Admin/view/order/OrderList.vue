@@ -38,7 +38,7 @@
                                <tr v-for="order in orders" :key="order.OrderProductId">
                                    <td><input type="checkbox" class="m-select-row"></td>
                                    <td>{{ order.Name }}</td>
-                                   <td>{{ order.ReceiVer }}</td>
+                                   <td>{{ order.Receiver }}</td>
 
                                    <td>{{ formatDate(order.OrderDate) }}</td>
                                  
@@ -48,13 +48,14 @@
                                  
                                    
                                  
-                                   <td>{{ order.Status }}</td>
+                                   <td v-if="order.Status===0">Chưa xử lý</td>
+                                   <td v-if="order.Status===1">Đã xử lý</td>
                                   
                                    <td>
                                       <div class="m-option">
                                        <button class="m-btn-option m-btn-de btn-info"  @click="btnOrderDetailClick(order.OrderProductId)">Chi tiết</button>
-                                       <!-- <button class="m-btn-option m-btn-ud btn-warning" @click="btnUpdateClick()">Sửa</button>
-                                       <button class="m-btn-option m-btn-ud  btn-danger" @click="btnDelete()">Xóa</button> -->
+                                       <button v-if="order.Status===0" class="m-btn-option m-btn-ud btn-warning" @click="btnHandled(order)">Xử lý</button>
+                                       <!-- <button class="m-btn-option m-btn-ud  btn-danger" @click="btnHandled(order)">Xóa</button> -->
                                       </div>
                                    </td>
                                </tr>
@@ -68,13 +69,7 @@
                        </div>
                        <div class="m-page-right">
                            <div class="m-number-page">
-                               <!-- <select name="" id="">
-                                   <option>10 bản ghi trên 1 trang</option>
-                                   <option>20 bản ghi trên 1 trang</option>
-                                   <option>30 bản ghi trên 1 trang</option>
-                                   <option>50 bản ghi trên 1 trang</option>
-                                   <option>100 bản ghi trên 1 trang</option>
-                               </select> -->
+                              
                            </div>
                            <div class="m-number">
                                <button @click="prevPage" :disabled="pageNumber === 1">Trước</button>
@@ -96,6 +91,12 @@
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
+// Import Vue và VueToasted
+import Vue from 'vue';
+import Toasted from 'vue-toasted';
+
+// Sử dụng VueToasted với Vue
+Vue.use(Toasted);
 // import OrderDetail from './OrderDetail';
 import axios from "axios";
 export default {
@@ -111,11 +112,16 @@ export default {
      return Array.from({ length: end - start + 1 }, (_, i) => start + i);
    }
  },
+//  watch:{
+//   orders(){
+//   this.getOrders();
+//   }
+//  },
  created() {
   // this.getProducts();
   this.getOrders();
  //  this.fetchItems(this.pageNumber,this.pageSize);
-   this.total();
+  // this.total();
  },
  methods: {
    ...mapActions(["getOrders","getOrderDetail"]),
@@ -181,6 +187,40 @@ export default {
     this.getOrderDetail(orderId);
     this.$router.push('/orderdetail');      
    },
+   async btnHandled(order){
+    const formData={
+      orderProductId:order.OrderProductId,
+      userId:order.UserId,
+      orderDate:order.OrderDate,
+      deliveryDate:order.OrderDate,
+      status:1,
+      receiver:order.Receiver,
+      phone:order.Phone,
+      orderAddress:order.OrderAddress
+    }
+    try{
+    await axios.put(`https://localhost:7159/api/Order/${order.OrderProductId}`,formData);
+      console.log("đon hàng sửa",formData);
+      this.$toasted.show('Cập nhật  thành công !', {
+        duration: 2000, // Thời gian hiển thị thông báo (ms)
+        position: 'top-center', // Vị trí hiển thị
+        type: 'success' // Kiểu thông báo (success, info, error)
+
+        });
+        // gọi lại dữ liệu 
+        this.getOrders();
+    }
+    catch(error){
+          // Hiển thị thông báo thành công
+          this.$toasted.show('Cập nhật thất bại !', {
+        duration: 2000, // Thời gian hiển thị thông báo (ms)
+        position: 'top-center', // Vị trí hiển thị
+        type: 'error' // Kiểu thông báo (success, info, error)
+
+        });
+    }
+
+   }
   },
  
  data() {
