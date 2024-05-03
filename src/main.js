@@ -20,6 +20,8 @@ import OrderList from './layout/Admin/view/order/OrderList.vue'
 import OrderDetail from './layout/Admin/view/order/OrderDetail.vue'
 import TheStatistical from './layout/Admin/view/statistical/TheStatistical.vue'
 import StatisticalDetail from './layout/Admin/view/statistical/StatisticalDetail.vue'
+import StatisticalAll from './layout/Admin/view/statistical/StatisticalAll.vue'
+
 
 import TheUser from './components/TheUser.vue'
 
@@ -70,6 +72,7 @@ const routes = [
 { path: '/orderdetail', component: OrderDetail },
 { path: '/statistical', component: TheStatistical },
 { path: '/statisticaldetail', component: StatisticalDetail },
+{ path: '/statisticalall', component: StatisticalAll },
 
   ]
 },

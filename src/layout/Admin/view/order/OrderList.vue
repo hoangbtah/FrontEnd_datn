@@ -91,16 +91,16 @@
                        </div>
                    </div>   
            </div>
-           <OrderDetail/>
+           <!-- <OrderDetail/> -->
            </div>        
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
-import OrderDetail from './OrderDetail';
+// import OrderDetail from './OrderDetail';
 import axios from "axios";
 export default {
  name: "OrderList",
- components:{OrderDetail},
+ components:{},
  computed: {
    ...mapGetters(["orders",'isShowOD',"orderDetails"]),
    // hiển thị trang

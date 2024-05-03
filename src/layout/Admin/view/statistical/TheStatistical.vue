@@ -8,26 +8,18 @@
     :chart-data="chartData"
     :chart-id="chartId"
     :dataset-id-key="datasetIdKey"
-    @click="handleBarClick()"
   />
   </div>
   <div v-if="responeData.length===0">
     <p>Không có dữ liệu !</p>
   </div>
- 
-  <!-- <router-link to="/statisticaldetail">
-    View Detail
-  </router-link> -->
   </div>
 </template>
 
 <script>
 import { Bar } from "vue-chartjs/legacy";
-//import { Bar } from "vue-chartjs";
-//import 'chartjs-plugin-datalabels';
-
+import {mapGetters} from "vuex";
 import axios from "axios";
-
 import {
   Chart as ChartJS,
   Title,
@@ -84,6 +76,11 @@ export default {
       default: () => ({}) // Giá trị mặc định là một đối tượng trống
     }
   },
+  computed: {
+    ...mapGetters([
+      "yearSelected",
+      "monthSelected",
+    ])},
   data() {
     return {
       chartData: {
@@ -149,15 +146,7 @@ export default {
         // Cập nhật dữ liệu biểu đồ
         this.chartData.datasets[0].data = newData;
 
-        //  // Ánh xạ dữ liệu vào mảng tháng
-        //  monthlySalesData.forEach(item => {
-        //   if (item.Month >= 1 && item.Month <= 12) {
-        //     this.chartData.datasets[0].data[item.Month - 1] = item.Quantity;
-        //   }
-        // });
-        // Cập nhật biểu đồ
-        //  this.$refs.chart.update();  
-        // Gọi $nextTick để đợi Vue cập nhật
+      
         this.$nextTick(() => {
           // Gọi update() trên biểu đồ để áp dụng các thay đổi
           if (this.$refs.chart && this.$refs.chart.update) {
@@ -170,19 +159,6 @@ export default {
       }
     },
 
-    handleBarClick(event, chartElements) {
-      console.log("điều hương");
-      console.log(chartElements);
-      console.log("handleBarClick is triggered");
-      console.log("event:", event);
-      console.log("chartElements:", chartElements);
-      if (chartElements && chartElements.length > 0) {
-        const monthIndex = chartElements[0].index;
-        const monthName = this.chartData.labels[monthIndex];
-        const path = `/statisticaldetail/${monthName.toLowerCase()}`;
-        this.$router.push(path);
-      }
-    }
   },
   created() {
     // console.log("data cũ")
@@ -193,18 +169,25 @@ export default {
     this.fetchMonthlySalesData(currentYear);
     console.log("data hiện tại");
     console.log(this.chartData.datasets);
+  },
+  watch:{
+    yearSelected(){
+      console.log("lấy dữ liệu khi truyền vào năm mới");
+      console.log("năm được chọn",this.yearSelected);
+    this.fetchMonthlySalesData(this.yearSelected);
+    }
   }
 };
 </script>
 
 <style scoped>
 .statistical {
-  width: 800px;
-  height: 800px;
+  width: 650px;
+  height: 450px;
 }
 .bieudo {
   height: 400px;
-  width: 800px;
+  width: 550px;
 }
 </style>
 

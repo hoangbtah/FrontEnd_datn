@@ -19,7 +19,9 @@
                         <table id="tblEmployee" class="m-table">
                             <thead>
                              <tr>
-                                <th><input type="checkbox" class="m-select-row"></th>
+                              <th>STT</th>
+                                <!-- <th><input type="checkbox" class="m-select-row"></th>
+                                 -->
                                  <!-- <th class="m-employee-code"></th> -->
                                  <th class="m-employee-name">TÊN SẢN PHẨM</th>
                                  <th class="m-gender">GIÁ BÁN</th>
@@ -32,8 +34,8 @@
                              </tr>       
                             </thead>     
                             <tbody>
-                                <tr v-for="productad in pageproducts" :key="productad.ProductId">
-                                    <td><input type="checkbox" class="m-select-row"></td>
+                                <tr v-for="(productad,index) in pageproducts" :key="productad.ProductId">
+                                    <td>{{ index+1 }}</td>
                                     <td>{{ productad.ProductName }}</td>
                                     <td>{{ formatCurrency(productad.Price) }} đ</td>
                                     <td>{{ productad.Quantity }}</td>

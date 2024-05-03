@@ -4,11 +4,24 @@
     <PageContent/>
     <TheFooter/>
     <!-- show chat bot  -->
-    <df-messenger
+    <!-- <df-messenger
   intent="WELCOME" v-if="ShowChatbot"
   chat-title="chatbot_web"
   agent-id="07c89bea-66d2-4fe6-9244-b83f0a6e34ae"
   language-code="en"
+></df-messenger> -->
+<!-- <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+<df-messenger
+  intent="WELCOME"
+  chat-title="FSHOP"
+  agent-id="980225b8-6137-47f2-8848-db03bd871700"
+  language-code="vi"
+></df-messenger> -->
+<df-messenger
+  intent="WELCOME"
+  chat-title="FSHOP"
+  agent-id="980225b8-6137-47f2-8848-db03bd871700"
+  language-code="vi"
 ></df-messenger>
     </div>
     

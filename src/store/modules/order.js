@@ -2,11 +2,15 @@ import axios from "axios";
 const orderModules={
     state:{
         orders:[],
-        orderDetails:[]
+        orderDetails:[],
+        yearSelected:'',
+        monthSelected:''
     },
     getters:{
         orders:state=> state.orders,
         orderDetails:state=> state.orderDetails,
+        yearSelected:state=> state.yearSelected,
+        monthSelected:state=> state.monthSelected,
 
       //  isShowOD:state=>state.isShowOD,
     },
@@ -39,13 +43,14 @@ const orderModules={
         SET_ORDERDETAIL(state,orderDetails){
             state.orderDetails=orderDetails
         },
-        // TOGGLE_ISSHOWOD(state){
-        //    // state.isShowOD=!state.isShowOD
-        //    console.log("gọi 1 lần")
-        //    console.log(state.isShowOD);
-        //    state.isShowOD=!state.isShowOD
-        //    console.log(state.isShowOD);
-        // },
+        SET_YEARSELECTED(state,yearSelected){
+            state.yearSelected=yearSelected
+        },
+        SET_MONTHSELECTED(state,monthSelected){
+            state.monthSelected=monthSelected
+        },
+       
+       
     }
 }
 export default orderModules

@@ -55,7 +55,7 @@
                    Quản lý hóa đơn 
                </div>
            </div>
-           <router-link to="/statistical" class="menu-item">
+           <!-- <router-link to="/statistical" class="menu-item">
                <div class="menu-icon m-icon-sell">
                    
                </div>
@@ -69,6 +69,14 @@
                </div>
                <div class="menu-text">
                    Thống kê chi tiết
+               </div>
+           </router-link> -->
+           <router-link to="/statisticalall" class="menu-item">
+               <div class="menu-icon m-icon-sell">
+                   
+               </div>
+               <div class="menu-text">
+                   Thống kê 
                </div>
            </router-link>
           

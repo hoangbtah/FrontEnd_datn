@@ -1,19 +1,26 @@
 <template>
-<div>
-  <p>Biểu đồ thống kê chi tiết doanh thu bán hàng theo hãng  trong tháng năm </p>
-    <Pie
+<div class="statistical-manu">
+  <p>Biểu đồ thống kê doanh thu theo hãng  trong tháng</p>
+  <div v-if="responeData.length!==0">
+    <Pie class="bieudotron"
+    refs="chart"
       :chart-options="chartOptions"
       :chart-data="chartData"
       :chart-id="chartId"
-      :dataset-id-key="datasetIdKey"
-     
+      :dataset-id-key="datasetIdKey"   
     />
+    </div>
+    <div v-if="responeData.length===0">
+    <p>Không có dữ liệu !</p>
+  </div>
+   
 </div>
 </template>
   
   <script>
 import { Pie } from "vue-chartjs/legacy";
 import axios from "axios";
+import {mapGetters} from "vuex";
 import {
   Chart as ChartJS,
   Title,
@@ -41,11 +48,11 @@ export default {
     },
     width: {
       type: Number,
-      default: 400
+      default: 300
     },
     height: {
       type: Number,
-      default: 400
+      default: 300
     },
     cssClasses: {
       default: "",
@@ -62,6 +69,11 @@ export default {
       default: () => ({}) // Giá trị mặc định là một đối tượng trống
     }
   },
+  computed: {
+    ...mapGetters([
+      "yearSelected",
+      "monthSelected",
+    ])},
   data() {
     return {
       chartData: {
@@ -76,8 +88,21 @@ export default {
       chartOptions: {
         responsive: true,
         maintainAspectRatio: false
-      }
+      },
+      responeData: []
     };
+  },
+  watch:{
+    monthSelected(){
+      console.log("lấy dữ liệu khi truyền vào tháng mới");
+      console.log("tháng được chọn",this.monthSelected);
+    this.fetchMonthlySalesData(this.monthSelected,this.yearSelected);
+    },
+    yearSelected(){
+      console.log("lấy dữ liệu khi truyền vào tháng mới");
+      console.log("tháng được chọn",this.monthSelected);
+    this.fetchMonthlySalesData(this.monthSelected,this.yearSelected);
+    }
   },
   methods: {
     async fetchMonthlySalesData(month, year) {
@@ -86,6 +111,8 @@ export default {
           `https://localhost:7159/api/v1/Product/getProductSaleByMonthAndYear/${month}/${year}`
         );
         const monthlySalesData = response.data;
+        this.responeData = response.data;
+
         console.log("data detail");
         console.log(monthlySalesData);
 
@@ -117,6 +144,14 @@ export default {
 <style scoped>
 .p {
   background: #539bcf;
+}
+.bieudotron{
+  width:300px;
+  height:300px;
+}
+.statistical-manu{
+  width:450px;
+  height:450px;
 }
 </style>
 
