@@ -19,7 +19,7 @@
                        <table id="tblEmployee" class="m-table">
                            <thead>
                             <tr>
-                               <th><input type="checkbox" class="m-select-row"></th>
+                               <th>STT</th>
                               
                                 <th class="m-employee-name">NGƯỜI ĐẶT HÀNG</th>
                                 <th class="m-employee-name">NGƯỜI NHẬN</th>
@@ -35,8 +35,8 @@
                             </tr>       
                            </thead>     
                            <tbody>
-                               <tr v-for="order in orders" :key="order.OrderProductId">
-                                   <td><input type="checkbox" class="m-select-row"></td>
+                               <tr v-for="(order,index) in orders" :key="order.OrderProductId">
+                                   <td>{{ index+1 }}</td>
                                    <td>{{ order.Name }}</td>
                                    <td>{{ order.Receiver }}</td>
 
@@ -75,12 +75,7 @@
                                <button @click="prevPage" :disabled="pageNumber === 1">Trước</button>
                                <button v-for="page in displayedPages" :key="page" @click="gotoPage(page)" :class="{ 'm-page-selected': page === pageNumber }">{{ page }}</button>
                                <button @click="nextPage" :disabled="pageNumber === totalPages">Sau</button>
-                               <!-- <button >Trước</button>
-                               <button class="m-page-selected">1</button>
-                           <button >2</button>
-                           <button >3</button>
-                           <button >4</button>
-                           <button >Sau</button> -->
+                              
                            </div>
                           
                        </div>

@@ -27,10 +27,11 @@ const orderModules={
         async getOrderDetail({commit},orderId){
             try {
               const respone=await  axios.get(`https://localhost:7159/api/OrderDetail/getorderDetail/${orderId}`)
-              console.log("lấy chi tiết đơn hàng thành công")
-                commit('SET_ORDERDETAIL',respone.data)
+              console.log("lấy chi tiết đơn hàng thành công");
+              console.log(respone.data);
+                commit('SET_ORDERDETAIL',respone.data);
             } catch (error) {
-                console.log(error)
+                console.log(error);
             }
            
         },

@@ -47,23 +47,23 @@
                    Quản lý tài khoản
                </div>
            </router-link>
-           <div class="menu-item">
+           <!-- <div class="menu-item">
                <div class="menu-icon m-icon-invoice-management">
                    
                </div>
                <div class="menu-text">
-                   Quản lý hóa đơn 
+                   Quản lý giảm giá 
                </div>
-           </div>
-           <!-- <router-link to="/statistical" class="menu-item">
+           </div> -->
+           <router-link to="/productdiscount" class="menu-item">
                <div class="menu-icon m-icon-sell">
                    
                </div>
                <div class="menu-text">
-                   Thống kê
+                   Quan lý khuyến mãi
                </div>
            </router-link>
-           <router-link to="/statisticaldetail" class="menu-item">
+           <!-- <router-link to="/statisticaldetail" class="menu-item">
                <div class="menu-icon m-icon-sell">
                    
                </div>

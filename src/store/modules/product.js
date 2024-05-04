@@ -6,6 +6,7 @@ const productModules = {
         isShow:false,
         isShowDialog:false,
         pageproducts:[],
+        productsDiscount:[],
       //  pageProductsAdmin:[],
         selectedManufacturerId: null,
         selectedCatagoryId: null,
@@ -13,6 +14,7 @@ const productModules = {
     },
     getters: {
         products: state => state.products,
+        productsDiscount: state => state.productsDiscount,
         product: state => state.product,
         isShow:state=>state.isShow,
         isShowDialog:state=>state.isShowDialog,
@@ -86,6 +88,18 @@ const productModules = {
                 console.log(error)
             }
         },
+        //lấy sản phẩm giảm giá
+        async getProductsDiscount({ commit }) {
+
+            try {
+                const respone = await axios.get(`https://localhost:7159/api/v1/Product/products/discounted`)
+               
+                 commit('SET_PRODUCTSDISCOUNT', respone.data);   
+
+            } catch (error) {
+                console.log(error)
+            }
+        },
         
 
 
@@ -94,6 +108,9 @@ const productModules = {
     mutations: {
         SET_PRODUCTS(state, products) {
             state.products = products
+        },
+        SET_PRODUCTSDISCOUNT(state, productsDiscount) {
+            state.productsDiscount = productsDiscount
         },
         SET_PRODUCT(state, product) {
             state.product = product
