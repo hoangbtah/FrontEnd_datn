@@ -144,8 +144,6 @@ export default {
           dataProduct
         );
 
-       
-
         // Hiển thị thông báo thành công
         this.$toasted.show("Thêm thành công!", {
           duration: 4000, // Thời gian hiển thị thông báo (ms)
@@ -174,21 +172,17 @@ export default {
           type: "success" // Kiểu thông báo (success, info, error)
         });
 
-        // console.log(this.product);
         // ẩn form đi
         this.$store.commit("TOGGLE_ISSHOW");
-      //  this.product={};
       this.$store.commit("SET_PRODUCT",dataProduct);
-        //loading lại dữ liệu
-        //    this.getProducts();
-    //  this.fetchItems(this.pageNumber, this.pageSize);
+     
 
       }
       // nếu thêm mới thành công thì hiển thị toast thêm mới thành công
       // nếu có lỗi validate hoặc lỗi từ back-end thì hiển thị thông báo tương ứng
     }
   },
-  // props: ["isShow", "employeeSelected", "employeeSelectedId", "forMode"],
+  props: ["forMode"],
   watch: {
     employeeSelected: function(value) {
       //this.employee=value;

@@ -29,7 +29,7 @@ Vue.use(Toasted);
 export default {
 name:"TheDialog",
 created(){
-   this.getProduct();
+//    this.getProduct();
 },
 computed: {
 ...mapGetters([

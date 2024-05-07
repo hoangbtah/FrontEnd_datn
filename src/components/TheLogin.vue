@@ -19,7 +19,7 @@
         :type="showPassword ? 'text' : 'password'"
         id="password" name="password" required v-model="password">
         <span @click="toggleShowPassword" class="toggle-password">
-              <i class="fa" :class="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+              <i class="fa" :class="showPassword ? 'fa-eye' : 'fa-eye-slash'"></i>
             </span>
             <!-- </div> -->
        </div>     

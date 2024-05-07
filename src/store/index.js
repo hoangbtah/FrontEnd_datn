@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
 import auth from './modules/auth'
 import todos from './modules/todos'
 import catagorys from './modules/catagory'

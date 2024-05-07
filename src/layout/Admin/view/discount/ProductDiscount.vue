@@ -129,16 +129,7 @@ export default {
  },
 
  created() {
-   //this.getProducts();
-
-   // const storedProducts = localStorage.getItem("listPageAdminProduct");
-   // if (storedProducts) {
-   //   this.items = JSON.parse(storedProducts);
-   //   this.total();
-   //   this.displayedPages(); // Gọi lại displayedPages() để tính toán lại các trang hiển thị
-   // } else {
-   //   this.fetchItems(this.pageNumber, this.pageSize);
-   // }
+  
    this.fetchItems();
   
  },

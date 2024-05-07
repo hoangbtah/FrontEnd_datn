@@ -136,7 +136,6 @@ const productModules = {
             state.isShowDialogDeleteDiscount=!state.isShowDialogDeleteDiscount
         },
         TOGGLE_DIALOG(state){
-            console.log("lật is show dialog ");
             state.isShowDialog= !state.isShowDialog
         },
         SET_PAGEPRODUCTS(state, pageproducts) {

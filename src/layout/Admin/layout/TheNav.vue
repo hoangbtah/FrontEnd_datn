@@ -1,6 +1,6 @@
 <template>
     <div class="navbaradmin">
-           <router-link to="/admin"  class="menu-item" >
+           <router-link to="/adminindex"  class="menu-item" >
                <div class="menu-icon m-icon-overview">   
                </div>
                <div class="menu-text">
@@ -15,14 +15,14 @@
                    Quản lý danh mục
                </div>
            </router-link>
-           <div class="menu-item">
-               <div class="menu-icon m-icon-deposits">
+           <router-link class="menu-item" to="/manufactorer">
+               <div class="menu-icon m-icon-cash">
                    
                </div>
                <div class="menu-text">
-                   Quản lý hãng sản xuất
+                   Quản lý thương hiệu
                </div>
-           </div>
+           </router-link>
            <router-link to="/order" class="menu-item">
                <div class="menu-icon m-icon-purchase">
                    
@@ -47,14 +47,7 @@
                    Quản lý tài khoản
                </div>
            </router-link>
-           <!-- <div class="menu-item">
-               <div class="menu-icon m-icon-invoice-management">
-                   
-               </div>
-               <div class="menu-text">
-                   Quản lý giảm giá 
-               </div>
-           </div> -->
+        
            <router-link to="/productdiscount" class="menu-item">
                <div class="menu-icon m-icon-sell">
                    
@@ -63,14 +56,7 @@
                    Quản lý khuyến mãi
                </div>
            </router-link>
-           <!-- <router-link to="/statisticaldetail" class="menu-item">
-               <div class="menu-icon m-icon-sell">
-                   
-               </div>
-               <div class="menu-text">
-                   Thống kê chi tiết
-               </div>
-           </router-link> -->
+          
            <router-link to="/statisticalall" class="menu-item">
                <div class="menu-icon m-icon-sell">
                    

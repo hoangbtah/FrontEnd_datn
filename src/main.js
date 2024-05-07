@@ -2,7 +2,6 @@ import Vue from 'vue'
 import App from './App.vue'
 import store from './store/index.js'
 import VueRouter from 'vue-router';
-//import { Bar, Line } from 'vue-chartjs';
 import ShopIndex from './components/ShopIndex.vue';
 import ShoppingCart from './components/ShoppingCart.vue'
 import TheShop from './components/TheShop.vue'
@@ -22,9 +21,9 @@ import TheStatistical from './layout/Admin/view/statistical/TheStatistical.vue'
 import StatisticalDetail from './layout/Admin/view/statistical/StatisticalDetail.vue'
 import StatisticalAll from './layout/Admin/view/statistical/StatisticalAll.vue'
 import ProductDiscount from './layout/Admin/view/discount/ProductDiscount.vue'
-
-
+import ManufactorerList from './layout/Admin/view/manufactorer/ManufactorerList.vue'
 import TheUser from './components/TheUser.vue'
+import LoginAdmin from './components/LoginAdmin.vue'
 
 
 
@@ -32,22 +31,6 @@ Vue.config.productionTip = false
 Vue.use(VueRouter)
 
 
-/// Đăng ký component BarChart và LineChart
-// Vue.component('bar-chart', {
-//   extends: Bar,
-//   props: ['chartData', 'options'],
-//   mounted() {
-//     this.renderChart(this.chartData, this.options);
-//   }
-// });
-
-// Vue.component('line-chart', {
-//   extends: Line,
-//   props: ['chartData', 'options'],
-//   mounted() {
-//     this.renderChart(this.chartData, this.options);
-//   }
-// });
 
 const routes = [
   /// điều hướng của phẩn user
@@ -64,11 +47,12 @@ const routes = [
     ]
   },
   /// điều hướng của admin
-  { path: '/admin', component: AdminIndex,
+  { path: '/adminindex', component: AdminIndex,
   children: [
-    { path: '', component: ProductList },
+{ path: '/', component: ProductList },
 { path: '/catagory', component: CatagoryList },
 { path: '/employee', component: EmployeeList },
+{ path: '/manufactorer', component: ManufactorerList },
 { path: '/order', component: OrderList },
 { path: '/orderdetail', component: OrderDetail },
 { path: '/statistical', component: TheStatistical },
@@ -81,6 +65,8 @@ const routes = [
 
   { path: '/login', component: TheLogin },
   { path: '/register', component: TheRegister },
+  { path: '/admin', component: LoginAdmin },
+
 ];
 
 

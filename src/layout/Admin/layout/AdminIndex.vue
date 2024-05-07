@@ -1,12 +1,11 @@
 <template >
     <div>
         <TheHeader/>
-    <div class="main">
-       <TheNav/>
-       <ThePagecontent/>
+        <div class="main">
+        <TheNav/>
+        <ThePagecontent/>
     </div>
     </div>
-   
 </template>
 <script>
 import TheNav from './TheNav.vue'
