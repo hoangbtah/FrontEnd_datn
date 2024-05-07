@@ -141,7 +141,7 @@
                             <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
                               <div class="sale-product">
                                 <div class="product-0" v-if="productabc.Quantity==0"> <p>Đã hết hàng</p></div>
-                                <div class="sale" v-if="productabc.DiscountPercent>0"> <P>-{{productabc.DiscountPercent*100}}%</P> </div>
+                                <div class="sale" v-if="checkDateValidity(productabc.StartDate,productabc.EndDate)"> <P>-{{productabc.DiscountPercent*100}}%</P> </div>
                               </div>
                             
                               <P></P>
@@ -151,8 +151,8 @@
                                 <h7 class="text-truncate mb-3">{{productabc.ManufactorerName}}</h7>
                                 <h6 class="text-truncate mb-3">{{productabc.ProductName}}</h6>
                                 <div class="d-flex justify-content-center">
-                                    <h6 v-if="productabc.DiscountPercent>0">{{formatCurrency(productabc.Price- productabc.Price*productabc.DiscountPercent) }}đ</h6>
-                                    <h6 class="text-muted ml-2" v-if="productabc.DiscountPercent>0"><del>{{ formatCurrency(productabc.Price) }}</del>đ</h6>
+                                    <h6 v-if="checkDateValidity(productabc.StartDate,productabc.EndDate)">{{formatCurrency(productabc.Price- productabc.Price*productabc.DiscountPercent) }}đ</h6>
+                                    <h6 class="text-muted ml-2" v-if="checkDateValidity(productabc.StartDate,productabc.EndDate)"><del>{{ formatCurrency(productabc.Price) }}</del>đ</h6>
                                     <h6 v-else>{{formatCurrency(productabc.Price)}}đ</h6>
 
                                 </div>
@@ -383,7 +383,6 @@ export default {
         await this.$store.commit("SET_PAGEPRODUCTS", response.data.data);
 
         this.totalPages = response.data.totalPages;
-        //  this.displayedPages();
         // Lưu danh sách sản phẩm phân trang vào Local Storage
         //  localStorage.setItem('listPageProduct', JSON.stringify(response.data));
         console.log("tong só trang");
@@ -417,13 +416,7 @@ export default {
     async prevPage() {
       if (this.pageNumber > 1) {
         this.pageNumber--;
-        //  this.fetchItems();
-        // if (this.selectedManufacturerId) {
-        //   await this.fetchItems(this.selectedManufacturerId);
-        //   //await this.getProductsByManufactorerId(this.selectedManufacturerId);
-        // } else {
-        //   await this.fetchItems();
-        // }
+       
         await this.fetchItems(
           this.selectedManufacturerId,
           this.searchProduct,
@@ -482,6 +475,17 @@ export default {
         console.error(error);
       }
     },
+    // kiểm tra ngày giảm giá so với ngày hiện tại
+    checkDateValidity( startDate, endDate) {
+    // Chuyển các biến thành đối tượng Date
+    let currentDateTime = new Date();
+    startDate=new Date(startDate);
+    endDate= new Date(endDate);
+    
+
+    // Kiểm tra xem currentDateTime có nằm giữa StartDate và EndDate không
+    return currentDateTime >= startDate && currentDateTime <= endDate;
+},
 
     // format tiền
     formatCurrency(number) {
@@ -512,15 +516,16 @@ export default {
         userId: this.auth.user.userId,
         productName: product.ProductName,
         image: product.Image,
-       // quantity: product.Quantity,
        quantity:1,
-       // price: this.formatCurrency(product.Price-product.Price*product.DiscountPercent)
-       price:product.Price-product.Price*product.DiscountPercent
+       price:product.Price       
       };
-      // console.log("product add to cart");
-      // console.log(product);
-      // const userId = this.auth.user.userId;
-      // console.log(userId);
+
+      if(this.checkDateValidity(product.StartDate,product.EndDate))
+       {
+        formData.price=product.Price-product.Price*product.DiscountPercent
+       }
+     
+    
       const token = localStorage.getItem("token");
       console.log(token);
       if (!token) {
@@ -561,7 +566,8 @@ export default {
       maxDisplayedPages: 5,
       searchKey: "", // Biến lưu từ khóa tìm kiếm,
       moneyFirst: null,
-      moneyLast: null
+      moneyLast: null,
+      currentDateTime: new Date(), // Khai báo biến lưu trữ ngày và giờ hiện tại
     };
   }
 };

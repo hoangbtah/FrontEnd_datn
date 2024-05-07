@@ -47,7 +47,6 @@ export default {
         console.log("sản phẩm cần xóa ",product);
         try{
             await axios.delete(`https://localhost:7159/api/v1/Product/${product.ProductId}`)
-            // hiển thị thông báo thành công
              // Hiển thị thông báo thành công
         this.$toasted.show("Xóa thành công!", {
           duration: 3000, // Thời gian hiển thị thông báo (ms)
@@ -60,6 +59,12 @@ export default {
         }
         catch(error){
             console.log("xóa thất bại");
+              // Hiển thị thông báo thành công
+        this.$toasted.show("Cảnh báo! Không lên xóa sản phẩm này vì nó sẽ ảnh hưởng đến thống kê doanh thu,nhưng nếu bạn vẫn muốn xóa hãy xóa các đơn hàng có sản phẩm này trước rồi quay lại xóa sản phẩm này", {
+          duration: 5000, // Thời gian hiển thị thông báo (ms)
+          position: "top-center", // Vị trí hiển thị
+          type: "error" // Kiểu thông báo (success, info, error)
+        });
         }
     },
   }

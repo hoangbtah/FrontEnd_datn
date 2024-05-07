@@ -60,7 +60,7 @@
                    
                </div>
                <div class="menu-text">
-                   Quan lý khuyến mãi
+                   Quản lý khuyến mãi
                </div>
            </router-link>
            <!-- <router-link to="/statisticaldetail" class="menu-item">

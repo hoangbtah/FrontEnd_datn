@@ -37,13 +37,13 @@
                             </tr>       
                            </thead>     
                            <tbody>
-                               <tr v-for="(productad,index) in productsDiscount" :key="productad.ProductId">
+                               <tr v-for="(productad,index) in productsDiscount" :key="productad.DiscountId">
                                    <td>{{ index+1 }}</td>
                                    <td>{{ productad.ProductName }}</td>
                                    <td>{{ formatCurrency(productad.Price) }} đ</td>
                                    <td>{{ productad.DiscountPercent }}</td>
-                                   <td>{{ productad.StartDate }}</td>
-                                   <td>{{ productad.EndDate }}</td>
+                                   <td>{{ formatDate(productad.StartDate) }}</td>
+                                   <td>{{ formatDate(productad.EndDate) }}</td>
                                    <!-- <td>{{ productad.Quantity }}</td> -->
                                    <!-- <td>{{ productad.CatagoryName }}</td> -->
                                    <td>{{ productad.ManufactorerName }}</td>
@@ -53,8 +53,8 @@
                                    <td>
                                       <div class="m-option">
                                        <!-- <button class="m-btn-option m-btn-de btn-info"  @click="btnDetailClick(productad.ProductId)">Chi tiết</button> -->
-                                       <button class="m-btn-option m-btn-ud btn-warning" @click="btnUpdateClick(productad.DiscountId)">Sửa</button>
-                                       <!-- <button class="m-btn-option m-btn-ud  btn-danger" @click="btnDelete(productad.ProductId)">Xóa</button> -->
+                                       <button class="m-btn-option m-btn-ud btn-warning" @click="btnUpdateClick(productad.ProductId)">Sửa</button>
+                                       <button class="m-btn-option m-btn-ud  btn-danger" @click="btnDelete(productad.ProductId)">Xóa</button>
                                       </div>
                                    </td>
                                </tr>
@@ -79,25 +79,26 @@
                        </div>
                    </div>   
            </div>
-            
+            <DiscountDetail :forModeDiscount="forDiscount"/>
+            <DialogDeleteDiscount/>
            </div>
                    
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
 import axios from "axios";
-// import ProductDetailAD from "./ProductDetailAD";
-// import TheDialog from "../../../../components/TheDialog";
+ import DiscountDetail from "./DiscountDetail";
+import DialogDeleteDiscount from "../../../../components/DialogDeleteDiscount";
 export default {
  name: "ProductDiscount",
- components: {  },
+ components: { DiscountDetail,DialogDeleteDiscount },
 
  computed: {
    ...mapGetters([
      "product",
      "comments",
      "products",
-     "isShowDialog",
+     "isShowDiscount",
      "pageproducts",
      "searchProduct",
      "productsDiscount"
@@ -115,6 +116,7 @@ export default {
  },
  watch: {
    product() {
+    console.log("sản phẩm thay đổi")
      this.fetchItems( this.searchProduct);
    },
    products() {
@@ -122,7 +124,8 @@ export default {
    },
    pageproducts() {
      this.fetchItems( this.searchProduct);
-   }
+   },
+
  },
 
  created() {
@@ -137,8 +140,7 @@ export default {
    //   this.fetchItems(this.pageNumber, this.pageSize);
    // }
    this.fetchItems();
-// this.getProductsDiscount();
-   // this.displayedPages(); // Gọi lại displayedPages() để tính toán lại các trang hiển thị
+  
  },
 
  methods: {
@@ -149,25 +151,7 @@ export default {
      "getProductSearch",
      "getProductsDiscount",
    ]),
-   // format tiền
-   formatCurrency(number) {
-     // Chuyển số sang chuỗi và đảm bảo là kiểu number
-
-     number = Number(number);
-     // Kiểm tra nếu không phải là số hợp lệ
-     if (isNaN(number)) {
-       return "0";
-     }
-     // Làm tròn số tiền theo quy tắc gần nhất
-     if (number < 1000) {
-       number = Math.round(number / 100) * 100; // Làm tròn đến hàng trăm gần nhất
-     } else {
-       number = Math.round(number / 1000) * 1000; // Làm tròn đến hàng nghìn gần nhất
-     }
-     // Sử dụng hàm toLocaleString() để định dạng tiền tệ theo định dạng của Việt Nam
-     // Ví dụ: 100000 sẽ thành "100.000"
-     return number.toLocaleString("vi-VN");
-   },
+   
    ///tìm kiếm sản phẩm
    async getSearchProduct(searchKey) {
      // // Lấy danh sách tìm kiếm từ Local Storage
@@ -243,13 +227,7 @@ export default {
          "listPageAdminProduct",
          JSON.stringify(response.data)
        );
-       //  Cập nhật lại displayedPages
-       // this.$nextTick(() => {
-       //   this.displayedPages();
-       // });
-       // this.$forceUpdate();
-
-      // console.log(this.totalPages);
+     
      } catch (error) {
        console.error(error);
      }
@@ -273,39 +251,66 @@ export default {
        this.fetchItems();
      }
    },
-//    total() {
-//      console.log("tính lại tổng số trang");
-//      this.totalPages = Math.ceil(this.products.length / this.pageSize);
-//    },
-   // thêm mới sản  phẩm
-//    btnAddClick() {
-//      this.forModeDetail = 1;
-//      console.log(this.forModeDetail);
-//      this.$store.commit("SET_PRODUCT", []);
-//      this.$store.commit("TOGGLE_ISSHOW");
-//    },
-//    // xem chi tiết
-//    btnDetailClick(productId) {
-//      this.getProduct(productId);
-//      this.$store.commit("TOGGLE_ISSHOW");
-//    },
-//    //xóa sản phẩm
-//    async btnDelete(productId) {
-//      console.log("is show dialog 1", this.isShowDialog);
-//      this.$store.commit("TOGGLE_DIALOG");
-//      console.log("is show dialog 2", this.isShowDialog);
-//      console.log("mã sản phẩm ", productId);
-//      // lấy sản phẩm cần xóa
-//      await this.getProduct(productId);
-//      console.log("sản phẩm cần xóa là ", this.product);
-//    },
+
    // sửa giảm giá
    btnUpdateClick(productId) {
-     this.forModeDetail = 0;
-     console.log(this.forModeDetail);
-     this.getProduct(productId);
-     this.$store.commit("TOGGLE_ISSHOW");
-   }
+    this.$store.commit("TOGGLE_ISSHOWDISCOUNT");
+
+    //  this.forModeDetail = 0;
+     console.log(productId);
+     console.log("lấy sản phẩm giảm giá")
+      this.getProduct(productId);
+    //  this.$store.commit("TOGGLE_ISSHOWDISCOUNT");
+   },
+   //xóa sản phẩm khỏi danh mục giảm giá
+   async btnDelete(productId){
+    console.log("mã giảm giá",productId);
+     //hiển thi dialog
+     this.$store.commit("TOGGLE_ISSHOWDIALOGDELETEDISCOUNT");
+     await this.getProduct(productId);
+     console.log("sản phẩm có mã cần xóa giảm giá",this.product)
+
+   },
+       // format tiền
+       formatCurrency(number) {
+      // Chuyển số sang chuỗi và đảm bảo là kiểu number
+
+      number = Number(number);
+      // Kiểm tra nếu không phải là số hợp lệ
+      if (isNaN(number)) {
+        return "0";
+      }
+      // Làm tròn số tiền theo quy tắc gần nhất
+      if (number < 1000) {
+        number = Math.round(number / 100) * 100; // Làm tròn đến hàng trăm gần nhất
+      } else {
+        number = Math.round(number / 1000) * 1000; // Làm tròn đến hàng nghìn gần nhất
+      }
+      // Sử dụng hàm toLocaleString() để định dạng tiền tệ theo định dạng của Việt Nam
+      // Ví dụ: 100000 sẽ thành "100.000"
+      return number.toLocaleString("vi-VN");
+    },
+    // định dạng ngày 
+    formatDate(dob)
+    {
+        if(dob)
+        {
+            dob= new Date(dob);
+            let date= dob.getDate();
+            date =date<10 ?  `0${date}`:date;
+            // lấy ngày 
+            let month= dob.getMonth()+1;
+            // lấy tháng
+            month= month <10 ? `0${month}`:month;
+            let year = dob.getFullYear();
+            //lấy giá trị là ngày tháng năm
+            dob= `${date}/${month}/${year}`;
+        }
+        else{
+            dob = "";
+        }
+        return dob;
+    },
  },
  data() {
    return {
@@ -314,7 +319,7 @@ export default {
      pageSize: 4,
      totalPages: 0,
      maxDisplayedPages: 5,
-     forModeDetail: 0,
+     forDiscount: 0,
      searchKey: "",
      datatotal: 0 // Biến lưu từ khóa tìm kiếm,
    };

@@ -188,7 +188,7 @@ export default {
       // nếu có lỗi validate hoặc lỗi từ back-end thì hiển thị thông báo tương ứng
     }
   },
-  props: ["isShow", "employeeSelected", "employeeSelectedId", "forMode"],
+  // props: ["isShow", "employeeSelected", "employeeSelectedId", "forMode"],
   watch: {
     employeeSelected: function(value) {
       //this.employee=value;

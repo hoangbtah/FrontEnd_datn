@@ -5,19 +5,24 @@ const productModules = {
         product: {},
         isShow:false,
         isShowDialog:false,
+        isShowDialogDeleteDiscount:false,
         pageproducts:[],
         productsDiscount:[],
-      //  pageProductsAdmin:[],
         selectedManufacturerId: null,
         selectedCatagoryId: null,
-        searchProduct:""
+        selectedProductId:null,
+        searchProduct:"",
+        isShowDiscount:false,
     },
     getters: {
         products: state => state.products,
         productsDiscount: state => state.productsDiscount,
         product: state => state.product,
+        selectedProductId: state => state.selectedProductId,
         isShow:state=>state.isShow,
+        isShowDialogDeleteDiscount:state=>state.isShowDialogDeleteDiscount,
         isShowDialog:state=>state.isShowDialog,
+        isShowDiscount:state=>state.isShowDiscount,
         pageproducts:state=>state.pageproducts,
        // pageProductsAdmin:state=>state.pageproducts,
         selectedManufacturerId:state=>state.selectedManufacturerId,
@@ -43,7 +48,7 @@ const productModules = {
             try {
 
                 const respone = await axios.get(`https://localhost:7159/api/v1/Product/product/${productId}`)
-             //   console.log("lấy sản phẩm thành công");
+                console.log("lấy sản phẩm thành công 123");
                 console.log(respone.data);
                  // Lưu sản phẩm vào Local Storage
                  localStorage.setItem('selectedProduct', JSON.stringify(respone.data));
@@ -124,6 +129,12 @@ const productModules = {
         TOGGLE_ISSHOW(state){
             state.isShow=!state.isShow
         },
+        TOGGLE_ISSHOWDISCOUNT(state){
+            state.isShowDiscount=!state.isShowDiscount
+        },
+        TOGGLE_ISSHOWDIALOGDELETEDISCOUNT(state){
+            state.isShowDialogDeleteDiscount=!state.isShowDialogDeleteDiscount
+        },
         TOGGLE_DIALOG(state){
             console.log("lật is show dialog ");
             state.isShowDialog= !state.isShowDialog
@@ -133,6 +144,9 @@ const productModules = {
         },
         SET_SELECTEDMANUFACTORERID(state,selectedManufacturerId){
             state.selectedManufacturerId=selectedManufacturerId
+        },
+        SET_SELECTEDPRODUCTID(state,selectedProductId){
+            state.selectedProductId=selectedProductId
         },
         RESET_SELECTEDMANUFACTORERID(state){
             state.selectedManufacturerId=null

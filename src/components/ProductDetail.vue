@@ -60,7 +60,8 @@
                 <small class="pt-1">{{ comments.length }} Reviews</small>
             </div>
 
-                <h3 class="font-weight-semi-bold mb-4">{{formatCurrency(product.Price-product.Price*product.DiscountPercent)}}đ</h3>
+                <h3 class="font-weight-semi-bold mb-4" v-if="checkDateValidity(product.StartDate,product.EndDate)">{{formatCurrency(product.Price-product.Price*product.DiscountPercent)}}đ</h3>
+                <h3 class="font-weight-semi-bold mb-4" v-else>{{formatCurrency(product.Price)}}đ</h3>
                 <p class="mb-4">{{product.Decription}}</p>
                 <div class="d-flex mb-3">
                     <p class="text-dark font-weight-medium mb-0 mr-3">Sizes:</p>
@@ -178,24 +179,7 @@
                     </div>
                     <div class="tab-pane fade" id="tab-pane-3">
                         <div class="row">
-                            <!-- <div class="col-md-6" >
-                                <h4 class="mb-4">Có {{comments.length}} đánh giá cho sản phẩm này</h4>
-                               
-                                <div class="media mb-4" v-for="comment in comments" :key="comment.CommentId">
-                                    <img src="img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
-                                    <div class="media-body">
-                                        <h6>{{comment.Name}}<small> - <i>{{formatDate(comment.PostDate)}}</i></small></h6>
-                                        <div class="text-primary mb-2">
-                                           
-                                        <template v-for="index in 5" :key="index">
-                                            <i class="fas fa-star" v-if="index <= comment.Rating"></i>
-                                            <i class="far fa-star" v-else></i>
-                                        </template>
-                                        </div>
-                                        <p>{{comment.CommentContent}}</p>
-                                    </div>
-                                </div>
-                            </div> -->
+                          
                             <div class="col-md-6">
                             <h4 class="mb-4">Có {{comments.length}} đánh giá cho sản phẩm này</h4>
                             <div class="media mb-4" v-for="(comment, index) in comments" :key="index">
@@ -270,21 +254,29 @@
         </div>
         <div class="row px-xl-5 pb-3">
             <div class="col-lg-3 col-md-6 col-sm-12 pb-1"  v-for="product in products.slice(0,4)" :key="product.ProductId">
-                <div class="card product-item border-0 mb-4">
+                
+                <div class="card product-item border-0 mb-4" >
                     <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                        <img class="img-fluid w-100" :src="product.Image" alt="">
+                        <div class="sale-product">
+                                <div class="product-0" v-if="product.Quantity==0"> <p>Đã hết hàng</p></div>
+                                <div class="sale" v-if="checkDateValidity(product.StartDate,product.EndDate)"> <P>-{{product.DiscountPercent*100}}%</P> </div>
+                              </div>                            
+                              <P></P>
+                                <img class="img-fluid w-100" :src="product.Image" alt="">                        
                     </div>
                     <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
                         <h7 class="text-truncate mb-3">{{product.ManufactorerName}}</h7>
                         <h6 class="text-truncate mb-3">{{product.ProductName}}</h6>
                         <div class="d-flex justify-content-center">
-                            <h6>{{formatCurrency(product.Price)}}VNĐ</h6>
-                            <!-- <h6 class="text-muted ml-2"><del>$123.00</del></h6> -->
+                                    <h6 v-if="checkDateValidity(product.StartDate,product.EndDate)">{{formatCurrency(product.Price- product.Price*product.DiscountPercent) }}đ</h6>
+                                    <h6 class="text-muted ml-2" v-if="checkDateValidity(product.StartDate,product.EndDate)"><del>{{ formatCurrency(product.Price) }}</del>đ</h6>
+                                    <h6 v-else>{{formatCurrency(product.Price)}}đ</h6>
                         </div>
-                    </div>
+                    </div>    
                     <div class="card-footer d-flex justify-content-between bg-light border">
-                        <router-link to="/productdetail" class="btn btn-sm text-dark p-0" ><button @click="handleProductClick(product.ProductId)"  style="border: none; background-color: transparent;"><i class="fas fa-eye text-primary mr-1"></i>View Detail</button></router-link>
-                        <router-link to="/shoppingcart" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</router-link>
+                        <router-link to="/productdetail" class="btn btn-sm text-dark p-0" ><button @click="handleProductClick(product.ProductId)"
+                         style="border: none; background-color: transparent;"><i class="fas fa-eye text-primary mr-1"></i>View Detail</button></router-link>
+                         <a @click="addToCart(product)"  class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
                     </div>
                 </div>
             </div>
@@ -361,6 +353,17 @@ export default {
       // Ví dụ: 100000 sẽ thành "100.000"
       return number.toLocaleString("vi-VN");
     },
+     // kiểm tra ngày giảm giá so với ngày hiện tại
+     checkDateValidity( startDate, endDate) {
+    // Chuyển các biến thành đối tượng Date
+    let currentDateTime = new Date();
+    startDate=new Date(startDate);
+    endDate= new Date(endDate);
+    
+
+    // Kiểm tra xem currentDateTime có nằm giữa StartDate và EndDate không
+    return currentDateTime >= startDate && currentDateTime <= endDate;
+},
     async addToCart(product) {
         console.log("sản phẩm thêm vào giỏ",product);
       const formData = {
@@ -368,15 +371,19 @@ export default {
         userId: this.auth.user.userId,
         productName: product.ProductName,
         image: product.Image,
-      //  quantity: product.Quantity,
       quantity:this.quantity,
-       // price: this.formatCurrency(product.Price-product.Price*product.DiscountPercent)
-       price:product.Price-product.Price*product.DiscountPercent
+       price:product.Price
       };
+
+       //kiểm tra nếu sản phẩm đó đang được giảm giá thì tính lại giá trị
+       if(this.checkDateValidity(product.StartDate,product.EndDate))
+       {
+        formData.price=product.Price-product.Price*product.DiscountPercent
+       }
+       
       console.log("product add to cart");
       console.log(product);
-      // const userId = this.auth.user.userId;
-      // console.log(userId);
+     
       const token = localStorage.getItem("token");
       console.log(token);
       if (!token) {

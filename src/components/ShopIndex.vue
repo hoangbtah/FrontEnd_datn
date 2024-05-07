@@ -110,7 +110,7 @@
                     <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
                         <div class="sale-product">
                                 <div class="product-0" v-if="product.Quantity==0"> <p>Đã hết hàng</p></div>
-                                <div class="sale" v-if="product.DiscountPercent>0"> <P>-{{product.DiscountPercent*100}}%</P> </div>
+                                <div class="sale" v-if="checkDateValidity(product.StartDate,product.EndDate)"> <P>-{{product.DiscountPercent*100}}%</P> </div>
                               </div>                            
                               <P></P>
                                 <img class="img-fluid w-100" :src="product.Image" alt="">                        
@@ -119,8 +119,8 @@
                         <h7 class="text-truncate mb-3">{{product.ManufactorerName}}</h7>
                         <h6 class="text-truncate mb-3">{{product.ProductName}}</h6>
                         <div class="d-flex justify-content-center">
-                                    <h6 v-if="product.DiscountPercent>0">{{formatCurrency(product.Price- product.Price*product.DiscountPercent) }}đ</h6>
-                                    <h6 class="text-muted ml-2" v-if="product.DiscountPercent>0"><del>{{ formatCurrency(product.Price) }}</del>đ</h6>
+                                    <h6 v-if="checkDateValidity(product.StartDate,product.EndDate)">{{formatCurrency(product.Price- product.Price*product.DiscountPercent) }}đ</h6>
+                                    <h6 class="text-muted ml-2" v-if="checkDateValidity(product.StartDate,product.EndDate)"><del>{{ formatCurrency(product.Price) }}</del>đ</h6>
                                     <h6 v-else>{{formatCurrency(product.Price)}}đ</h6>
                                 </div>
                     </div>    
@@ -146,7 +146,7 @@
                     <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
                         <div class="sale-product">
                                 <div class="product-0" v-if="product.Quantity==0"> <p>Đã hết hàng</p></div>
-                                <div class="sale" v-if="product.DiscountPercent>0"> <P>-{{product.DiscountPercent*100}}%</P> </div>
+                                <div class="sale" v-if="checkDateValidity(product.StartDate,product.EndDate)"> <P>-{{product.DiscountPercent*100}}%</P> </div>
                               </div>                            
                               <P></P>
                                 <img class="img-fluid w-100" :src="product.Image" alt="">                        
@@ -155,8 +155,8 @@
                         <h7 class="text-truncate mb-3">{{product.ManufactorerName}}</h7>
                         <h6 class="text-truncate mb-3">{{product.ProductName}}</h6>
                         <div class="d-flex justify-content-center">
-                                    <h6 v-if="product.DiscountPercent>0">{{formatCurrency(product.Price- product.Price*product.DiscountPercent) }}đ</h6>
-                                    <h6 class="text-muted ml-2" v-if="product.DiscountPercent>0"><del>{{ formatCurrency(product.Price) }}</del>đ</h6>
+                                    <h6 v-if="checkDateValidity(product.StartDate,product.EndDate)">{{formatCurrency(product.Price- product.Price*product.DiscountPercent) }}đ</h6>
+                                    <h6 class="text-muted ml-2" v-if="checkDateValidity(product.StartDate,product.EndDate)"><del>{{ formatCurrency(product.Price) }}</del>đ</h6>
                                     <h6 v-else>{{formatCurrency(product.Price)}}đ</h6>
                                 </div>
                     </div>    
@@ -203,7 +203,7 @@
                     <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
                         <div class="sale-product">
                                 <div class="product-0" v-if="product.Quantity==0"> <p>Đã hết hàng</p></div>
-                                <div class="sale" v-if="product.DiscountPercent>0"> <P>-{{product.DiscountPercent*100}}%</P> </div>
+                                <div class="sale" v-if="checkDateValidity(product.StartDate,product.EndDate)"> <P>-{{product.DiscountPercent*100}}%</P> </div>
                               </div>                            
                               <P></P>
                                 <img class="img-fluid w-100" :src="product.Image" alt="">                        
@@ -212,8 +212,8 @@
                         <h7 class="text-truncate mb-3">{{product.ManufactorerName}}</h7>
                         <h6 class="text-truncate mb-3">{{product.ProductName}}</h6>
                         <div class="d-flex justify-content-center">
-                                    <h6 v-if="product.DiscountPercent>0">{{formatCurrency(product.Price- product.Price*product.DiscountPercent) }}đ</h6>
-                                    <h6 class="text-muted ml-2" v-if="product.DiscountPercent>0"><del>{{ formatCurrency(product.Price) }}</del>đ</h6>
+                                    <h6 v-if="checkDateValidity(product.StartDate,product.EndDate)">{{formatCurrency(product.Price- product.Price*product.DiscountPercent) }}đ</h6>
+                                    <h6 class="text-muted ml-2" v-if="checkDateValidity(product.StartDate,product.EndDate)"><del>{{ formatCurrency(product.Price) }}</del>đ</h6>
                                     <h6 v-else>{{formatCurrency(product.Price)}}đ</h6>
                                 </div>
                     </div>    
@@ -240,7 +240,7 @@
                     <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
                         <div class="sale-product">
                                 <div class="product-0" v-if="product.Quantity==0"> <p>Đã hết hàng</p></div>
-                                <div class="sale" v-if="product.DiscountPercent>0"> <P>-{{product.DiscountPercent*100}}%</P> </div>
+                                <div class="sale" v-if="checkDateValidity(product.StartDate,product.EndDate)"> <P>-{{product.DiscountPercent*100}}%</P> </div>
                               </div>                            
                               <P></P>
                                 <img class="img-fluid w-100" :src="product.Image" alt="">                        
@@ -249,10 +249,10 @@
                         <h7 class="text-truncate mb-3">{{product.ManufactorerName}}</h7>
                         <h6 class="text-truncate mb-3">{{product.ProductName}}</h6>
                         <div class="d-flex justify-content-center">
-                                    <h6 v-if="product.DiscountPercent>0">{{formatCurrency(product.Price- product.Price*product.DiscountPercent) }}đ</h6>
-                                    <h6 class="text-muted ml-2" v-if="product.DiscountPercent>0"><del>{{ formatCurrency(product.Price) }}</del>đ</h6>
+                                    <h6 v-if="checkDateValidity(product.StartDate,product.EndDate)">{{formatCurrency(product.Price- product.Price*product.DiscountPercent) }}đ</h6>
+                                    <h6 class="text-muted ml-2" v-if="checkDateValidity(product.StartDate,product.EndDate)"><del>{{ formatCurrency(product.Price) }}</del>đ</h6>
                                     <h6 v-else>{{formatCurrency(product.Price)}}đ</h6>
-                                </div>
+                        </div>
                     </div>    
                     <div class="card-footer d-flex justify-content-between bg-light border">
                         <router-link to="/productdetail" class="btn btn-sm text-dark p-0" ><button @click="handleProductClick(product.ProductId)"
@@ -265,41 +265,7 @@
         </div>
     </div>
  
-    <!-- Vendor Start -->
-    <!-- <div class="container-fluid py-5">
-        <div class="row px-xl-5">
-            <div class="col">
-                <div class="owl-carousel vendor-carousel">
-                    <div class="vendor-item border p-4">
-                        <img src="img/vendor-1.jpg" alt="">
-                    </div>
-                    <div class="vendor-item border p-4">
-                        <img src="img/vendor-2.jpg" alt="">
-                    </div>
-                    <div class="vendor-item border p-4">
-                        <img src="img/vendor-3.jpg" alt="">
-                    </div>
-                    <div class="vendor-item border p-4">
-                        <img src="img/vendor-4.jpg" alt="">
-                    </div>
-                    <div class="vendor-item border p-4">
-                        <img src="img/vendor-5.jpg" alt="">
-                    </div>
-                    <div class="vendor-item border p-4">
-                        <img src="img/vendor-6.jpg" alt="">
-                    </div>
-                    <div class="vendor-item border p-4">
-                        <img src="img/vendor-7.jpg" alt="">
-                    </div>
-                    <div class="vendor-item border p-4">
-                        <img src="img/vendor-8.jpg" alt="">
-                    </div>
-                </div>
-            </div>
-        </div> -->
-    <!-- </div> -->
-    <!-- Vendor End -->
-
+  
     </div>
 </template>
 <script>
@@ -321,6 +287,11 @@ export default {
   created() {
     this.getProducts();
   },
+  data() {
+    return {
+        // currentDateTime: new Date(), // Khai báo biến lưu trữ ngày và giờ hiện tại
+    };
+},
   methods: {
     ...mapActions([
       "getProducts",
@@ -381,6 +352,17 @@ export default {
       this.getComments(productId);
       this.goToShoppingCart();
     },
+     // kiểm tra ngày giảm giá so với ngày hiện tại
+     checkDateValidity( startDate, endDate) {
+    // Chuyển các biến thành đối tượng Date
+    let currentDateTime = new Date();
+    startDate=new Date(startDate);
+    endDate= new Date(endDate);
+    
+
+    // Kiểm tra xem currentDateTime có nằm giữa StartDate và EndDate không
+    return currentDateTime >= startDate && currentDateTime <= endDate;
+},
     //thêm sản phẩm vào giỏ hàng
     async addToCart(product) {
       const formData = {
@@ -389,9 +371,15 @@ export default {
         productName: product.ProductName,
         image: product.Image,
       //  quantity: product.Quantity,
-      quantity:1,
+        quantity:1,
         price: product.Price
       };
+      //kiểm tra nếu sản phẩm đó đang được giảm giá thì tính lại giá trị
+      if(this.checkDateValidity(product.StartDate,product.EndDate))
+       {
+        formData.price=product.Price-product.Price*product.DiscountPercent
+       }
+       
       console.log("product index");
       console.log(product);
       // const userId = this.auth.user.userId;

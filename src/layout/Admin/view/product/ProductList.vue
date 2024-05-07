@@ -46,9 +46,10 @@
                                     <!-- <td></td> -->
                                     <td>
                                        <div class="m-option">
-                                        <button class="m-btn-option m-btn-de btn-info"  @click="btnDetailClick(productad.ProductId)">Chi tiết</button>
+                                        <!-- <button class="m-btn-option m-btn-de btn-info"  @click="btnDetailClick(productad.ProductId)">Chi tiết</button> -->
                                         <button class="m-btn-option m-btn-ud btn-warning" @click="btnUpdateClick(productad.ProductId)">Sửa</button>
                                         <button class="m-btn-option m-btn-ud  btn-danger" @click="btnDelete(productad.ProductId)">Xóa</button>
+                                        <button v-if="productad.DiscountPercent==null" class="m-btn-option m-btn-sale " @click="btnAddDiscount(productad.ProductId)">+ Sale</button>
                                        </div>
                                     </td>
                                 </tr>
@@ -62,20 +63,9 @@
                         </div>
                         <div class="m-page-right">
                             <div class="m-number-page">
-                                <!-- <select name="" id="">
-                                    <option>10 bản ghi trên 1 trang</option>
-                                    <option>20 bản ghi trên 1 trang</option>
-                                    <option>30 bản ghi trên 1 trang</option>
-                                    <option>50 bản ghi trên 1 trang</option>
-                                    <option>100 bản ghi trên 1 trang</option>
-                                </select> -->
+                              
                             </div>
-                            <!-- <div class="m-number">
-                                <button @click="prevPage" :disabled="pageNumber === 1">Trước</button>
-                                <button v-for="page in displayedPages" :key="page" @click="gotoPage(page)" :class="{ 'm-page-selected': page === pageNumber }">{{ page }}</button>
-                                <button @click="nextPage" :disabled="pageNumber === totalPages">Sau</button>
-                               
-                            </div> -->
+                          
                             <div class="m-number">
                             <button @click="prevPage" :disabled="pageNumber === 1">Trước</button>
                             <button v-for="page in displayedPages" :key="page" @click="gotoPage(page)" :class="{ 'm-page-selected': page === pageNumber }">{{ page }}</button>
@@ -86,7 +76,8 @@
             </div>
             <ProductDetailAD 
             :forMode="forModeDetail"/>
-            <TheDialog/>        
+            <TheDialog/>       
+            <DiscountDetail :forModeDiscount="forDiscount"/>
             </div>
                     
 </template>
@@ -95,9 +86,10 @@ import { mapActions, mapGetters } from "vuex";
 import axios from "axios";
 import ProductDetailAD from "./ProductDetailAD";
 import TheDialog from "../../../../components/TheDialog";
+import DiscountDetail from "../discount/DiscountDetail";
 export default {
   name: "EmployeeList",
-  components: { ProductDetailAD, TheDialog },
+  components: { ProductDetailAD, TheDialog ,DiscountDetail},
 
   computed: {
     ...mapGetters([
@@ -106,7 +98,8 @@ export default {
       "products",
       "isShowDialog",
       "pageproducts",
-      "searchProduct"
+      "searchProduct",
+      // "selectedProductId",
     ]),
     // hiển thị trang
     displayedPages() {
@@ -132,18 +125,8 @@ export default {
   },
 
   created() {
-    //this.getProducts();
-
-    // const storedProducts = localStorage.getItem("listPageAdminProduct");
-    // if (storedProducts) {
-    //   this.items = JSON.parse(storedProducts);
-    //   this.total();
-    //   this.displayedPages(); // Gọi lại displayedPages() để tính toán lại các trang hiển thị
-    // } else {
-    //   this.fetchItems(this.pageNumber, this.pageSize);
-    // }
+   
     this.fetchItems();
-    // this.displayedPages(); // Gọi lại displayedPages() để tính toán lại các trang hiển thị
   },
 
   methods: {
@@ -244,20 +227,13 @@ export default {
         this.totalPages = response.data.totalPages;
         this.datatotal = response.data.total;
 
-       // console.log("danh sách sản phẩm phân trang ");
-        // console.log(this.items);
+      
         // Lưu danh sách sản phẩm phân trang vào Local Storage
         localStorage.setItem(
           "listPageAdminProduct",
           JSON.stringify(response.data)
         );
-        //  Cập nhật lại displayedPages
-        // this.$nextTick(() => {
-        //   this.displayedPages();
-        // });
-        // this.$forceUpdate();
-
-       // console.log(this.totalPages);
+      
       } catch (error) {
         console.error(error);
       }
@@ -284,6 +260,19 @@ export default {
     total() {
       console.log("tính lại tổng số trang");
       this.totalPages = Math.ceil(this.products.length / this.pageSize);
+    },
+    btnAddDiscount(productId){
+      console.log("mã sản phẩm giảm giá",productId)
+      // hiển thị form giảm giá
+      this.$store.commit("TOGGLE_ISSHOWDISCOUNT");
+      // gán giá trị productId
+      this.$store.commit("SET_SELECTEDPRODUCTID",productId);
+      // xóa nội dung trong form đi 
+      this.$store.commit("SET_PRODUCT", []);
+      // gán trạng thái là thêm mới 
+      this.forDiscount=1;
+
+
     },
     // thêm mới sản  phẩm
     btnAddClick() {
@@ -323,6 +312,7 @@ export default {
       totalPages: 0,
       maxDisplayedPages: 5,
       forModeDetail: 0,
+      forDiscount:0,
       searchKey: "",
       datatotal: 0 // Biến lưu từ khóa tìm kiếm,
     };
