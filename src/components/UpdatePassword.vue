@@ -4,14 +4,6 @@
          <h1>E SHOPPER</h1>
      <div class="login-form" >
        <h5>ĐỔI MẬT KHẨU</h5>
-       <!-- <div class="input-group">
-         <label for="username">Mật khẩu cũ:</label>
-         <input type="username" id="username" name="username" required v-model="name">
-       </div>
-       <div class="input-group">
-         <label for="username">Mật khẩu mới:</label>
-         <input type="username" id="username" name="username" required v-model="name">
-       </div> -->
        <div class="input-group">
          <label for="password">Mật khẩu cũ:</label>
          <input class="password-field"
@@ -46,135 +38,150 @@
 </template>
  <script>
  import axios from 'axios';
- import {mapActions,mapGetters} from 'vuex';
- 
- export default {
-     name:'UpdatePassword',
-     data(){
-       return {
-         oldPassword:'',
-         newPassword:'',
-         examPassword:''
-       };
-     },
-     created(){
-     },
-     computed:{...mapGetters(['auth'])},
-     methods:{
-       ...mapActions(['getUser','getCarts']),
-         async  updatePassword() {
-            // kiểm tra mật khẩu mới và mật khẩu xác nhận
-            if(this.newPassword !== this.examPassword)
-            {
+import { mapActions, mapGetters } from "vuex";
+// Import Vue và VueToasted
+import Vue from "vue";
+import Toasted from "vue-toasted";
+Vue.use(Toasted);
+export default {
+  name: "UpdatePassword",
+  data() {
+    return {
+      // name:'',
+      showPassword:false,
+      oldPassword: "",
+      newPassword: "",
+      examPassword: ""
+    };
+  },
+  created() {},
+  computed: { ...mapGetters(["auth"]) },
+  methods: {
+    ...mapActions(["getUser", "getCarts"]),
+    async updatePassword() {
+      // kiểm tra mật khẩu mới và mật khẩu xác nhận
+      if (this.newPassword !== this.examPassword) {
+        // Hiển thị thông báo lỗi
+        this.$toasted.show("Mật khẩu không khớp!", {
+          duration: 4000, // Thời gian hiển thị thông báo (ms)
+          position: "top-center", // Vị trí hiển thị
+          type: "error" // Kiểu thông báo (success, info, error)
+        });
+        return;
+      }
+      const formData = {
+        username: this.auth.user.name,
+        oldPassword: this.oldPassword,
+        newPassword: this.newPassword
+      };
+      console.log("thông tin cập nhật", formData);
 
+      try {
+        // Gọi API đăng ký bằng Axios
+        const token = localStorage.getItem("token");
+
+       const respone =await axios.post('https://localhost:7159/api/Auth/changePassword', formData,
+        {
+            headers: {
+              Authorization: `Bearer ${token}`
             }
-       const formData = {
-         
-       };
- 
-     try{
-           // Gọi API đăng ký bằng Axios
-      const respone = await axios.post('https://localhost:7159/api/Auth/Login', formData)
-         // .then(response => {
-         //  console.log('Đăng nhập thành công!');
-           // Xử lý phản hồi từ server nếu cần
-        //   const token = respone.data;
-        //   console.log(respone.data.token);
-          // Lưu token vào local storage để sử dụng sau này
-           localStorage.setItem('token',  respone.data);
-           // Lưu token với key dựa trên định danh của người dùng
-           // sessionStorage.setItem(`token_${formData.name}`, respone.data);
- 
-           this.auth.isEmployee= true;
-           this.registrationError='';
-          await this.getUser(formData);
-         await  this.getCarts(this.auth.user.userId);
-          this.$router.push('/user');      
-        
-     }
-     catch (error) {
-         console.error(error);
-         console.error('Đăng nhập thất bại:', error.response.data);
-           this.registrationError =  error.response.data;
-       }
-     },
-     toggleShowPassword() {
-       this.showPassword = !this.showPassword;
-     }
-     }
- }
- </script>
+          }
+        )
+            //  localStorage.setItem('token',  respone.data);
+                    // Hiển thị thông thành công
+            this.$toasted.show(respone.data, {
+            duration: 2000, // Thời gian hiển thị thông báo (ms)
+            position: "top-center", // Vị trí hiển thị
+            type: "success" // Kiểu thông báo (success, info, error)
+          });
+            this.$router.push('/user');
+      } catch (error) {
+        console.error(error);
+        console.error("Cập nhật thất bại:", error.response.data);
+              // Hiển thị thông thành công
+              this.$toasted.show( error.response.data, {
+            duration: 2000, // Thời gian hiển thị thông báo (ms)
+            position: "top-center", // Vị trí hiển thị
+            type: "error" // Kiểu thông báo (success, info, error)
+          });
+        //  this.registrationError =  error.response.data;
+      }
+    },
+    toggleShowPassword() {
+      this.showPassword = !this.showPassword;
+    }
+  }
+};
+</script>
  <style scoped>
- .login{
-     display: flex;
-   justify-content: center;
-   align-items: center;
-   /* height: 100vh; */
-   margin: 0;
- }
-     .login-container {
-   width: 500px;
-  
- }
- 
- h1{
-     text-align: center;
-     margin-top:20px;
-     color: #D19C97;
- }
- h5 {
-     text-align: center;
-     margin-top: 50px;
- }
- 
- .input-group {
-   margin-bottom: 15px;
- }
- 
- .input-group label {
-   display: block;
-   margin-bottom: 5px;
- }
- 
- .input-group input {
-   width: 100%;
-   padding: 8px;
-   border-radius: 4px;
-   border: 1px solid #ccc;
- }
- 
- button {
-   width: 100%;
-   padding: 10px;
-   background-color: #D19C97;
-   color: #fff;
-   border: none;
-   border-radius: 4px;
-   cursor: pointer;
- }
- .forgot-password p{
-   color:red;
-   cursor: pointer;
-   text-align: center;
- }
- .register{
-   margin-top: 20px;
- }
- .register label{
-   color:#000;
- }
- .toggle-password {
-   position: absolute;
-   top: 50px;
-   right: 10px;
-   transform: translateY(-50%);
-   cursor: pointer;
- }
- 
- /* Điều chỉnh biểu tượng mắt */
- .toggle-password i {
-   font-size: 18px;
-   color: #2b2727;
-  
- }
- </style>
+.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* height: 100vh; */
+  margin: 0;
+}
+.login-container {
+  width: 500px;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 20px;
+  color: #d19c97;
+}
+h5 {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #d19c97;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.forgot-password p {
+  color: red;
+  cursor: pointer;
+  text-align: center;
+}
+.register {
+  margin-top: 20px;
+}
+.register label {
+  color: #000;
+}
+.toggle-password {
+  position: absolute;
+  top: 50px;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+/* Điều chỉnh biểu tượng mắt */
+.toggle-password i {
+  font-size: 18px;
+  color: #2b2727;
+}
+</style>

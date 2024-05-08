@@ -15,12 +15,7 @@
                                 required="required" data-validation-required-message="Please enter your name" />
                             <p class="help-block text-danger"></p>
                         </div>
-                        <!-- <div class="control-group">
-                            <label for="username">Mật khẩu:</label>
-                            <input type="text" class="form-control" id="password" placeholder="Mật khẩu" v-model="auth.user.name"
-                                required="required" data-validation-required-message="Please enter a subject" />
-                            <p class="help-block text-danger"></p>
-                        </div> -->
+                       
                         <div class="control-group">
                             <label for="username">Email:</label>
                             <input type="email" class="form-control" id="email" placeholder="Email" v-model="auth.user.email"
@@ -40,7 +35,7 @@
                             <p class="help-block text-danger"></p>
                         </div>
                         <div>
-                            <button class="btn btn-primary py-2 px-4" >Cập nhật thông tin</button>
+                            <button class="btn btn-primary py-2 px-4" @click="btnUpdateUser()">Cập nhật thông tin</button>
                             <button class="btn btn-primary py-2 px-4" style="margin-left:10px" @click="btnUpdatePassword()">Đổi mật khẩu</button>
                         </div>
                        
@@ -54,26 +49,95 @@
     <!-- Contact End -->
 </template>
 <script>
-//import axios from 'axios';
+// Import Vue và VueToasted
+import Vue from "vue";
+import Toasted from "vue-toasted";
+Vue.use(Toasted);
+import axios from 'axios';
 import {mapActions,mapGetters} from 'vuex';
 export default {
     name:'TheUser',
     data(){
       return {
-        name:'',
-        password:'',
-        registrationError:''
+        // name:'',
+        // password:'',
+        // registrationError:''
       };
     },
     created() {
-        this.getUser()
+        // this.getUser();
     },
     computed:{...mapGetters(['auth'])},
     methods:{
       ...mapActions(['getUser']),
       btnUpdatePassword(){
         this.$router.push('/updatepassword');      
+      },
+     async btnUpdateUser(){
+         // kiểm tra mật khẩu mới và mật khẩu xác nhận
+      if (this.newPassword !== this.examPassword) {
+        // Hiển thị thông báo lỗi
+        this.$toasted.show("Mật khẩu không khớp!", {
+          duration: 4000, // Thời gian hiển thị thông báo (ms)
+          position: "top-center", // Vị trí hiển thị
+          type: "error" // Kiểu thông báo (success, info, error)
+        });
+        return;
       }
+      const formData = {
+        userId:this.auth.user.userId,
+        name:this.auth.user.name,
+        email:this.auth.user.email,
+        address:this.auth.user.address,
+        passwordHash:this.auth.user.passwordHash,
+        passwordSalt:this.auth.user.passwordSalt,
+        role:this.auth.user.role,
+        phoneNumber:this.auth.user.phoneNumber,
+        active:this.auth.user.active
+      };
+      console.log("thông tin cập nhật", formData);
+        //validate dữ liệu đăng kí 
+        if (!formData.name  || !formData.email || !formData.phoneNumber) {
+           // Hiển thị thông báo thành công
+        this.$toasted.show("Thông tin tên đăng nhập, mật khẩu, số điện thoại và email không được để trống!", {
+          duration: 4000, // Thời gian hiển thị thông báo (ms)
+          position: "top-right", // Vị trí hiển thị
+          type: "error" // Kiểu thông báo (success, info, error)
+        });
+        return ;
+      }
+      try {
+        // Gọi API đăng ký bằng Axios
+        // const token = localStorage.getItem("token");
+
+       await axios.put(`https://localhost:7159/api/v1/User/${formData.userId}`, formData)
+        // {
+        //     headers: {
+        //       Authorization: `Bearer ${token}`
+        //     }
+        //   }
+        // )
+            //  localStorage.setItem('token',  respone.data);
+                    // Hiển thị thông thành công
+            this.$toasted.show("Cập nhật thành công", {
+            duration: 2000, // Thời gian hiển thị thông báo (ms)
+            position: "top-center", // Vị trí hiển thị
+            type: "success" // Kiểu thông báo (success, info, error)
+          });
+            // this.$router.push('/user');
+      } catch (error) {
+        console.error(error);
+        console.error("Cập nhật thất bại:", error.response.data);
+              // Hiển thị thông thành công
+              this.$toasted.show("Cập nhật thất bại", {
+            duration: 2000, // Thời gian hiển thị thông báo (ms)
+            position: "top-center", // Vị trí hiển thị
+            type: "error" // Kiểu thông báo (success, info, error)
+          });
+        //  this.registrationError =  error.response.data;
+      }
+      }
+
     },
     
 }

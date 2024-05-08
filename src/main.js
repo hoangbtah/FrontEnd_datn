@@ -25,6 +25,8 @@ import ManufactorerList from './layout/Admin/view/manufactorer/ManufactorerList.
 import TheUser from './components/TheUser.vue'
 import LoginAdmin from './components/LoginAdmin.vue'
 import UpdatePassword from './components/UpdatePassword.vue'
+import UpdateUser from './layout/Admin/view/employee/UpdateUser.vue'
+
 
 
 
@@ -60,6 +62,8 @@ const routes = [
 { path: '/statisticaldetail', component: StatisticalDetail },
 { path: '/statisticalall', component: StatisticalAll },
 { path: '/productdiscount', component: ProductDiscount },
+{ path: '/updateuser', component: UpdateUser },
+
 
   ]
 },

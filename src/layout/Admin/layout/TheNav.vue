@@ -31,14 +31,14 @@
                    Quản lý đơn hàng
                </div>
            </router-link>
-           <router-link to="/orderdetail" class="menu-item">
+           <!-- <router-link to="/orderdetail" class="menu-item">
                <div class="menu-icon m-icon-purchase">
                    
                </div>
                <div class="menu-text">
                    Chi tiết đơn hàng
                </div>
-           </router-link>
+           </router-link> -->
            <router-link to="/employee" class="menu-item">
                <div class="menu-icon m-icon-sell">
                    

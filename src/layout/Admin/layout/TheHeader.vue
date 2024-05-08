@@ -28,12 +28,10 @@
 
            </div>
            <div class="header-right-r-title">
-                <!-- <label for="">Hi, {{  auth.user.name }} </label> -->
-                <!-- <div v-if="auth.isAuthenticated"> <router-link to="/admin" class="nav-item nav-link"><div class="nav-text">Login</div></router-link></div> -->
                            <div class="menu-item">
-                            <a><div class="menu-text">Hi ,{{ auth.user.name }}</div></a>
+                            <a @click="UpdateUser()"><div class="menu-text">Hi ,{{ auth.user.name }}</div></a>
                             </div>
-                            <div class="menu-item" v-if="auth.isAuthenticated==false"><a  @click="logout()"><div class="menu-text">Logout</div></a>
+                            <div class="menu-item"><a  @click="logout()"><div class="menu-text">Logout</div></a>
                             </div>
                
            </div>
@@ -73,13 +71,7 @@ export default {
 
   methods: {
     ...mapActions([
-    //   "getCatagorys",
-    //   "getManufactorers",
-    //   "getProductsByCatagoryId",
-    //   "getProductsByManufactorerId",
       "getUser",
-    //   "resetCarts",
-    //   "getCarts"
     ]),
 
     logout() {
@@ -96,6 +88,9 @@ export default {
     //   this.resetCarts();
       // Cập nhật giao diện hoặc chuyển hướng đến trang chủ
       this.$router.push("/admin");
+    },
+    UpdateUser(){
+      this.$router.push("/updateuser");
     }
   }
 };
