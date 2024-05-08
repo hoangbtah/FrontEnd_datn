@@ -273,8 +273,8 @@ import { mapActions, mapGetters } from "vuex";
 import TheHeaderCur from "../layout/TheHeaderCur.vue";
 //import axios from "axios";
 // Import Vue và VueToasted
-import Vue from 'vue';
-import Toasted from 'vue-toasted';
+import Vue from "vue";
+import Toasted from "vue-toasted";
 
 // Sử dụng VueToasted với Vue
 Vue.use(Toasted);
@@ -289,9 +289,9 @@ export default {
   },
   data() {
     return {
-        // currentDateTime: new Date(), // Khai báo biến lưu trữ ngày và giờ hiện tại
+      // currentDateTime: new Date(), // Khai báo biến lưu trữ ngày và giờ hiện tại
     };
-},
+  },
   methods: {
     ...mapActions([
       "getProducts",
@@ -352,17 +352,16 @@ export default {
       this.getComments(productId);
       this.goToShoppingCart();
     },
-     // kiểm tra ngày giảm giá so với ngày hiện tại
-     checkDateValidity( startDate, endDate) {
-    // Chuyển các biến thành đối tượng Date
-    let currentDateTime = new Date();
-    startDate=new Date(startDate);
-    endDate= new Date(endDate);
-    
+    // kiểm tra ngày giảm giá so với ngày hiện tại
+    checkDateValidity(startDate, endDate) {
+      // Chuyển các biến thành đối tượng Date
+      let currentDateTime = new Date();
+      startDate = new Date(startDate);
+      endDate = new Date(endDate);
 
-    // Kiểm tra xem currentDateTime có nằm giữa StartDate và EndDate không
-    return currentDateTime >= startDate && currentDateTime <= endDate;
-},
+      // Kiểm tra xem currentDateTime có nằm giữa StartDate và EndDate không
+      return currentDateTime >= startDate && currentDateTime <= endDate;
+    },
     //thêm sản phẩm vào giỏ hàng
     async addToCart(product) {
       const formData = {
@@ -370,21 +369,23 @@ export default {
         userId: this.auth.user.userId,
         productName: product.ProductName,
         image: product.Image,
-      //  quantity: product.Quantity,
-        quantity:1,
+        //  quantity: product.Quantity,
+        quantity: 1,
         price: product.Price
       };
       //kiểm tra nếu sản phẩm đó đang được giảm giá thì tính lại giá trị
-      if(this.checkDateValidity(product.StartDate,product.EndDate))
-       {
-        formData.price=product.Price-product.Price*product.DiscountPercent
-       }
-       
+      if (this.checkDateValidity(product.StartDate, product.EndDate)) {
+        formData.price =
+          product.Price - product.Price * product.DiscountPercent;
+      }
+
       console.log("product index");
       console.log(product);
       // const userId = this.auth.user.userId;
       // console.log(userId);
-      const token = localStorage.getItem("token");
+        const token = localStorage.getItem("token");
+    //   const userIdentifier = this.auth.user.name; // Đây là định danh của người dùng, có thể lấy từ đâu đó như vuex store hoặc props
+    //   const token = sessionStorage.getItem(`token_${userIdentifier}`);
       console.log(token);
       if (!token) {
         // Nếu không có token, chuyển hướng đến trang đăng nhập
@@ -395,20 +396,20 @@ export default {
       try {
         // await this.$store.dispatch("addProductToCart", { userId, product });
         await this.addProductToCart(formData);
-      //  console.log("Sản phẩm đã được thêm vào giỏ hàng!");
-          // Hiển thị thông báo lỗi
-      this.$toasted.show('Thêm sản phẩm vào giỏ hàng thành công !', {
-        duration: 2000, // Thời gian hiển thị thông báo (ms)
-        position: 'top-center', // Vị trí hiển thị
-        type: 'success' // Kiểu thông báo (success, info, error)
-      });
+        //  console.log("Sản phẩm đã được thêm vào giỏ hàng!");
+        // Hiển thị thông báo lỗi
+        this.$toasted.show("Thêm sản phẩm vào giỏ hàng thành công !", {
+          duration: 2000, // Thời gian hiển thị thông báo (ms)
+          position: "top-center", // Vị trí hiển thị
+          type: "success" // Kiểu thông báo (success, info, error)
+        });
       } catch (error) {
-          // Hiển thị thông báo lỗi
-      this.$toasted.show(error.response.data, {
-        duration: 2000, // Thời gian hiển thị thông báo (ms)
-        position: 'top-center', // Vị trí hiển thị
-        type: 'error' // Kiểu thông báo (success, info, error)
-      });
+        // Hiển thị thông báo lỗi
+        this.$toasted.show(error.response.data, {
+          duration: 2000, // Thời gian hiển thị thông báo (ms)
+          position: "top-center", // Vị trí hiển thị
+          type: "error" // Kiểu thông báo (success, info, error)
+        });
         console.error("Lỗi khi thêm sản phẩm vào giỏ hàng:", error);
       }
     }
@@ -416,22 +417,22 @@ export default {
 };
 </script>
 <style >
-.sale-product{
-  display:flex;
+.sale-product {
+  display: flex;
   position: relative;
 }
-.sale-product .sale{
+.sale-product .sale {
   position: absolute;
-  right:0;
-  padding-right:5px;
-  z-index:999;
+  right: 0;
+  padding-right: 5px;
+  z-index: 999;
 }
-.sale-product  p{
-  color:red;
+.sale-product p {
+  color: red;
 }
-.sale-product .product-0{
+.sale-product .product-0 {
   margin-left: 5px;
   position: absolute;
-  z-index:999;
+  z-index: 999;
 }
 </style>

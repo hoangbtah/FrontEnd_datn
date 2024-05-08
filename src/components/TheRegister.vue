@@ -34,13 +34,8 @@
                                 required="required" data-validation-required-message="Please enter a subject" />
                             <p class="help-block text-danger"></p>
                         </div>
-                        <!-- <div class="control-group">
-                            <textarea class="form-control" rows="6" id="message" placeholder="Message"
-                                required="required"
-                                data-validation-required-message="Please enter your message"></textarea>
-                            <p class="help-block text-danger"></p>
-                        </div> -->
-                         <!-- Hiển thị trường chọn vai trò nếu là nhân viên -->
+                       
+                         <!-- Hiển thị trường chọn vai trò nếu là nhân viên
                         <div v-if="auth.isEmployee">
                             <label for="role">Vai trò:</label>
                             <select v-model="role">
@@ -48,7 +43,7 @@
                             <option value="Sales">Nhân viên bán hàng</option>
                             <option value="Technician">Kỹ thuật viên</option>
                             </select>
-                        </div>
+                        </div> -->
                         <div>
                             <!-- <router-link to="/login"> -->
                             <button class="btn btn-primary py-2 px-4" type="submit" id="sendMessageButton">Đăng ký</button>
@@ -65,7 +60,7 @@
                 </div>
             </div>
             <div class="col-lg-5 mb-5">
-                <h5 class="font-weight-semi-bold mb-3">Get In Touch</h5>
+                <!-- <h5 class="font-weight-semi-bold mb-3">Get In Touch</h5>
                 <p>Justo sed diam ut sed amet duo amet lorem amet stet sea ipsum, sed duo amet et. Est elitr dolor elitr erat sit sit. Dolor diam et erat clita ipsum justo sed.</p>
                 <div class="d-flex flex-column mb-3">
                     <h5 class="font-weight-semi-bold mb-3">Store 1</h5>
@@ -78,7 +73,7 @@
                     <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA</p>
                     <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@example.com</p>
                     <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+012 345 67890</p>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -87,6 +82,10 @@
 <script>
 import axios from 'axios';
 import {mapGetters} from 'vuex';
+// Import Vue và VueToasted
+import Vue from "vue";
+import Toasted from "vue-toasted";
+Vue.use(Toasted);
 export default {
     name:'TheRegister',
     data(){
@@ -97,7 +96,7 @@ export default {
             email:'',
             address:'',
             phoneNumber:'',
-            registrationSuccess: false,
+            // registrationSuccess: false,
             registrationError: '',
             isEmployee: false,
         };
@@ -109,20 +108,37 @@ export default {
         name: this.name,
         password: this.password,
          email: this.email,
-        role: this.role,
+        role: 'User',
         phoneNumber:this.phoneNumber,
         address:this.address
       };
+      console.log("dữ liệu đăng kí",formData);
+      //validate dữ liệu đăng kí 
+      if (!formData.name || !formData.password || !formData.email || !formData.phoneNumber) {
+           // Hiển thị thông báo thành công
+        this.$toasted.show("Thông tin tên đăng nhập, mật khẩu, số điện thoại và email không được để trống!", {
+          duration: 4000, // Thời gian hiển thị thông báo (ms)
+          position: "top-right", // Vị trí hiển thị
+          type: "error" // Kiểu thông báo (success, info, error)
+        });
+        return ;
+      }
 
     try{
           // Gọi API đăng ký bằng Axios
-     const respone = await axios.post('https://localhost:7043/api/Auth/register', formData)
+     const respone = await axios.post('https://localhost:7159/api/Auth/register', formData)
         // .then(response => {
           console.log('Đăng ký thành công!');
           // Xử lý phản hồi từ server nếu cần
-            this.registrationSuccess=true;
+            // this.registrationSuccess=true;
           console.log(respone.data);
          // this.$router.push('/login');
+          // Hiển thị thông báo thành công
+        this.$toasted.show("Đăng kí tài khoản thành công!", {
+          duration: 2000, // Thời gian hiển thị thông báo (ms)
+          position: "top-right", // Vị trí hiển thị
+          type: "success" // Kiểu thông báo (success, info, error)
+        });
     }     
     catch (error) {
         console.error(error);

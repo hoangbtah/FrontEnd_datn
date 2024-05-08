@@ -63,9 +63,6 @@ export default {
       const formData = {
         name: this.name,
         password: this.password,
-      
-        // email: this.email,
-        // role: this.role
       };
 
     try{
@@ -76,20 +73,16 @@ export default {
           // Xử lý phản hồi từ server nếu cần
        //   const token = respone.data;
        //   console.log(respone.data.token);
-          // Lưu token vào local storage để sử dụng sau này
+         // Lưu token vào local storage để sử dụng sau này
           localStorage.setItem('token',  respone.data);
-           // this.registrationSuccess=true;
-        //  console.log(respone.data);
+          // Lưu token với key dựa trên định danh của người dùng
+          // sessionStorage.setItem(`token_${formData.name}`, respone.data);
+
           this.auth.isEmployee= true;
-        
-         console.log(this.auth.isAuthenticated);
-         // this.auth.name=this.name;
           this.registrationError='';
          await this.getUser(formData);
-      //    console.log("userid: ",this.auth.user.userId);
         await  this.getCarts(this.auth.user.userId);
          this.$router.push('/');      
-       //  this.auth.isAuthenticated=false;
        
     }
     catch (error) {

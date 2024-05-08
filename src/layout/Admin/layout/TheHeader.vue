@@ -30,10 +30,10 @@
            <div class="header-right-r-title">
                 <!-- <label for="">Hi, {{  auth.user.name }} </label> -->
                 <!-- <div v-if="auth.isAuthenticated"> <router-link to="/admin" class="nav-item nav-link"><div class="nav-text">Login</div></router-link></div> -->
-                           <div>
-                            <a class="nav-item nav-link"><div class="nav-text">Hi ,{{ auth.user.name }}</div></a>
+                           <div class="menu-item">
+                            <a><div class="menu-text">Hi ,{{ auth.user.name }}</div></a>
                             </div>
-                            <div v-if="auth.isAuthenticated==false"><a class="nav-item nav-link" @click="logout()"><div class="nav-text">Logout</div></a>
+                            <div class="menu-item" v-if="auth.isAuthenticated==false"><a  @click="logout()"><div class="menu-text">Logout</div></a>
                             </div>
                
            </div>
@@ -103,6 +103,10 @@ export default {
 <style scoped="">
 .header-right-r-title{
     display:flex;
+}
+.header-right-r-title .menu-item{
+  margin-right: 10px;
+  cursor: pointer;
 }
 @import url("../../../assets_ad/css_ad/layout/header.css");
 </style>

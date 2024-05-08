@@ -24,6 +24,7 @@ import ProductDiscount from './layout/Admin/view/discount/ProductDiscount.vue'
 import ManufactorerList from './layout/Admin/view/manufactorer/ManufactorerList.vue'
 import TheUser from './components/TheUser.vue'
 import LoginAdmin from './components/LoginAdmin.vue'
+import UpdatePassword from './components/UpdatePassword.vue'
 
 
 
@@ -66,6 +67,7 @@ const routes = [
   { path: '/login', component: TheLogin },
   { path: '/register', component: TheRegister },
   { path: '/admin', component: LoginAdmin },
+  { path: '/updatepassword', component: UpdatePassword },
 
 ];
 

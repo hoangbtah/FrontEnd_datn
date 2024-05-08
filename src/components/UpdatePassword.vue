@@ -1,71 +1,75 @@
-<template>
+<template lang="">
     <div class="login">
      <div class="login-container">
          <h1>E SHOPPER</h1>
-     <form class="login-form"  @submit.prevent="Login">
-       <h5>Đăng Nhập</h5>
+     <div class="login-form" >
+       <h5>ĐỔI MẬT KHẨU</h5>
        <!-- <div class="input-group">
-         <label for="email">Email:</label>
-         <input type="email" id="email" name="email" required>
-       </div> -->
-       <div class="input-group">
-         <label for="username">Tên đăng nhập:</label>
+         <label for="username">Mật khẩu cũ:</label>
          <input type="username" id="username" name="username" required v-model="name">
        </div>
        <div class="input-group">
-         <label for="password">Mật khẩu:</label>
-         <!-- <div class="password-input"> -->
+         <label for="username">Mật khẩu mới:</label>
+         <input type="username" id="username" name="username" required v-model="name">
+       </div> -->
+       <div class="input-group">
+         <label for="password">Mật khẩu cũ:</label>
          <input class="password-field"
          :type="showPassword ? 'text' : 'password'"
-         id="password" name="password" required v-model="password">
+         id="password" name="password" required v-model="oldPassword">
          <span @click="toggleShowPassword" class="toggle-password">
                <i class="fa" :class="showPassword ? 'fa-eye' : 'fa-eye-slash'"></i>
              </span>
-             <!-- </div> -->
         </div>     
-       <div class="forgot-password">
-       <p>Quên mật khẩu ?</p>
+        <div class="input-group">
+         <label for="password">Mật khẩu mới:</label>
+         <input class="password-field"
+         :type="showPassword ? 'text' : 'password'"
+         id="password" name="password" required v-model="newPassword">
+         <span @click="toggleShowPassword" class="toggle-password">
+               <i class="fa" :class="showPassword ? 'fa-eye' : 'fa-eye-slash'"></i>
+             </span>
+        </div>     
+       <div class="input-group">
+         <label for="password">Xác nhận mật khẩu mới:</label>
+         <input class="password-field"
+         :type="showPassword ? 'text' : 'password'"
+         id="password" name="password" required v-model="examPassword">
+         <span @click="toggleShowPassword" class="toggle-password">
+               <i class="fa" :class="showPassword ? 'fa-eye' : 'fa-eye-slash'"></i>
+             </span>
+        </div>     
      </div>
-       <button  type="submit">Đăng Nhập</button>
-       <div>
-         <p v-if="registrationError" style="color: red;">{{ registrationError }}</p>
-       </div>
-     </form>
-    <!-- <div class="register">
-     <router-link to="/register" ><div><label>Đăng ký tài khoản !</label></div></router-link>
-    </div> -->
-     
+       <button @click="updatePassword()">Cập nhật</button>
+     </div>
    </div>
-    </div>
 </template>
  <script>
  import axios from 'axios';
  import {mapActions,mapGetters} from 'vuex';
+ 
  export default {
-     name:'LoginAdmin',
+     name:'UpdatePassword',
      data(){
        return {
-         name:'',
-         password:'',
-         registrationError:'',
-         showPassword:false
+         oldPassword:'',
+         newPassword:'',
+         examPassword:''
        };
      },
      created(){
-      // this.Login();
-     //  this.getUser();
-       //this.getCarts();
      },
      computed:{...mapGetters(['auth'])},
      methods:{
        ...mapActions(['getUser','getCarts']),
-         async  Login() {
+         async  updatePassword() {
+            // kiểm tra mật khẩu mới và mật khẩu xác nhận
+            if(this.newPassword !== this.examPassword)
+            {
+
+            }
        const formData = {
-         name: this.name,
-         password: this.password,
-       
-         // email: this.email,
-         // role: this.role
+         
        };
  
      try{
@@ -76,20 +80,16 @@
            // Xử lý phản hồi từ server nếu cần
         //   const token = respone.data;
         //   console.log(respone.data.token);
-           // Lưu token vào local storage để sử dụng sau này
-           localStorage.setItem('loginAdmin',  respone.data);
-            // this.registrationSuccess=true;
-         //  console.log(respone.data);
+          // Lưu token vào local storage để sử dụng sau này
+           localStorage.setItem('token',  respone.data);
+           // Lưu token với key dựa trên định danh của người dùng
+           // sessionStorage.setItem(`token_${formData.name}`, respone.data);
+ 
            this.auth.isEmployee= true;
-         
-          console.log(this.auth.isAuthenticated);
-          // this.auth.name=this.name;
            this.registrationError='';
           await this.getUser(formData);
-       //    console.log("userid: ",this.auth.user.userId);
          await  this.getCarts(this.auth.user.userId);
-          this.$router.push('/adminindex');      
-        //  this.auth.isAuthenticated=false;
+          this.$router.push('/user');      
         
      }
      catch (error) {

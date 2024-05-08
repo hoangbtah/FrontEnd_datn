@@ -7,12 +7,12 @@
                </div> -->
            </div>
            <div class="m-page-toolbar">
-               <div class="m-toolbar-left">
+               <!-- <div class="m-toolbar-left">
                    <input id="txtSearch" class="m-input m-btn-icon-right m-icon-search" placeholder="Tìm theo tên" style="width: 200px;"/>
                </div>
                <div class="m-toolbar-right">
                    <button id="reload" class="m-icon-refresh"></button>
-               </div>
+               </div> -->
            </div>
            <div class="m-page-grid">
                    <div class="m-grid">

@@ -137,23 +137,21 @@ export default {
   created() {
     this.getCatagorys();
     this.getManufactorers();
-     //lấy người dùng
-     const user = localStorage.getItem('selectedUser');
-    console.log(this.auth.isAuthenticated)
+    //lấy người dùng
+    const user = localStorage.getItem("selectedUser");
+    console.log(this.auth.isAuthenticated);
     if (user) {
       // Nếu đã lưu sản phẩm trong Local Storage, sử dụng nó
-      this.$store.commit('SET_USER', JSON.parse(user));
-      console.log("lật lại user")
-      this.$store.commit('TOGGLE_AUTH');
-      console.log(this.auth.isAuthenticated)
-    } 
-    else {
+      this.$store.commit("SET_USER", JSON.parse(user));
+      console.log("lật lại user");
+      this.$store.commit("TOGGLE_AUTH");
+      console.log(this.auth.isAuthenticated);
+    } else {
       // Nếu chưa có, gọi API để lấy sản phẩm
-      this.getUser(this.auth.user.name,this.auth.user.password);
+      this.getUser(this.auth.user.name, this.auth.user.password);
     }
     // lấy giỏ hàng
     this.getCarts(this.auth.user.userId);
-
   },
   //   updated(){
   //     this.logout();
@@ -166,29 +164,31 @@ export default {
       "getProductsByManufactorerId",
       "getUser",
       "resetCarts",
-      "getCarts",
-      
+      "getCarts"
     ]),
-    handleGetProductsByManufactorer(manufactorerId){
-        this.getProductsByManufactorerId(manufactorerId);
+    handleGetProductsByManufactorer(manufactorerId) {
+      this.getProductsByManufactorerId(manufactorerId);
       //  this.getTotalProductsByManufactorerId(manufactorerId);
     },
     // kiểm tra xem đã đăng nhập chưa trước khi xem giỏ hàng
     checkLogin() {
-       
-        console.log("kiểm tra đang nhập chưa")
-        const token = localStorage.getItem("token");
+      console.log("kiểm tra đang nhập chưa");
+      const token = localStorage.getItem("token");
       console.log(token);
       if (!token) {
-
         // Nếu không có token, chuyển hướng đến trang đăng nhập
         this.$root.$router.push("/login");
-      //  commit('SET_NEED_LOGIN', true);
+        //  commit('SET_NEED_LOGIN', true);
         return;
       }
     },
     logout() {
-      // Xóa token khỏi localStorage
+      // Lấy định danh của người dùng
+    //   const userIdentifier = this.auth.name;
+
+    //   // Xóa token của người dùng khỏi localStorage
+    //   sessionStorage.removeItem(`token_${userIdentifier}`);
+    //  Xóa token khỏi localStorage
       localStorage.removeItem("token");
       localStorage.removeItem("selectedProduct");
       localStorage.removeItem("commentedProduct");
