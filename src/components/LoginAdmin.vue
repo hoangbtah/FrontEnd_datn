@@ -24,7 +24,7 @@
              <!-- </div> -->
         </div>     
        <div class="forgot-password">
-       <p>Quên mật khẩu ?</p>
+       <p @click="btnForgotPassword()">Quên mật khẩu ?</p>
      </div>
        <button  type="submit">Đăng Nhập</button>
        <div>
@@ -71,15 +71,10 @@
      try{
            // Gọi API đăng ký bằng Axios
       const respone = await axios.post('https://localhost:7159/api/Auth/Login', formData)
-         // .then(response => {
-         //  console.log('Đăng nhập thành công!');
-           // Xử lý phản hồi từ server nếu cần
-        //   const token = respone.data;
-        //   console.log(respone.data.token);
-           // Lưu token vào local storage để sử dụng sau này
-           localStorage.setItem('loginAdmin',  respone.data);
-            // this.registrationSuccess=true;
-         //  console.log(respone.data);
+       
+          //  localStorage.setItem('loginAdmin',  respone.data);
+          localStorage.setItem('token',  respone.data);
+        
            this.auth.isEmployee= true;
          
           console.log(this.auth.isAuthenticated);
@@ -100,7 +95,10 @@
      },
      toggleShowPassword() {
        this.showPassword = !this.showPassword;
-     }
+     },
+     btnForgotPassword(){
+      this.$router.push('forgotpasswordadmin');      
+    }
      }
  }
  </script>

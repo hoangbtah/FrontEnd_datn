@@ -26,6 +26,9 @@ import TheUser from './components/TheUser.vue'
 import LoginAdmin from './components/LoginAdmin.vue'
 import UpdatePassword from './components/UpdatePassword.vue'
 import UpdateUser from './layout/Admin/view/employee/UpdateUser.vue'
+import ForgotPassword from './components/ForgotPassword.vue'
+import ForgotPasswordAdmin from './components/ForgotPasswordAdmin.vue'
+
 
 
 
@@ -72,6 +75,8 @@ const routes = [
   { path: '/register', component: TheRegister },
   { path: '/admin', component: LoginAdmin },
   { path: '/updatepassword', component: UpdatePassword },
+  { path: '/forgotpassword', component: ForgotPassword },
+  { path: '/forgotpasswordadmin', component: ForgotPasswordAdmin },
 
 ];
 

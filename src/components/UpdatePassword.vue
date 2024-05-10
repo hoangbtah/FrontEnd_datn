@@ -58,12 +58,51 @@ export default {
   computed: { ...mapGetters(["auth"]) },
   methods: {
     ...mapActions(["getUser", "getCarts"]),
+    // xác định mật khẩu mạnh cho mật khẩu
+    validatePassword(password) {
+    // Kiểm tra chiều dài mật khẩu
+    if (password.length < 8) {
+      return false;
+    }
+
+    // Kiểm tra xem mật khẩu có chứa ít nhất một chữ cái thường
+    if (!/[a-z]/.test(password)) {
+      return false;
+    }
+
+    // Kiểm tra xem mật khẩu có chứa ít nhất một chữ cái hoa
+    if (!/[A-Z]/.test(password)) {
+      return false;
+    }
+
+    // Kiểm tra xem mật khẩu có chứa ít nhất một số
+    if (!/\d/.test(password)) {
+      return false;
+    }
+
+    // Kiểm tra xem mật khẩu có chứa khoảng trắng không
+    if (/\s/.test(password)) {
+      return false;
+    }
+
+    return true;
+  },
     async updatePassword() {
       // kiểm tra mật khẩu mới và mật khẩu xác nhận
       if (this.newPassword !== this.examPassword) {
         // Hiển thị thông báo lỗi
         this.$toasted.show("Mật khẩu không khớp!", {
           duration: 4000, // Thời gian hiển thị thông báo (ms)
+          position: "top-center", // Vị trí hiển thị
+          type: "error" // Kiểu thông báo (success, info, error)
+        });
+        return;
+      }
+            // kiểm tra mật khẩu có mạnh không
+            if (!this.validatePassword(this.newPassword) ) {
+        // Hiển thị thông báo lỗi
+        this.$toasted.show("Mật khẩu phải viết liền có từ 8 kí tự trở lên , có kí tự thường , kí tự in hoa và số !", {
+          duration: 5000, // Thời gian hiển thị thông báo (ms)
           position: "top-center", // Vị trí hiển thị
           type: "error" // Kiểu thông báo (success, info, error)
         });
@@ -79,6 +118,9 @@ export default {
       try {
         // Gọi API đăng ký bằng Axios
         const token = localStorage.getItem("token");
+        // if(token===null){
+        //   token=localStorage.getItem("loginAdmin");
+        // }
 
        const respone =await axios.post('https://localhost:7159/api/Auth/changePassword', formData,
         {

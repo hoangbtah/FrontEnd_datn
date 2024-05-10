@@ -24,7 +24,7 @@
             <!-- </div> -->
        </div>     
       <div class="forgot-password">
-      <p>Quên mật khẩu ?</p>
+      <p @click="btnForgotPassword()">Quên mật khẩu ?</p>
     </div>
       <button  type="submit">Đăng Nhập</button>
       <div>
@@ -32,7 +32,7 @@
       </div>
     </form>
    <div class="register">
-    <router-link to="/register" ><div><label>Đăng ký tài khoản !</label></div></router-link>
+    <router-link to="/register" ><div><label style="cursor:pointer">Đăng ký tài khoản !</label></div></router-link>
    </div>
     
   </div>
@@ -52,9 +52,6 @@ export default {
       };
     },
     created(){
-     // this.Login();
-    //  this.getUser();
-      //this.getCarts();
     },
     computed:{...mapGetters(['auth'])},
     methods:{
@@ -62,22 +59,15 @@ export default {
         async  Login() {
       const formData = {
         name: this.name,
-        password: this.password,
+        password: this.password.trim(),
       };
 
     try{
           // Gọi API đăng ký bằng Axios
      const respone = await axios.post('https://localhost:7159/api/Auth/Login', formData)
-        // .then(response => {
-        //  console.log('Đăng nhập thành công!');
-          // Xử lý phản hồi từ server nếu cần
-       //   const token = respone.data;
-       //   console.log(respone.data.token);
+       
          // Lưu token vào local storage để sử dụng sau này
           localStorage.setItem('token',  respone.data);
-          // Lưu token với key dựa trên định danh của người dùng
-          // sessionStorage.setItem(`token_${formData.name}`, respone.data);
-
           this.auth.isEmployee= true;
           this.registrationError='';
          await this.getUser(formData);
@@ -93,6 +83,9 @@ export default {
     },
     toggleShowPassword() {
       this.showPassword = !this.showPassword;
+    },
+    btnForgotPassword(){
+      this.$router.push('forgotpassword');      
     }
     }
 }
