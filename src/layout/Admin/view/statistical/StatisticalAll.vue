@@ -11,7 +11,11 @@
                 <option v-for="month in months" :key="month" :value="month">{{ month }}</option>
             </select>
             <button @click="selectMonthAndYear">Xem</button>
+            <input type="date" v-model="startDate"> <!-- Ngày bắt đầu -->
+            <input type="date" v-model="endDate"> <!-- Ngày kết thúc -->
+            <button @click="fetchDailySalesData">Tìm kiếm</button>
         </div>
+     
 
        <div class="chart-all">
         <div>
@@ -60,109 +64,109 @@
 import axios from "axios";
 import PieChart from "./StatisticalDetail.vue";
 import BarChart from "./TheStatistical.vue";
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 export default {
-    name:"StatisticalAll",
-    components:{
-        PieChart,BarChart
+  name: "StatisticalAll",
+  components: {
+    PieChart,
+    BarChart
+  },
+  created() {
+    this.getProductSale(this.selectedMonth, this.selectedYear);
+  },
+  computed: {
+    ...mapGetters(["yearSelected", "monthSelected","startDateSatis","endDateSatis"])
+  },
+  watch: {
+    yearSelected() {
+      this.getProductSale(this.monthSelected, this.yearSelected);
     },
-    created(){
-        this.getProductSale(this.selectedMonth,this.selectedYear);
+    monthSelected() {
+      // this.getgetProductSale(this.);
+      this.getProductSale(this.monthSelected, this.yearSelected);
+    }
+  },
+  methods: {
+    async selectMonthAndYear() {
+      await this.$store.commit("SET_YEARSELECTED", this.selectedYear);
+      await this.$store.commit("SET_MONTHSELECTED", this.selectedMonth);
     },
-    computed: {
-    ...mapGetters([
-      "yearSelected",
-      "monthSelected",
-    ])},
-    watch:{
-        yearSelected(){
-            this.getProductSale(this.monthSelected,this.yearSelected);
-        },
-        monthSelected(){
-            // this.getgetProductSale(this.);
-            this.getProductSale(this.monthSelected,this.yearSelected);
-
-        }
-
+    async getProductSale(month, year) {
+      try {
+        const respone = await axios.get(
+          `https://localhost:7159/api/v1/Product/getProductSale/${month}/${year}`
+        );
+        this.items = respone.data;
+        console.log("lấy sản phẩm bán thành công");
+      } catch (error) {
+        console.log("lấy sản phẩm bán lỗi");
+        console.log(error);
+      }
     },
-    methods:{
-      async  selectMonthAndYear(){
-            await this.$store.commit("SET_YEARSELECTED", this.selectedYear);
-            await this.$store.commit("SET_MONTHSELECTED", this.selectedMonth);
-        },
-        async getProductSale(month,year){
-            try {
-              const respone = await axios.get(`https://localhost:7159/api/v1/Product/getProductSale/${month}/${year}`);
-               this.items=respone.data;
-               console.log("lấy sản phẩm bán thành công");
-            } catch (error) {
-                console.log("lấy sản phẩm bán lỗi")
-                console.log(error)
-            }
-           
-        },
-    },
-    data() {
+    async fetchDailySalesData() {
+      await this.$store.commit("SET_STARTDATE", this.startDate);
+      await this.$store.commit("SET_ENDATE", this.endDate);      
+    }
+  },
+  data() {
     return {
-        // Các biến dữ liệu khác...
-        selectedYear: new Date().getFullYear(), // Chọn năm hiện tại làm mặc định
-        // selectedMonth: 'all', // Chọn 'Tất cả' làm mặc định
-        selectedMonth: (new Date().getMonth() + 1).toString(), // Lấy tháng hiện tại làm mặc định
-        years: [2022, 2023, 2024], // Danh sách các năm
-        months: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'] ,// Danh sách các tháng
-        items:[]
+      // Các biến dữ liệu khác...
+      selectedYear: new Date().getFullYear(), // Chọn năm hiện tại làm mặc định
+      // selectedMonth: 'all', // Chọn 'Tất cả' làm mặc định
+      selectedMonth: (new Date().getMonth() + 1).toString(), // Lấy tháng hiện tại làm mặc định
+      years: [2022, 2023, 2024], // Danh sách các năm
+      months: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"], // Danh sách các tháng
+      items: [],
+      startDate:'',
+      endDate:''
     };
-},
-
-
-}
+  }
+};
 </script>
 <style>
-.chart-all{
-    display: flex;
+.chart-all {
+  display: flex;
 }
 .form-container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        margin-bottom:15px; 
-        position: sticky;
-        background-color:#e5e5e5; 
-    top: 0;
-    z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  position: sticky;
+  background-color: #e5e5e5;
+  top: 0;
+  z-index: 10;
 }
 
 .form-container label {
-        font-weight: bold;
-        margin-bottom: 0px;
-        /* padding-bottom: 0px; */
+  font-weight: bold;
+  margin-bottom: 0px;
+  /* padding-bottom: 0px; */
 }
 
 .form-container select {
-        padding: 8px;
-        border-radius: 2px;
-        border: 1px solid #ccc;
-        background-color: #f5f5f5;
-        /* height: 35px; */
+  padding: 8px;
+  border-radius: 2px;
+  border: 1px solid #ccc;
+  background-color: #f5f5f5;
+  /* height: 35px; */
 }
 
 .form-container button {
-        padding: 8px 15px;
-        border: none;
-        border-radius: 5px;
-        background-color: #609ee0;
-        color: white;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  background-color: #609ee0;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .form-container button:hover {
-        background-color: #41d379;
+  background-color: #41d379;
 }
-.m-statis{
-  
-    overflow-y: auto;
+.m-statis {
+  overflow-y: auto;
 }
-
 </style>

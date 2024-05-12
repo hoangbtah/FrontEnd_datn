@@ -62,10 +62,8 @@
          async  Login() {
        const formData = {
          name: this.name,
-         password: this.password,
+         password: this.password.trim(),
        
-         // email: this.email,
-         // role: this.role
        };
  
      try{

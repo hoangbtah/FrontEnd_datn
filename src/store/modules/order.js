@@ -4,13 +4,17 @@ const orderModules={
         orders:[],
         orderDetails:[],
         yearSelected:'',
-        monthSelected:''
+        monthSelected:'',
+        startDateSatis:'',
+        endDateSatis:''
     },
     getters:{
         orders:state=> state.orders,
         orderDetails:state=> state.orderDetails,
         yearSelected:state=> state.yearSelected,
         monthSelected:state=> state.monthSelected,
+        startDateSatis:state=>state.startDateSatis,
+        endDateSatis:state=>state.endDateSatis,
 
       //  isShowOD:state=>state.isShowOD,
     },
@@ -50,6 +54,12 @@ const orderModules={
         SET_MONTHSELECTED(state,monthSelected){
             state.monthSelected=monthSelected
         },
+        SET_STARTDATE(state,startDateSatis){
+            state.startDateSatis=startDateSatis
+        },
+        SET_ENDATE(state,endDateSatis){
+            state.endDateSatis=endDateSatis
+        },  
        
        
     }

@@ -1,6 +1,6 @@
 <template>
 <div class="statistical-manu">
-  <p>Biểu đồ thống kê doanh thu theo hãng  trong tháng</p>
+  <p>Biểu đồ thống kê doanh thu theo hãng</p>
   <div v-if="responeData.length!==0">
     <Pie class="bieudotron"
     refs="chart"

@@ -1,6 +1,6 @@
 <template>
   <div class="statistical">
-  <p>Biểu đồ thống kê doanh thu trong 12 tháng</p>
+  <p>Biểu đồ thống kê doanh thu </p>
   <div v-if="responeData.length!==0">
     <Bar class="bieudo"
     refs="chart"
@@ -80,6 +80,8 @@ export default {
     ...mapGetters([
       "yearSelected",
       "monthSelected",
+      "startDateSatis",
+      "endDateSatis"
     ])},
   data() {
     return {
@@ -101,7 +103,8 @@ export default {
         datasets: [
           {
             label: "Doanh số",
-            backgroundColor: "#f87979",
+            // backgroundColor: "#f87979",
+            backgroundColor: "#609ee0",
             //data: [0,0,0,0,0,0,0,0,0,0,0,0]
             data: Array(12).fill(0) // Khởi tạo mảng 12 phần tử ban đầu là 0
           }
@@ -128,11 +131,6 @@ export default {
         console.log("dữ liệu gán");
         console.log(this.responeData);
 
-        // // Cập nhật dữ liệu biểu đồ
-        // this.chartData.datasets[0].data = monthlySalesData.map(
-        //   item => item.Quantity
-        //   // console.log()
-        // );
 
         // Ánh xạ dữ liệu vào mảng tháng
         const newData = Array(12).fill(0); // Khởi tạo mảng mới
@@ -145,6 +143,7 @@ export default {
 
         // Cập nhật dữ liệu biểu đồ
         this.chartData.datasets[0].data = newData;
+      this.$refs.chart.update(); // Update the chart
 
       
         this.$nextTick(() => {
@@ -158,6 +157,29 @@ export default {
         console.error("Error fetching monthly sales data:", error);
       }
     },
+    async fetchDataByStartAndEnd(start,end) {
+      try {
+        const response = await axios.get(
+          `https://localhost:7159/api/v1/Product/getProductSaleByStartAndEnd/${start}/${end}`
+        );
+        this.responseData = response.data;
+        this.updateChart();
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    },
+    updateChart() {
+      this.chartData.labels = this.responseData.map(item => this.formatDate(item.date));
+      this.chartData.datasets[0].data = this.responseData.map(item => item.salesAmount);
+      this.$refs.chart.update(); // Update the chart
+    },
+    formatDate(datetimeString) {
+      // Kiểm tra xem chuỗi đầu vào có hợp lệ không
+      if (!datetimeString) return ''; // hoặc bạn có thể trả về một giá trị mặc định
+
+      // Cắt chuỗi từ datetime thành date (lấy 10 ký tự đầu tiên)
+      return datetimeString.slice(0, 10);
+    }
 
   },
   created() {
@@ -175,7 +197,14 @@ export default {
       console.log("lấy dữ liệu khi truyền vào năm mới");
       console.log("năm được chọn",this.yearSelected);
     this.fetchMonthlySalesData(this.yearSelected);
+    },
+    startDateSatis(){
+      this.fetchDataByStartAndEnd(this.startDateSatis,this.endDateSatis);
+    },
+    endDateSatis(){
+      this.fetchDataByStartAndEnd(this.startDateSatis,this.endDateSatis);
     }
+
   }
 };
 </script>
