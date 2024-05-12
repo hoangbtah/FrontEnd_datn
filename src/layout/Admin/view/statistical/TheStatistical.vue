@@ -1,7 +1,7 @@
 <template>
   <div class="statistical">
   <p>Biểu đồ thống kê doanh thu </p>
-  <div v-if="responeData.length!==0">
+  <div >
     <Bar class="bieudo"
     refs="chart"
     :chart-options="chartOptions"
@@ -10,15 +10,15 @@
     :dataset-id-key="datasetIdKey"
   />
   </div>
-  <div v-if="responeData.length===0">
+  <!-- <div v-if="responeData.length===0">
     <p>Không có dữ liệu !</p>
-  </div>
+  </div> -->
   </div>
 </template>
 
 <script>
 import { Bar } from "vue-chartjs/legacy";
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 import axios from "axios";
 import {
   Chart as ChartJS,
@@ -82,23 +82,24 @@ export default {
       "monthSelected",
       "startDateSatis",
       "endDateSatis"
-    ])},
+    ])
+  },
   data() {
     return {
       chartData: {
         labels: [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-          "August",
-          "September",
-          "October",
-          "November",
-          "December"
+          "Tháng 1",
+          "Tháng 2",
+          "Tháng 3",
+          "Tháng 4",
+          "Tháng 5",
+          "Tháng 6",
+          "Tháng 7",
+          "Tháng 8",
+          "Tháng 9",
+          "Tháng 10",
+          "Tháng 11",
+          "Tháng 12"
         ],
         datasets: [
           {
@@ -114,7 +115,7 @@ export default {
         responsive: true,
         maintainAspectRatio: false
       },
-      responeData: []
+      responeData: [],
     };
   },
   methods: {
@@ -130,81 +131,85 @@ export default {
         console.log(response.data);
         console.log("dữ liệu gán");
         console.log(this.responeData);
+       
 
+          // Ánh xạ dữ liệu vào mảng tháng
+          const newData = Array(12).fill(0); // Khởi tạo mảng mới
 
-        // Ánh xạ dữ liệu vào mảng tháng
-        const newData = Array(12).fill(0); // Khởi tạo mảng mới
+          monthlySalesData.forEach(item => {
+            if (item.Month >= 1 && item.Month <= 12) {
+              newData[item.Month - 1] = item.SalesAmount;
+            }
+          });
 
-        monthlySalesData.forEach(item => {
-          if (item.Month >= 1 && item.Month <= 12) {
-            newData[item.Month - 1] = item.SalesAmount;
-          }
-        });
-
-        // Cập nhật dữ liệu biểu đồ
-        this.chartData.datasets[0].data = newData;
-      this.$refs.chart.update(); // Update the chart
-
-      
-        this.$nextTick(() => {
-          // Gọi update() trên biểu đồ để áp dụng các thay đổi
-          if (this.$refs.chart && this.$refs.chart.update) {
-            this.$refs.chart.update();
-
-          }
-        });
+          // Cập nhật dữ liệu biểu đồ
+          this.chartData.datasets[0].data = newData;
+          this.chartData.labels = [ "Tháng 1",
+          "Tháng 2",
+          "Tháng 3",
+          "Tháng 4",
+          "Tháng 5",
+          "Tháng 6",
+          "Tháng 7",
+          "Tháng 8",
+          "Tháng 9",
+          "Tháng 10",
+          "Tháng 11",
+          "Tháng 12"]
+          this.$refs.chart.update(); // Update the chart
       } catch (error) {
         console.error("Error fetching monthly sales data:", error);
       }
     },
-    async fetchDataByStartAndEnd(start,end) {
+    async fetchDataByStartAndEnd(start, end) {
       try {
         const response = await axios.get(
           `https://localhost:7159/api/v1/Product/getProductSaleByStartAndEnd/${start}/${end}`
         );
         this.responseData = response.data;
         this.updateChart();
+        // this.forMode = "daily"; // Chuyển chế độ sang thống kê theo tháng
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     },
     updateChart() {
       this.chartData.labels = this.responseData.map(item => this.formatDate(item.date));
-      this.chartData.datasets[0].data = this.responseData.map(item => item.salesAmount);
+      this.chartData.datasets[0].data = this.responseData.map(
+        item => item.salesAmount
+      );
       this.$refs.chart.update(); // Update the chart
     },
     formatDate(datetimeString) {
       // Kiểm tra xem chuỗi đầu vào có hợp lệ không
-      if (!datetimeString) return ''; // hoặc bạn có thể trả về một giá trị mặc định
+      if (!datetimeString) return ""; // hoặc bạn có thể trả về một giá trị mặc định
 
       // Cắt chuỗi từ datetime thành date (lấy 10 ký tự đầu tiên)
       return datetimeString.slice(0, 10);
     }
-
   },
   created() {
-    // console.log("data cũ")
-    // console.log( this.chartData.datasets);
-
     const currentYear = new Date().getFullYear(); // Lấy năm hiện tại
     //const currentYear=2025;
     this.fetchMonthlySalesData(currentYear);
     console.log("data hiện tại");
     console.log(this.chartData.datasets);
   },
-  watch:{
-    yearSelected(){
+  mounted() {
+  this.chartRendered = true; // Đánh dấu rằng biểu đồ đã được render xong
+},
+  watch: {
+    yearSelected() {
       console.log("lấy dữ liệu khi truyền vào năm mới");
-      console.log("năm được chọn",this.yearSelected);
-    this.fetchMonthlySalesData(this.yearSelected);
+      console.log("năm được chọn", this.yearSelected);
+      this.fetchMonthlySalesData(this.yearSelected);
     },
-    startDateSatis(){
-      this.fetchDataByStartAndEnd(this.startDateSatis,this.endDateSatis);
+    startDateSatis() {
+      this.fetchDataByStartAndEnd(this.startDateSatis, this.endDateSatis);
     },
-    endDateSatis(){
-      this.fetchDataByStartAndEnd(this.startDateSatis,this.endDateSatis);
+    endDateSatis() {
+      this.fetchDataByStartAndEnd(this.startDateSatis, this.endDateSatis);
     }
-
   }
 };
 </script>

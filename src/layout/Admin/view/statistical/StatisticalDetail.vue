@@ -1,7 +1,7 @@
 <template>
 <div class="statistical-manu">
   <p>Biểu đồ thống kê doanh thu theo hãng</p>
-  <div v-if="responeData.length!==0">
+  <div >
     <Pie class="bieudotron"
     refs="chart"
       :chart-options="chartOptions"
@@ -10,9 +10,9 @@
       :dataset-id-key="datasetIdKey"   
     />
     </div>
-    <div v-if="responeData.length===0">
+    <!-- <div v-if="responeData.length===0">
     <p>Không có dữ liệu !</p>
-  </div>
+  </div> -->
    
 </div>
 </template>

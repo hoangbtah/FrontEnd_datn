@@ -11,15 +11,13 @@
                 <option v-for="month in months" :key="month" :value="month">{{ month }}</option>
             </select>
             <button @click="selectMonthAndYear">Xem</button>
-            <input type="date" v-model="startDate"> <!-- Ngày bắt đầu -->
-            <input type="date" v-model="endDate"> <!-- Ngày kết thúc -->
+            <label>Ngày bắt đầu</label><input type="date" v-model="startDate"> <!-- Ngày bắt đầu -->
+            <label>Ngày kết thúc</label><input type="date" v-model="endDate"> <!-- Ngày kết thúc -->
             <button @click="fetchDailySalesData">Tìm kiếm</button>
         </div>
-     
-
        <div class="chart-all">
         <div>
-                <BarChart/>
+                <BarChart />
         </div>
         <div>
                 <PieChart/>
@@ -38,7 +36,6 @@
                                  <!-- <th class="m-position">LOẠI SẢN PHẨM</th> -->
                                  <th class="m-department-name">HÃNG SẢN XUẤT</th>
                                  <th class="m-account">HÌNH ẢNH</th>
-                              
                              </tr>       
                             </thead>     
                             <tbody>
@@ -51,12 +48,9 @@
                                     <!-- <td></td> -->
                                     <td> <img class="" style="width:50px;height:50px" :src="productad.Image" alt=""></td>
                                     <td></td>
-                                  
-                                  
                                 </tr>
                             </tbody>
                             </table>
-                         
        </div>
     </div>
 </template>
@@ -110,9 +104,7 @@ export default {
   },
   data() {
     return {
-      // Các biến dữ liệu khác...
       selectedYear: new Date().getFullYear(), // Chọn năm hiện tại làm mặc định
-      // selectedMonth: 'all', // Chọn 'Tất cả' làm mặc định
       selectedMonth: (new Date().getMonth() + 1).toString(), // Lấy tháng hiện tại làm mặc định
       years: [2022, 2023, 2024], // Danh sách các năm
       months: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"], // Danh sách các tháng
