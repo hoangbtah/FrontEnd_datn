@@ -78,17 +78,38 @@ export default {
     monthSelected() {
       // this.getgetProductSale(this.);
       this.getProductSale(this.monthSelected, this.yearSelected);
+    },
+    startDateSatis(){
+      this.getProductSaleByStartAndEnd(this.startDateSatis, this.endDateSatis);
+    },
+    endDateSatis(){
+      this.getProductSaleByStartAndEnd(this.startDateSatis, this.endDateSatis);
     }
+
   },
   methods: {
     async selectMonthAndYear() {
       await this.$store.commit("SET_YEARSELECTED", this.selectedYear);
       await this.$store.commit("SET_MONTHSELECTED", this.selectedMonth);
     },
+    // lấy danh sách sản phẩm bán được theo tháng và năm
     async getProductSale(month, year) {
       try {
         const respone = await axios.get(
           `https://localhost:7159/api/v1/Product/getProductSale/${month}/${year}`
+        );
+        this.items = respone.data;
+        console.log("lấy sản phẩm bán thành công");
+      } catch (error) {
+        console.log("lấy sản phẩm bán lỗi");
+        console.log(error);
+      }
+    },
+    // lấy danh sách sản phẩm bán được theo khoảng thời gian
+    async getProductSaleByStartAndEnd(start, end) {
+      try {
+        const respone = await axios.get(
+          `https://localhost:7159/api/v1/Product/getProductSaleStatis/${start}/${end}`
         );
         this.items = respone.data;
         console.log("lấy sản phẩm bán thành công");

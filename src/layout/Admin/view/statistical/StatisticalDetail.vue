@@ -72,7 +72,7 @@ export default {
   computed: {
     ...mapGetters([
       "yearSelected",
-      "monthSelected",
+      "monthSelected","startDateSatis","endDateSatis"
     ])},
   data() {
     return {
@@ -102,9 +102,16 @@ export default {
       console.log("lấy dữ liệu khi truyền vào tháng mới");
       console.log("tháng được chọn",this.monthSelected);
     this.fetchMonthlySalesData(this.monthSelected,this.yearSelected);
+    },
+    startDateSatis() {
+      this.fetchDataByStartAndEndPie(this.startDateSatis, this.endDateSatis);
+    },
+    endDateSatis() {
+      this.fetchDataByStartAndEndPie(this.startDateSatis, this.endDateSatis);
     }
   },
   methods: {
+    // lấy thống kê theo tháng và năm , mặc đinh ban đầu là tháng và năm hiện tại
     async fetchMonthlySalesData(month, year) {
       try {
         const response = await axios.get(
@@ -131,9 +138,30 @@ export default {
       } catch (error) {
         console.error("Error fetching monthly sales data:", error);
       }
-    }
+    },
+    // lấy thống kê theo một khoảng thời gian nhập vào
+    async fetchDataByStartAndEndPie(start, end) {
+      console.log("chuỗi ngày tháng",start,end);
+      try {
+        const response = await axios.get(
+          `https://localhost:7159/api/v1/Product/getProductSaleByStartAndEndPie/${start}/${end}`
+        );
+        this.responeData = response.data;
+        this.updateChart();
+        // this.forMode = "daily"; // Chuyển chế độ sang thống kê theo tháng
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    },
+    updateChart() {
+      this.chartData.labels = this.responeData.map(item => item.Hang);
+      this.chartData.datasets[0].data = this.responeData.map(
+        item => item.SalesAmount
+      );
+      this.$refs.chart.update(); // Update the chart
+    },
   },
-  mounted() {
+  created() {
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth() + 1; // Lấy tháng hiện tại (1-12)
 

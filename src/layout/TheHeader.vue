@@ -51,15 +51,17 @@
                 </form>
             </div>
             <div class="col-lg-3 col-6 text-right">
-              
-                <router-link to="/shoppingcart" class="btn border">
-                    <button  @click="checkLogin()"  style="border: none; background-color: transparent;">
+                <a class="btn border">
+                    <i class="fas fa-bell text-primary"></i>
+                    <span class="badge">0</span>
+                </a>
+             
+                <a @click="goToShoppingCart()" class="btn border">
                          <i class="fas fa-shopping-cart text-primary"></i>
-                    <!-- <i class="fas fa-shopping-cart text-primary"></i> -->
                     <span class="badge">{{ carts.length }}</span>
-                </button>
-                </router-link>
+                </a>
             </div>
+            
         </div>
     </div>
     <!-- Topbar End -->
@@ -170,18 +172,10 @@ export default {
       this.getProductsByManufactorerId(manufactorerId);
       //  this.getTotalProductsByManufactorerId(manufactorerId);
     },
-    // kiểm tra xem đã đăng nhập chưa trước khi xem giỏ hàng
-    checkLogin() {
-      console.log("kiểm tra đang nhập chưa");
-      const token = localStorage.getItem("token");
-      console.log(token);
-      if (!token) {
-        // Nếu không có token, chuyển hướng đến trang đăng nhập
-        this.$root.$router.push("/login");
-        //  commit('SET_NEED_LOGIN', true);
-        return;
-      }
+    goToShoppingCart(){
+         this.$root.$router.push("/shoppingcart");
     },
+   
     logout() {
       // Lấy định danh của người dùng
     //   const userIdentifier = this.auth.name;

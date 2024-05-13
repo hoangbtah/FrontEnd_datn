@@ -195,9 +195,9 @@ export default {
     console.log("data hiện tại");
     console.log(this.chartData.datasets);
   },
-  mounted() {
-  this.chartRendered = true; // Đánh dấu rằng biểu đồ đã được render xong
-},
+//   mounted() {
+//   this.chartRendered = true; // Đánh dấu rằng biểu đồ đã được render xong
+// },
   watch: {
     yearSelected() {
       console.log("lấy dữ liệu khi truyền vào năm mới");
