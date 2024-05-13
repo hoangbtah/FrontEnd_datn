@@ -62,9 +62,9 @@
             <div class="col-lg-4">
                 <form class="mb-5" action="">
                     <div class="input-group">
-                        <input type="text" class="form-control p-4" placeholder="Coupon Code">
+                        <input type="text" class="form-control p-4" placeholder="Mã giảm giá">
                         <div class="input-group-append">
-                            <button class="btn btn-primary">Apply Coupon</button>
+                            <button class="btn btn-primary">Áp dụng</button>
                         </div>
                     </div>
                 </form>
@@ -80,6 +80,10 @@
                         <div class="d-flex justify-content-between">
                             <h6 class="font-weight-medium">Phí giao hàng</h6>
                             <h6 class="font-weight-medium">0 đ</h6>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <h6 class="font-weight-medium">Mã giảm giá</h6>
+                            <h6 class="font-weight-medium">0 %</h6>
                         </div>
                     </div>
                     <div class="card-footer border-secondary bg-transparent">

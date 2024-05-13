@@ -51,7 +51,7 @@
                 </form>
             </div>
             <div class="col-lg-3 col-6 text-right">
-                <a class="btn border">
+                <a @click="goToNotification()" class="btn border">
                     <i class="fas fa-bell text-primary"></i>
                     <span class="badge">0</span>
                 </a>
@@ -175,7 +175,9 @@ export default {
     goToShoppingCart(){
          this.$root.$router.push("/shoppingcart");
     },
-   
+   goToNotification(){
+    this.$root.$router.push("/notification");
+   },
     logout() {
       // Lấy định danh của người dùng
     //   const userIdentifier = this.auth.name;

@@ -29,6 +29,7 @@ import UpdateUser from './layout/Admin/view/employee/UpdateUser.vue'
 import ForgotPassword from './components/ForgotPassword.vue'
 import ForgotPasswordAdmin from './components/ForgotPasswordAdmin.vue'
 import VoucherList from './layout/Admin/view/voucher/VoucherList.vue'
+import TheNotification from './components/TheNotification.vue'
 
 
 
@@ -50,6 +51,7 @@ const routes = [
   { path: '/checkout', component: TheCheckout },
   { path: '/contact', component: TheContact },
   { path: '/user', component: TheUser },
+  { path: '/notification', component: TheNotification },
  
     ]
   },

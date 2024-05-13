@@ -182,7 +182,7 @@ export default {
       this.startDate=this.formatDate(this.product.StartDate);
       this.endDate=this.formatDate(this.product.EndDate);
       console.log('startDate:', this.startDate);
-  console.log('endDate:', this.endDate);
+      console.log('endDate:', this.endDate);
     },
    
    

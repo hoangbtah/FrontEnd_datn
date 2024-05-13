@@ -4,13 +4,15 @@ const voucherModules={
         vouchers:[],
         isShowVoucher:false,
         voucher:{},
-        isShowDeleteVoucher:false
+        isShowDeleteVoucher:false,
+        voucherOfUser:[]
     },
     getters:{
         vouchers:state=> state.vouchers,
         voucher:state=> state.voucher,
         isShowVoucher:state=> state.isShowVoucher,
-        isShowDeleteVoucher:state=> state.isShowDeleteVoucher
+        isShowDeleteVoucher:state=> state.isShowDeleteVoucher,
+        voucherOfUser:state=> state.voucherOfUser,
     },
     actions:{
         async getVouchers({commit}){
@@ -25,6 +27,18 @@ const voucherModules={
             try {
               const respone=await  axios.get(`https://localhost:7159/api/Voucher/${voucherId}`)
                 commit('SET_VOUCHER',respone.data)
+            } catch (error) {
+                console.log(error)
+            }
+           
+        },
+        ///lấy voucher của người dùng
+        async getVoucherOfUser({commit},userId){
+            try {
+              const respone=await  axios.get(`https://localhost:7159/api/Voucher/voucher/${userId}`)
+              console.log("lấy voucher của người dùng thành công")
+              console.log(respone.data)
+                commit('SET_VOUCHEROFUSER',respone.data)
             } catch (error) {
                 console.log(error)
             }
@@ -48,6 +62,9 @@ const voucherModules={
         },
         DELETE_VOUCHER(state, voucherId) {
             state.vouchers = state.vouchers.filter(voucher => voucher.voucherId !== voucherId)
+        },
+        SET_VOUCHEROFUSER(state,voucherOfUser){
+            state.voucherOfUser=voucherOfUser
         },
     }
 }

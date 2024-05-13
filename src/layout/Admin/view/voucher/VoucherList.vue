@@ -32,7 +32,7 @@
                            <tbody v-for="(voucher,index) in vouchers" :key="voucher.voucherId">
                               <tr>
                                <td>{{ index+1 }}</td>
-                               <td>{{ voucher.voucherCode }}</td>
+                               <td>{{ voucher.voucherId }}</td>
                                <td>{{ formatDate(voucher.startDateVoucher) }}</td>
                                <td>{{ formatDate(voucher.endDateVoucher) }}</td>
                                <td>{{ voucher.percentVoucher }}</td>
@@ -40,8 +40,8 @@
                                <td>{{ formatCurrency(voucher.endPrice) }}</td>
                                <td>
                                     <button class="m-btn-option btn-warning"  @click="btnUpdateVoucher(voucher.voucherId)">Sửa</button>
-                                   <!-- <button class="m-btn-option btn-info" v-if="user.active===1" @click="btnUpdateUser(user)">Khóa</button>
-                                   <button class="m-btn-option btn-warning" v-if="user.active===0" @click="btnUpdateUser(user)">Mở khóa</button>  -->
+                                   <!-- <button class="m-btn-option btn-info"  @click="btnDelete(voucher.voucherId)">Khóa</button> -->
+                                   <!-- <button class="m-btn-option btn-warning" v-if="user.active===0" @click="btnUpdateUser(user)">Mở khóa</button>  -->
                                </td>
                               </tr>
                            </tbody>
@@ -74,7 +74,7 @@ Vue.use(Toasted);
 export default {
  name: "VoucherList",
  components:{VoucherDetail},
- computed: { ...mapGetters(["vouchers"]) },
+ computed: { ...mapGetters(["vouchers","voucher"]) },
  created() {
     this.getVouchers();
  },
@@ -139,6 +139,11 @@ export default {
       await this.getVoucher(voucherId);
     },
    
+ },
+ watch:{
+  voucher(){
+    this.getVouchers();
+  }
  },
  data() {
    return {

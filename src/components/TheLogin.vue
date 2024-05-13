@@ -55,7 +55,7 @@ export default {
     },
     computed:{...mapGetters(['auth'])},
     methods:{
-      ...mapActions(['getUser','getCarts']),
+      ...mapActions(['getUser','getCarts','getVoucherOfUser']),
         async  Login() {
       const formData = {
         name: this.name,
@@ -73,6 +73,8 @@ export default {
          await this.getUser(formData);
         await  this.getCarts(this.auth.user.userId);
          this.$router.push('/');      
+         //lấy voucher người dùng
+         await this.getVoucherOfUser(this.auth.user.userId);
        
     }
     catch (error) {

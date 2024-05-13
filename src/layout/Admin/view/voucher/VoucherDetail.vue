@@ -3,7 +3,7 @@
                <div class="m-dialog-content">
                    <div class="m-dialog-header">
                        <div class="m-dialog-title">
-                           Thông tin Voucher
+                           Thông tin Voucher<h6>(nếu Voucher áp dụng cho tất cả đơn hàng thì không cần nhập khoảng giá)</h6>
                        </div>
                        <button id="dialog-close" class="m-dialog-close m-icon-cancel">
                                
@@ -14,7 +14,7 @@
                           <div class="m-row-1-left">
                            <div class="m-dialog-employcode">
                                <div><label for="">Mã Voucher</label></div>
-                               <div style="width:332px"><label>{{ voucher.voucherCode }}</label></div>
+                               <div style="width:332px"><label>{{ voucher.voucherId }}</label></div>
                            </div>
                            <div class="m-dialog-employee-name">
                            </div>
@@ -38,27 +38,27 @@
                        <div class="m-row-1">
                         <div class="m-row-1-left">
                         <div class="m-dialog-donvi">
-                               <div><label for="">Ngày bắt đầu</label></div>
+                               <div><label for="">Ngày bắt đầu <i class="required">*</i></label></div>
                                <div><input class="m-input"  type="date"  v-model ="startDate"></div>
                            </div>
                         </div>
                         <div class="m-row-1-right">
                            <div class="m-dialog-donvi">
-                               <div><label for="">Ngày kết thúc</label></div>
+                               <div><label for="">Ngày kết thúc <i class="required">*</i></label></div>
                                <div><input class="m-input"  type="date" v-model="endDate" ></div>
                            </div>
                          </div> 
                        </div>
                        <div class="m-row-3">
                            <div class="m-dialog-chuc-danh">
-                               <div><label for="">Mô tả Voucher</label></div>
+                               <div><label for="">Mô tả Voucher <i class="required">*</i></label></div>
                                <div> 
                                  <textarea  name="comment" style="width: 352px; height: 150px;" v-model="voucher.decriptionUse">
                                  </textarea>
                        </div>
                            </div>
                            <div class="m-voucher">
-                               <div><label for="">Phần trăm khuyến mãi</label></div>
+                               <div><label for="">Phần trăm khuyến mãi <i class="required">*</i></label></div>
                                <div><input class="m-input"  type="text" style="width:200px" v-model="voucher.percentVoucher">
                                </div>
                            </div>
@@ -68,7 +68,7 @@
                    <div class="m-dialog-footer">
                       <div class="m-dialog-footer-left"> <button id="m-btn-add-cancle" class="m-btn m-btn-nocolor" @click="btnClose">Hủy</button></div>
                        <div class="m-dialog-footer-right">
-                           <button id="btnSave" class="m-btn " @click="btnSave(product)">Cất</button>
+                           <button id="btnSave" class="m-btn " @click="btnSave(voucher)">Cất</button>
                            <!-- <button id="btnSaveAndAdd" class="m-btn">Cất và thêm</button> -->
                        </div>
                    </div>
@@ -88,6 +88,7 @@ export default {
   name: "ProductDetailAD",
   components: {},
   created() {
+    // cẩn thận khi loading lại
     this.formatDiscountDate();
   },
   computed: {
@@ -101,29 +102,64 @@ export default {
         // hide form 
       this.$store.commit("TOGGLE_ISSHOWVOUCHER");
     },
-    async btnSave(product) {
+    async btnSave(voucher) {
       // var me=this;
-      const dataProduct = {
-        productId: product.ProductId,
-        productName: product.ProductName,
-        quantity: product.Quantity,
-        price: product.Price,
-        image: product.Image,
-        catagoryId: product.CatagoryId,
-        manufactorerId: product.ManufactorerId,
-        description: product.Description
+      const dataVoucher = {
+        voucherId:voucher.voucherId,
+        startDateVoucher:this.convertToDateTime(this.startDate),
+        endDateVoucher:this.convertToDateTime(this.endDate),
+        decriptionUse:voucher.decriptionUse,
+        maxximumUse:voucher.maxximumUse,
+        startPrice:voucher.startPrice,
+        endPrice:voucher.endPrice,
+        percentVoucher:voucher.percentVoucher
       };
-      console.log("dữ liệu thêm hoặc sửa ", dataProduct);
+      console.log("dữ liệu thêm hoặc sửa ", dataVoucher);
       //1.validate dữ liệu
+         // Kiểm tra nếu startDate là ngày sau endDate
+         if (dataVoucher.startDateVoucher > dataVoucher.endDateVoucher) {
+        this.$toasted.show("Ngày bắt đầu không được lớn hơn ngày kết thúc !", {
+          duration: 2000, // Thời gian hiển thị thông báo (ms)
+          position: "top-right", // Vị trí hiển thị
+          type: "error" // Kiểu thông báo (success, info, error)
+        });
+        return ;
+      }
+      //kiểm tra khoảng giá 
+      if (dataVoucher.startPrice > dataVoucher.endPrice) {
+        this.$toasted.show("Khoảng giá đầu không thể lớn hơn khoảng giá sau !", {
+          duration: 2000, // Thời gian hiển thị thông báo (ms)
+          position: "top-right", // Vị trí hiển thị
+          type: "error" // Kiểu thông báo (success, info, error)
+        });
+        return ;
+      }
+        // Kiểm tra nếu startDate là ngày sau endDate
+        if (!dataVoucher.startDateVoucher || !dataVoucher.endDateVoucher) {
+        this.$toasted.show("Ngày bắt đầu và ngày kết thúc không được để trống !", {
+          duration: 2000, // Thời gian hiển thị thông báo (ms)
+          position: "top-right", // Vị trí hiển thị
+          type: "error" // Kiểu thông báo (success, info, error)
+        });
+        return ;
+      }
+      if (!dataVoucher.percentVoucher ||  !dataVoucher.decriptionUse) {
+           // Hiển thị thông báo thành công
+        this.$toasted.show("Mô tả voucher và phần trăm giảm giá  không được để trống!", {
+          duration: 2000, // Thời gian hiển thị thông báo (ms)
+          position: "top-right", // Vị trí hiển thị
+          type: "error" // Kiểu thông báo (success, info, error)
+        });
+        return ;
+      }
       //2. build object thông tin nhân viên
       //3. gọi api thực hiện thêm mới
       //3.1 kiểm tra trạng thaasi thêm mới hay sửa
       if (this.forMode == 1) {
-        await axios.post(
-          `https://localhost:7159/api/v1/Product`,
-          dataProduct
+      await axios.post(
+          `https://localhost:7159/api/Voucher/createVoucher`,
+          dataVoucher
         );
-
         // Hiển thị thông báo thành công
         this.$toasted.show("Thêm thành công!", {
           duration: 4000, // Thời gian hiển thị thông báo (ms)
@@ -135,16 +171,12 @@ export default {
         // ẩn form đi
         this.$store.commit("TOGGLE_ISSHOWVOUCHER");
         //loading lại dữ liệu
-        this.$store.commit("ADD_PRODUCT",dataProduct);
+      this.$store.commit("SET_VOUCHER",dataVoucher);
       } else {
         await axios.put(
-          `https://localhost:7159/api/v1/Product/${dataProduct.productId}`,
-          dataProduct
+          `https://localhost:7159/api/Voucher/${dataVoucher.voucherId}`,
+          dataVoucher
         );
-
-        // axios.post("https://localhost:7159/api/v1/Employees/",me.employee)
-        // .then(function(){
-
         // Hiển thị thông báo thành công
         this.$toasted.show("Sửa thành công!", {
           duration: 4000, // Thời gian hiển thị thông báo (ms)
@@ -154,7 +186,7 @@ export default {
 
         // ẩn form đi
         this.$store.commit("TOGGLE_ISSHOWVOUCHER");
-      this.$store.commit("SET_PRODUCT",dataProduct);
+      this.$store.commit("SET_VOUCHER",dataVoucher);
      
 
       }
@@ -166,6 +198,17 @@ export default {
       this.startDate=this.formatDate(this.voucher.startDateVoucher);
       this.endDate=this.formatDate(this.voucher.endDateVoucher);
     },
+     // định dạng ngày datetime
+     convertToDateTime(date) {
+  // Kiểm tra xem date có tồn tại không
+  if (date) {
+    // Tạo một đối tượng Date từ chuỗi ngày
+    const dateTime = new Date(date);
+    // Chuyển đổi thành ngày giờ và trả về
+    return dateTime.toISOString();
+  } else {
+    return null;
+  }},
      // định dạng ngày date
      formatDate(dob)
     {
@@ -192,7 +235,7 @@ export default {
   data() {
     return {
         startDate:'',
-      endDate:''
+        endDate:''
     };
   }
 };
