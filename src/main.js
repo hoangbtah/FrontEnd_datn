@@ -28,6 +28,7 @@ import UpdatePassword from './components/UpdatePassword.vue'
 import UpdateUser from './layout/Admin/view/employee/UpdateUser.vue'
 import ForgotPassword from './components/ForgotPassword.vue'
 import ForgotPasswordAdmin from './components/ForgotPasswordAdmin.vue'
+import VoucherList from './layout/Admin/view/voucher/VoucherList.vue'
 
 
 
@@ -66,11 +67,9 @@ const routes = [
 { path: '/statisticalall', component: StatisticalAll },
 { path: '/productdiscount', component: ProductDiscount },
 { path: '/updateuser', component: UpdateUser },
-
-
+{ path: '/voucher', component: VoucherList },
   ]
 },
-
   { path: '/login', component: TheLogin },
   { path: '/register', component: TheRegister },
   { path: '/admin', component: LoginAdmin },

@@ -5,27 +5,18 @@ import todos from './modules/todos'
 import catagorys from './modules/catagory'
 import manufactorers from './modules/manufactorer'
 import products from './modules/product'
-// import product from './modules/product'
-// import pageproducts from './modules/product'
-// import selectedManufacturerId from './modules/product'
-// import selectedCatagoryId from './modules/product'
-// import searchProduct from './modules/product'
 import comments from './modules/comment'
 import carts from './modules/cart'
-//import isShow from './modules/product'
-// import isShowDialog from './modules/product'
 import orders from './modules/order'
-// import orderDetails from './modules/order'
+import voucher from './modules/voucher'
 
-//import isShowOD from './modules/order'
 
 
 
 Vue.use(Vuex)
 const storeData= {
     modules:{
-        // auth,todos,catagorys,manufactorers,products,product,comments,carts,orders,orderDetails,pageproducts,selectedCatagoryId,selectedManufacturerId,searchProduct,isShowDialog
-        auth,todos,catagorys,manufactorers,products,comments,carts,orders
+        auth,todos,catagorys,manufactorers,products,comments,carts,orders,voucher
     }
   
 
