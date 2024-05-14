@@ -14,7 +14,7 @@
                           <div class="m-row-1-left">
                            <div class="m-dialog-employcode">
                                <div><label for="">Mã Voucher</label></div>
-                               <div style="width:332px"><label>{{ voucher.voucherId }}</label></div>
+                               <div style="width:332px"><label>{{ voucher.voucherCode }}</label></div>
                            </div>
                            <div class="m-dialog-employee-name">
                            </div>
@@ -58,12 +58,16 @@
                        </div>
                            </div>
                            <div class="m-voucher">
-                               <div><label for="">Phần trăm khuyến mãi <i class="required">*</i></label></div>
+                               <div><label for="">Phần trăm khuyến mãi </label></div>
                                <div><input class="m-input"  type="text" style="width:200px" v-model="voucher.percentVoucher">
+                               </div>
+                               <div><label for="">Số tiền giảm </label></div>
+                               <div><input class="m-input"  type="text" style="width:200px" v-model="voucher.discountMoney">
                                </div>
                            </div>
                           
                        </div>
+                    
                    </div>
                    <div class="m-dialog-footer">
                       <div class="m-dialog-footer-left"> <button id="m-btn-add-cancle" class="m-btn m-btn-nocolor" @click="btnClose">Hủy</button></div>
@@ -73,7 +77,9 @@
                        </div>
                    </div>
                </div>
-         
+               <div class="custom-loading" v-if="isLoading">
+  <div class="spinner"></div>
+  </div>
        </div>
 </template>
 <script>
@@ -103,16 +109,19 @@ export default {
       this.$store.commit("TOGGLE_ISSHOWVOUCHER");
     },
     async btnSave(voucher) {
+      this.isLoading=true;
       // var me=this;
       const dataVoucher = {
         voucherId:voucher.voucherId,
+        voucherCode:voucher.voucherCode,
         startDateVoucher:this.convertToDateTime(this.startDate),
         endDateVoucher:this.convertToDateTime(this.endDate),
         decriptionUse:voucher.decriptionUse,
         maxximumUse:voucher.maxximumUse,
         startPrice:voucher.startPrice,
         endPrice:voucher.endPrice,
-        percentVoucher:voucher.percentVoucher
+        percentVoucher:voucher.percentVoucher,
+        discountMoney:voucher.discountMoney
       };
       console.log("dữ liệu thêm hoặc sửa ", dataVoucher);
       //1.validate dữ liệu
@@ -125,15 +134,15 @@ export default {
         });
         return ;
       }
-      //kiểm tra khoảng giá 
-      if (dataVoucher.startPrice > dataVoucher.endPrice) {
-        this.$toasted.show("Khoảng giá đầu không thể lớn hơn khoảng giá sau !", {
-          duration: 2000, // Thời gian hiển thị thông báo (ms)
-          position: "top-right", // Vị trí hiển thị
-          type: "error" // Kiểu thông báo (success, info, error)
-        });
-        return ;
-      }
+      // //kiểm tra khoảng giá 
+      // if (dataVoucher.startPrice > dataVoucher.endPrice) {
+      //   this.$toasted.show("Khoảng giá đầu không thể lớn hơn khoảng giá sau !", {
+      //     duration: 2000, // Thời gian hiển thị thông báo (ms)
+      //     position: "top-right", // Vị trí hiển thị
+      //     type: "error" // Kiểu thông báo (success, info, error)
+      //   });
+      //   return ;
+      // }
         // Kiểm tra nếu startDate là ngày sau endDate
         if (!dataVoucher.startDateVoucher || !dataVoucher.endDateVoucher) {
         this.$toasted.show("Ngày bắt đầu và ngày kết thúc không được để trống !", {
@@ -143,9 +152,9 @@ export default {
         });
         return ;
       }
-      if (!dataVoucher.percentVoucher ||  !dataVoucher.decriptionUse) {
+      if (!dataVoucher.decriptionUse) {
            // Hiển thị thông báo thành công
-        this.$toasted.show("Mô tả voucher và phần trăm giảm giá  không được để trống!", {
+        this.$toasted.show("Mô tả voucher không được để trống!", {
           duration: 2000, // Thời gian hiển thị thông báo (ms)
           position: "top-right", // Vị trí hiển thị
           type: "error" // Kiểu thông báo (success, info, error)
@@ -166,8 +175,8 @@ export default {
           position: "top-center", // Vị trí hiển thị
           type: "success" // Kiểu thông báo (success, info, error)
         });
-
-        // console.log(this.product);
+        //gửi thông báo khi thêm voucher
+        this.$store.commit("ADD_VOUCHER");
         // ẩn form đi
         this.$store.commit("TOGGLE_ISSHOWVOUCHER");
         //loading lại dữ liệu
@@ -187,9 +196,10 @@ export default {
         // ẩn form đi
         this.$store.commit("TOGGLE_ISSHOWVOUCHER");
       this.$store.commit("SET_VOUCHER",dataVoucher);
-     
 
       }
+      this.isLoading=false;
+
       // nếu thêm mới thành công thì hiển thị toast thêm mới thành công
       // nếu có lỗi validate hoặc lỗi từ back-end thì hiển thị thông báo tương ứng
     },
@@ -235,11 +245,27 @@ export default {
   data() {
     return {
         startDate:'',
-        endDate:''
+        endDate:'',
+        isLoading:false
     };
   }
 };
 </script>
 <style scoped>
+.custom-loading {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #d55e5e;
+  border-radius: 50%;
+  animation: spin 1s infinite linear;
+}
 @import url("../../../../assets_ad/css_ad/component/dialog.css");
 </style>

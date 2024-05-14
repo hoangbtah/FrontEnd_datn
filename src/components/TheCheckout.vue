@@ -59,10 +59,10 @@
                             <!-- <p>$150</p> -->
                         </div>
                         <hr class="mt-0">
-                        <div class="d-flex justify-content-between mb-3 pt-1">
+                        <!-- <div class="d-flex justify-content-between mb-3 pt-1">
                             <h6 class="font-weight-medium">Tổng phụ</h6>
                             <h6 class="font-weight-medium">{{ formatCurrency(totalAmount())}} đ</h6>
-                        </div>
+                        </div> -->
                         <div class="d-flex justify-content-between">
                             <h6 class="font-weight-medium">Phí giao hàng</h6>
                             <h6 class="font-weight-medium"> 0 đ</h6>
@@ -71,7 +71,7 @@
                     <div class="card-footer border-secondary bg-transparent">
                         <div class="d-flex justify-content-between mt-2">
                             <h5 class="font-weight-bold">Tổng tiền</h5>
-                            <h5 class="font-weight-bold">{{ formatCurrency(totalAmount())}} đ</h5>
+                            <h5 class="font-weight-bold">{{ formatCurrency(totalPay)}} đ</h5>
                         </div>
                     </div>
                 </div>
@@ -121,7 +121,7 @@ Vue.use(Toasted);
 export default {
     name:'TheCheckout',
     computed: {
-    ...mapGetters(["auth", "carts"]),
+    ...mapGetters(["auth", "carts","totalPay"]),
   
   },
   methods: {

@@ -60,14 +60,14 @@
                 </table>
             </div>
             <div class="col-lg-4">
-                <form class="mb-5" action="">
+                <div class="mb-5" >
                     <div class="input-group">
-                        <input type="text" class="form-control p-4" placeholder="Mã giảm giá">
+                        <input type="text" class="form-control p-4" placeholder="Mã giảm giá" v-model="voucherCode">
                         <div class="input-group-append">
-                            <button class="btn btn-primary">Áp dụng</button>
+                            <button class="btn btn-primary" @click="btnClickUseVoucher(voucherCode)">Áp dụng</button>
                         </div>
                     </div>
-                </form>
+                </div>
                 <div class="card border-secondary mb-5">
                     <div class="card-header bg-secondary border-0">
                         <h4 class="font-weight-semi-bold m-0">Cart Summary</h4>
@@ -81,15 +81,19 @@
                             <h6 class="font-weight-medium">Phí giao hàng</h6>
                             <h6 class="font-weight-medium">0 đ</h6>
                         </div>
-                        <div class="d-flex justify-content-between">
+                        <div class="d-flex justify-content-between" v-if="inforVoucherDiscountMoney>0">
                             <h6 class="font-weight-medium">Mã giảm giá</h6>
-                            <h6 class="font-weight-medium">0 %</h6>
+                            <h6 class="font-weight-medium">{{ formatCurrency(inforVoucherDiscountMoney) }} đ</h6>
+                        </div>
+                        <div class="d-flex justify-content-between" v-if="inforVoucherPercentVoucher>0">
+                            <h6 class="font-weight-medium">Mã giảm giá</h6>
+                            <h6 class="font-weight-medium">{{ inforVoucherPercentVoucher*100 }} %</h6>
                         </div>
                     </div>
                     <div class="card-footer border-secondary bg-transparent">
                         <div class="d-flex justify-content-between mt-2">
                             <h5 class="font-weight-bold">Tổng thanh toán</h5>
-                            <h5 class="font-weight-bold">{{ formatCurrency(totalAmount())}} đ</h5>
+                            <h5 class="font-weight-bold">{{ formatCurrency(calculateFinalTotal())}} đ</h5>
                         </div>
                         <router-link to="/checkout" >
                          <button class="btn btn-block btn-primary my-3 py-3">Tiến hành kiểm tra</button></router-link>
@@ -116,9 +120,11 @@ export default {
   name: "ShoppingCart",
   created() {
     this.getCarts(this.auth.user.userId);
+    this.$store.commit("SET_TOTALPAY",this.totalAmount());
+    
   },
   computed: {
-    ...mapGetters(["auth", "carts"]),
+    ...mapGetters(["auth", "carts","totalPay"]),
     needLogin() {
       return this.$store.state.needLogin;
     }
@@ -127,8 +133,8 @@ export default {
     ...mapActions(["getUser", "getCarts", "deleteCart", "updateCart"]),
     // cập nhật số lượng trong giỏ hàng
     async UpdateQuantity(cart, action) {
-      console.log("lấy 1 sản phẩm trong giỏ hàng");
-      console.log(cart);
+      // console.log("lấy 1 sản phẩm trong giỏ hàng");
+      // console.log(cart);
       if (action === 1) {
         cart.Quantity++;
       } else if (action === -1) {
@@ -151,12 +157,12 @@ export default {
         quantity: cart.Quantity,
         price: cart.Price
       };
-      console.log("cart tăng số lượng");
-      console.log(formData);
+      // console.log("cart tăng số lượng");
+      // console.log(formData);
       // const userId = this.auth.user.userId;
       // console.log(userId);
       const token = localStorage.getItem("token");
-      console.log(token);
+      // console.log(token);
       if (!token) {
         // Nếu không có token, chuyển hướng đến trang đăng nhập
         this.$router.push("/login");
@@ -166,12 +172,12 @@ export default {
       try {
         // await this.$store.dispatch("addProductToCart", { userId, product });
         await this.updateCart(formData);
-        console.log("Sản phẩm đã được thêm vào giỏ hàng!");
+        // console.log("Sản phẩm đã được thêm vào giỏ hàng!");
         // gọi lại api lấy giỏ hàng
         
       } catch (error) {
         cart.Quantity--;
-        console.error("Lỗi khi thêm sản phẩm vào giỏ hàng:", error);
+        // console.error("Lỗi khi thêm sản phẩm vào giỏ hàng:", error);
         this.$toasted.show(error.response.data, {
         duration: 2000, // Thời gian hiển thị thông báo (ms)
         position: 'top-center', // Vị trí hiển thị
@@ -185,10 +191,10 @@ export default {
       try {
         /// tạo 1 bản sao của cart  khi thay đôi updateCart nó ko ảnh hưởng đến cart
         const updatedCart = { ...cart };
-        console.log("cart input")
-        console.log(updatedCart);
+        // console.log("cart input")
+        // console.log(updatedCart);
         await this.updateCart(updatedCart);
-        console.log("Đã cập nhật số lượng trên máy chủ!");
+        // console.log("Đã cập nhật số lượng trên máy chủ!");
           // Hiển thị thông báo thành công
       this.$toasted.show('Cập nhật giỏ hàng thành công !', {
         duration: 2000, // Thời gian hiển thị thông báo (ms)
@@ -203,7 +209,7 @@ export default {
         type: 'error' // Kiểu thông báo (success, info, error)
       });
         // Xử lý lỗi khi cập nhật không thành công
-        console.error("Lỗi khi cập nhật số lượng trên máy chủ:", error);
+        // console.error("Lỗi khi cập nhật số lượng trên máy chủ:", error);
         // Khôi phục lại số lượng ban đầu nếu cập nhật thất bại
         this.getCarts(this.auth.user.userId); // Lấy lại danh sách giỏ hàng từ máy chủ
       }
@@ -336,21 +342,111 @@ export default {
         console.error("Lỗi khi đặt hàng:", error);
         // Xử lý lỗi nếu cần thiết (hiển thị thông báo lỗi, log, ...)
       }
+    },
+    formatDate(dob)
+    {
+        if(dob)
+        {
+            dob= new Date(dob);
+            let date= dob.getDate();
+            date =date<10 ?  `0${date}`:date;
+            // lấy ngày 
+            let month= dob.getMonth()+1;
+            // lấy tháng
+            month= month <10 ? `0${month}`:month;
+            let year = dob.getFullYear();
+            //lấy giá trị là ngày tháng năm
+            dob= `${date}-${month}-${year}`;
+        }
+        else{
+            dob = "";
+        }
+        return dob;
+    },
+    /// khi người áp dụng mã giảm giá
+   async btnClickUseVoucher(voucherCode){
+    try{
+      //1 lây thông tin của mã voucher nhập vào 
+      // validate dữ liệu
+      //nếu voucher có hiệu lực thì trừ tiền theo voucher 
+      // nếu voucher không còn hiệu lực thì đưa ra thông báo
+      const respone= await axios.get(`https://localhost:7159/api/Voucher/voucherbyVoucherCode/${voucherCode}`);
+      console.log("thông tin voucher",respone.data);
+      // this.inforVoucherDiscountMoney=respone.data.DiscountMoney;
+      // this.inforVoucherPercentVoucher=respone.data.PercentVoucher;
+      //validate ngày sử dụng của voucher 
+      const currentDate= new Date();
+      // console.log("tổng đơn hàng",this.totalAmount());
+      // console.log(this.formatDate(currentDate));
+    if(this.formatDate(currentDate)>this.formatDate(respone.data.EndDateVoucher) || this.formatDate(currentDate)<this.formatDate(respone.data.StartDateVoucher)){
+          // Hiển thị thông báo lỗi
+      this.$toasted.show("Voucher này không thể dùng được do không nằm trong thời gian áp dụng !", {
+        duration: 4000, // Thời gian hiển thị thông báo (ms)
+        position: 'top-center', // Vị trí hiển thị
+        type: 'error' // Kiểu thông báo (success, info, error)
+      });
+      return ;
+      }
+      /// validate điều kiện giá cuối của voucher 
+      if(this.totalAmount() > respone.data.EndPrice && respone.data.EndPrice>0){
+           // Hiển thị thông báo lỗi
+      this.$toasted.show("Voucher này không thể dùng được do tổng tiền không nằm trong điều kiện của voucher !", {
+        duration: 4000, // Thời gian hiển thị thông báo (ms)
+        position: 'top-center', // Vị trí hiển thị
+        type: 'error' // Kiểu thông báo (success, info, error)
+      });
+      return ;
+      }
+       /// validate điều kiện giá đầu của voucher 
+       if(this.totalAmount() < respone.data.StartPrice && respone.data.StartPrice>0){
+           // Hiển thị thông báo lỗi
+      this.$toasted.show("Voucher này không thể dùng được do tổng tiền không nằm trong điều kiện của voucher !", {
+        duration: 4000, // Thời gian hiển thị thông báo (ms)
+        position: 'top-center', // Vị trí hiển thị
+        type: 'error' // Kiểu thông báo (success, info, error)
+      });
+      return ;
+      }
+      this.inforVoucherDiscountMoney=respone.data.DiscountMoney;
+     this.inforVoucherPercentVoucher=respone.data.PercentVoucher;
+          // Hiển thị thông báo lỗi
+          this.$toasted.show("Áp dụng voucher thành công !", {
+        duration: 4000, // Thời gian hiển thị thông báo (ms)
+        position: 'top-center', // Vị trí hiển thị
+        type: 'success' // Kiểu thông báo (success, info, error)
+      });
     }
-  
+    catch (error) {
+    this.$toasted.show("Có lỗi xảy ra khi áp dụng voucher!", {
+      duration: 4000, // Thời gian hiển thị thông báo (ms)
+      position: 'top-center', // Vị trí hiển thị
+      type: 'error' // Kiểu thông báo (success, info, error)
+    });
+  }
+
+    },
+    calculateFinalTotal() {
+    const total = this.totalAmount();
+    const discountAmount = total * this.inforVoucherPercentVoucher + this.inforVoucherDiscountMoney;
+    this.$store.commit("SET_TOTALPAY",total-discountAmount);
+    return total - discountAmount;
+  },
   },
   watch: {
     needLogin(value) {
       if (value) {
         this.$router.push("/login");
       }
-    }
+    },
   },
   data() {
     return {
       items: "",
       isShow: false,
       thongbao: "",
+      voucherCode:'',
+      inforVoucherDiscountMoney:0,
+      inforVoucherPercentVoucher:0
     };
   }
 };

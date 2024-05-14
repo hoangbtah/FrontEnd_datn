@@ -74,7 +74,7 @@ export default {
         await  this.getCarts(this.auth.user.userId);
          this.$router.push('/');      
          //lấy voucher người dùng
-         await this.getVoucherOfUser(this.auth.user.userId);
+       //  await this.getVoucherOfUser(this.auth.user.userId);
        
     }
     catch (error) {

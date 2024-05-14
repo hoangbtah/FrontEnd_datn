@@ -26,18 +26,20 @@
                                 <th class="m-account">Phần trăm giảm giá</th>
                                 <th class="m-option">Giá đầu</th>
                                 <th class="m-bank-name">Giá cuối</th>
+                                <th class="m-bank-name">Số tiền giảm</th>
                                <th>Chức năng</th>
                             </tr>       
                            </thead>     
                            <tbody v-for="(voucher,index) in vouchers" :key="voucher.voucherId">
                               <tr>
                                <td>{{ index+1 }}</td>
-                               <td>{{ voucher.voucherId }}</td>
+                               <td>{{ voucher.voucherCode }}</td>
                                <td>{{ formatDate(voucher.startDateVoucher) }}</td>
                                <td>{{ formatDate(voucher.endDateVoucher) }}</td>
                                <td>{{ voucher.percentVoucher }}</td>
                                <td>{{ formatCurrency(voucher.startPrice) }}</td>
                                <td>{{ formatCurrency(voucher.endPrice) }}</td>
+                               <td>{{ formatCurrency(voucher.discountMoney) }}</td>
                                <td>
                                     <button class="m-btn-option btn-warning"  @click="btnUpdateVoucher(voucher.voucherId)">Sửa</button>
                                    <!-- <button class="m-btn-option btn-info"  @click="btnDelete(voucher.voucherId)">Khóa</button> -->

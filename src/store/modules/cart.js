@@ -3,15 +3,17 @@ const cartModules = {
   state: {
     carts: [],
     needLogin: false,
+    totalPay:''
 
   },
   getters: {
     carts: state => state.carts,
+    totalPay: state => state.totalPay,
   },
   actions: {
     /// lấy sản phẩm trong giỏ hàng của người dùng 
     async getCarts({ commit }, userId) {
-      console.log("mã người dùng truyền vào khi lấy giỏ hàng", userId);
+      // console.log("mã người dùng truyền vào khi lấy giỏ hàng", userId);
       //  var me= this;
       // kiểm tra xem đã đăng nhập chưa
       // if(!userId){
@@ -38,8 +40,8 @@ const cartModules = {
           }
 
         )
-        console.log("lấy giỏ hàng thành công");
-        console.log(respone.data);
+        // console.log("lấy giỏ hàng thành công");
+        // console.log(respone.data);
         
         commit('SET_CARTS', respone.data);
       } catch (error) {
@@ -51,9 +53,9 @@ const cartModules = {
           // Chuyển hướng đến trang đăng nhập
           //   this.$router.push('/login');
           //  this.items="tài khoản không được cấp quyền để thực hiện chức năng này ";
-          console.error("tài khoản không được cấp quyền");
+          // console.error("tài khoản không được cấp quyền");
         }
-        console.error("Lỗi khi gửi yêu cầu đến API:");
+        // console.error("Lỗi khi gửi yêu cầu đến API:");
         if (error.response) {
           // Lỗi từ phản hồi của server (không phải lỗi mạng)
           console.error("Lỗi từ phản hồi của server:", error.response.data);
@@ -150,6 +152,10 @@ const cartModules = {
   mutations: {
     SET_CARTS(state, carts) {
       state.carts = carts
+    },
+    SET_TOTALPAY(state, totalPay) {
+      console.log("tông tiền",totalPay)
+      state.totalPay = totalPay
     },
     SET_NEED_LOGIN(state, value) {
       state.needLogin = value; // Cập nhật trạng thái needLogin với giá trị mới

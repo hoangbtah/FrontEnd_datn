@@ -52,8 +52,8 @@
             </div>
             <div class="col-lg-3 col-6 text-right">
                 <a @click="goToNotification()" class="btn border">
-                    <i class="fas fa-bell text-primary"></i>
-                    <span class="badge">0</span>
+                    <i class="fas fa-bell text-primary" ></i>
+                    <span class="badge" style="color:red" v-if="unreadCount>0">{{ unreadCount }}</span>
                 </a>
              
                 <a @click="goToShoppingCart()" class="btn border">
@@ -97,8 +97,8 @@
                         <div class="navbar-nav ">
                             <router-link  class="nav-item nav-link" to="/" exact><div class="nav-text">Home</div></router-link>
                             <router-link class="nav-item nav-link" to="/theshop"><div class="nav-text">Shop</div></router-link>
-                            <router-link to="/productdetail" class="nav-item nav-link"><div class="nav-text">Shop Detail</div></router-link>
-                            <router-link to="/checkout" class="nav-item nav-link"><div class="nav-text">Check out</div></router-link>
+                            <!-- <router-link to="/productdetail" class="nav-item nav-link"><div class="nav-text">Shop Detail</div></router-link>
+                            <router-link to="/checkout" class="nav-item nav-link"><div class="nav-text">Check out</div></router-link> -->
                             <div class="nav-item dropdown" >
                                 <a href="#" class="nav-link dropdown-toggle " data-toggle="dropdown">Danh mục</a>
                                 <div class="dropdown-menu rounded-0 m-0" >
@@ -135,7 +135,7 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   name: "TheHeader",
   components: {},
-  computed: { ...mapGetters(["catagorys", "manufactorers", "auth", "carts"]) },
+  computed: { ...mapGetters(["catagorys", "manufactorers", "auth", "carts","unreadCount"]) },
   created() {
     this.getCatagorys();
     this.getManufactorers();
@@ -145,9 +145,9 @@ export default {
     if (user) {
       // Nếu đã lưu sản phẩm trong Local Storage, sử dụng nó
       this.$store.commit("SET_USER", JSON.parse(user));
-      console.log("lật lại user");
+     // console.log("lật lại user");
       this.$store.commit("TOGGLE_AUTH");
-      console.log(this.auth.isAuthenticated);
+    //  console.log(this.auth.isAuthenticated);
     } else {
       // Nếu chưa có, gọi API để lấy sản phẩm
       this.getUser(this.auth.user.name, this.auth.user.password);
@@ -155,9 +155,11 @@ export default {
     // lấy giỏ hàng
     this.getCarts(this.auth.user.userId);
   },
-  //   updated(){
-  //     this.logout();
-  //   },
+  watch:{
+    unreadCount(){
+
+    }
+  },
   methods: {
     ...mapActions([
       "getCatagorys",
@@ -166,16 +168,18 @@ export default {
       "getProductsByManufactorerId",
       "getUser",
       "resetCarts",
-      "getCarts"
+      "getCarts",
+      "markAllAsRead"
     ]),
     handleGetProductsByManufactorer(manufactorerId) {
       this.getProductsByManufactorerId(manufactorerId);
-      //  this.getTotalProductsByManufactorerId(manufactorerId);
     },
     goToShoppingCart(){
          this.$root.$router.push("/shoppingcart");
     },
    goToNotification(){
+    this.markAllAsRead();
+    console.log(this.unreadCount);
     this.$root.$router.push("/notification");
    },
     logout() {
@@ -189,6 +193,8 @@ export default {
       localStorage.removeItem("selectedProduct");
       localStorage.removeItem("commentedProduct");
       localStorage.removeItem("selectedUser");
+      // xóa hiển thị thông báo
+    //   this.$store.commit("SET_ALLREAD");
 
       // Đặt lại trạng thái ủy quyền (authenticated) và dữ liệu cần thiết khác
       this.auth.isAuthenticated = true;
