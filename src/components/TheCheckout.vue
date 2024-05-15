@@ -56,7 +56,6 @@
                         <h5 class="font-weight-medium mb-3">Danh sách sản phẩm</h5>
                         <div class="d-flex justify-content-between" v-for="cart in carts" :key="cart.CartId">
                             <p>{{cart.ProductName}}</p>
-                            <!-- <p>$150</p> -->
                         </div>
                         <hr class="mt-0">
                         <!-- <div class="d-flex justify-content-between mb-3 pt-1">
@@ -81,20 +80,17 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <!-- <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" name="payment" id="paypal">
-                                <label class="custom-control-label" for="paypal">Paypal</label>
-                            </div> -->
+                           
                         </div>
                         <div class="form-group">
                             <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" name="payment" id="directcheck">
+                                <input type="radio" class="custom-control-input" name="payment" id="directcheck" @click=clickPay()>
                                 <label class="custom-control-label" for="directcheck">Thanh toán trực tiếp</label>
                             </div>
                         </div>
                         <div class="">
                             <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" name="payment" id="banktransfer">
+                                <input type="radio" class="custom-control-input" name="payment" id="banktransfer" @click=clickPayOnline()>
                                 <label class="custom-control-label" for="banktransfer">Thanh toán online</label>
                             </div>
                         </div>
@@ -215,9 +211,6 @@ export default {
 
         // Lấy OrderId của đơn hàng đã tạo
         const orderProductId = responseOrder.data.orderProductId;
-    //    console.log("ma don hang");
-      //  console.log(orderProductId);
-
         // Gọi API POST để tạo từng chi tiết đơn hàng
         for (const cart of this.carts) {
           const orderDetail = {
@@ -228,10 +221,6 @@ export default {
             image: cart.Image
             // Các trường khác của chi tiết đơn hàng tùy theo yêu cầu của bạn
           };
-
-         // console.log("Chi tiết đơn hàng:");
-         // console.log(orderDetail);
-
           // Gọi API POST để tạo chi tiết đơn hàng hiện tại
           try {
             const responseOrderDetail = await axios.post(
@@ -293,19 +282,28 @@ export default {
 
           }
         }
-
+       
         // Xóa giỏ hàng sau khi đã đặt hàng thành công
         await this.carts.forEach(cart => this.deleteCart(cart.CartId));
-       
-
-          // Hiển thị thông báo thành công
-          this.$toasted.show("Đặt hàng thành công!", {
+        if(this.forPay==0){
+           // Hiển thị thông báo thành công
+           this.$toasted.show("Đặt hàng thành công!", {
           duration: 4000, // Thời gian hiển thị thông báo (ms)
           position: "top-center", // Vị trí hiển thị
           type: "success" // Kiểu thông báo (success, info, error)
         });
-        // Chuyển hướng người dùng đến trang thành công hoặc thông báo thành công
+         // Chuyển hướng người dùng đến trang thành công hoặc thông báo thành công
       await  this.$router.push("/theshop");
+        }
+
+         
+        //nếu người dùng chọn thanh toán khi nhận hàng thì đưa ra thông báo thành công và điều hướng người dùng đến trang tiếp tục mua hàng
+        // nếu người dùng chọn thanh toán online thì điều hướng người dùng đến trang thanh toán
+        if(this.forPay==1)
+        {
+            await  this.$router.push("/payment");
+        }
+       
       } catch (error) {
         console.error("Lỗi khi đặt hàng:", error);
           // Hiển thị thông báo thành công
@@ -316,13 +314,21 @@ export default {
         });
         // Xử lý lỗi nếu cần thiết (hiển thị thông báo lỗi, log, ...)
       }
+    },
+    clickPay(){
+      this.forPay=0;
+    },
+    clickPayOnline(){
+      this.forPay=1;
+      console.log(this.forPay);
     }
   },
   data() {
     return {
      phoneNumber:'',
      orderAddress:'',
-     receiver:''
+     receiver:'',
+     forPay:0
     };
   }
 }

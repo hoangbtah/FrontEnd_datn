@@ -30,6 +30,9 @@ import ForgotPassword from './components/ForgotPassword.vue'
 import ForgotPasswordAdmin from './components/ForgotPasswordAdmin.vue'
 import VoucherList from './layout/Admin/view/voucher/VoucherList.vue'
 import TheNotification from './components/TheNotification.vue'
+import PaymentForm from './components/PaymentForm.vue'
+import PaymentReturn from './components/PaymentReturn.vue'
+
 
 
 
@@ -52,6 +55,7 @@ const routes = [
   { path: '/contact', component: TheContact },
   { path: '/user', component: TheUser },
   { path: '/notification', component: TheNotification },
+
  
     ]
   },
@@ -78,6 +82,11 @@ const routes = [
   { path: '/updatepassword', component: UpdatePassword },
   { path: '/forgotpassword', component: ForgotPassword },
   { path: '/forgotpasswordadmin', component: ForgotPasswordAdmin },
+  { path: '/payment', component: PaymentForm },
+  { path: '/paymentreturn', component: PaymentReturn },
+
+
+
 
 ];
 
