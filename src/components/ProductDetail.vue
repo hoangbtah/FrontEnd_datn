@@ -65,12 +65,12 @@
                 <p class="mb-4">{{product.Decription}}</p>
                 <div class="d-flex mb-3">
                     <p class="text-dark font-weight-medium mb-0 mr-3">Sizes:</p>
-                    <form>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="size-1" name="size">
-                            <label class="custom-control-label" for="size-1">10 ml</label>
+                    <!-- <form> -->
+                        <div class="  ">
+                            <!-- <input type="radio" class="custom-control-input" id="size-1" name="size"> -->
+                            <label class="" for="size-1">{{product.ProductSize}} ml</label>
                         </div>
-                        <div class="custom-control custom-radio custom-control-inline">
+                        <!-- <div class="custom-control custom-radio custom-control-inline">
                             <input type="radio" class="custom-control-input" id="size-2" name="size">
                             <label class="custom-control-label" for="size-2">20 ml</label>
                         </div>
@@ -86,7 +86,7 @@
                             <input type="radio" class="custom-control-input" id="size-5" name="size">
                             <label class="custom-control-label" for="size-5">100 ml</label>
                         </div>
-                    </form>
+                    </form> -->
                 </div>
                 <div class="d-flex mb-4">
                     

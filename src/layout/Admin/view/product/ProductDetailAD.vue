@@ -24,11 +24,15 @@
                           <div class="m-row-1-right">
                            <div class="m-dialog-employee-dob">
                                <div><label for="">Số lượng</label></div>
-                               <div><input class="m-input"  type="text" id="txtDateOfBrith"  v-model="product.Quantity"></div>
+                               <div><input class="m-input"  type="text"   v-model="product.Quantity"></div>
                            </div>
                            <div class="m-dialog-employee-dob">
                                <div><label for="">Đơn giá</label></div>
-                               <div><input class="m-input"  type="text" id="txtDateOfBrith"  v-model="product.Price"></div>
+                               <div><input class="m-input"  type="text"   v-model="product.Price"></div>
+                           </div>
+                           <div class="m-dialog-employee-dob">
+                               <div><label for="">Size</label></div>
+                               <div><input class="m-input"  type="text" style="width:50px"  v-model="product.ProductSize"></div>
                            </div>
                           
                           </div>
@@ -131,7 +135,8 @@ export default {
         image: product.Image,
         catagoryId: product.CatagoryId,
         manufactorerId: product.ManufactorerId,
-        description: product.Description
+        description: product.Description,
+        productSize:product.ProductSize
       };
       console.log("dữ liệu thêm hoặc sửa ", dataProduct);
       //1.validate dữ liệu

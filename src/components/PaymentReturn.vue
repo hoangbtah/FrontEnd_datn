@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+import { mapGetters,mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -34,34 +36,32 @@ export default {
 
     };
   },
- // mounted() {
-    // Gửi yêu cầu GET đến API của bạn để nhận kết quả thanh toán
-    // Thay đổi URL endpoint để phù hợp với API của bạn
-    // axios.get('http://example.com/payment/result')
-    //   .then(response => {
-    //     this.paymentResult = response.data;
-    //   })
-    //   .catch(error => {
-    //     console.error('Error:', error);
-    //   });
- // }
+  computed: {
+    ...mapGetters(["totalPay","orderSelected"])
+  },
  created() {
     // Lấy thông tin từ query string khi component được tạo
+    console.log("LAY DON HANG CREATED",this.orderSelected);
+   // console.log(orderSelected);
     this.orderId = this.$route.query.vnp_TxnRef;
     this.amount = this.$route.query.vnp_Amount;
     this.bankCode = this.$route.query.vnp_BankCode;
     this.transactionStatus = this.$route.query.vnp_TransactionStatus;
     if(this.transactionStatus==='00')
     {
-      this.status="Giao dịch thành công"
+      this.status="Giao dịch thành công";
+      this.getOrder(this.orderId);
+      this.updateOrder(this.orderSelected);
     }
     else{
       this.status="Giao dịch thất bại"
     }
+    
 
     // Lấy các thông tin khác nếu cần
   },
   methods: {
+    ...mapActions(["getOrder"]),
     // format tiền
   formatCurrency(number) {
       // Chuyển số sang chuỗi và đảm bảo là kiểu number
@@ -81,6 +81,32 @@ export default {
       // Ví dụ: 100000 sẽ thành "100.000"
       return number.toLocaleString("vi-VN");
     },
+    async updateOrder(orderSelected){
+      console.log(orderSelected);
+       //cập nhật trạng thái thanh toán cho đơn hàng khi trả về thanh toán thành công
+    const formData = {
+    orderProductId: orderSelected.orderProductId,
+    userId: orderSelected.userId,
+    orderDate: orderSelected.orderDate,
+    deliveryDate: orderSelected.deliveryDate,
+    status: orderSelected.status,
+    receiver: orderSelected.receiver,
+    phone: orderSelected.phone,
+    orderAddress: orderSelected.orderAddress,
+    payment: orderSelected.payment,
+    statusPayment: 1,
+    orderTotal: orderSelected.orderTotal
+      };
+      console.log("thông tin đơn hàng",formData)
+      try{
+        await axios.put(`https://localhost:7159/api/Order/${formData.orderProductId}`,formData);
+      console.log("cập nhật đơn hàng thành công");
+
+      }
+      catch(error){
+        console.log(error);
+      }
+    }
   },
 
 };

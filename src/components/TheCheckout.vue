@@ -117,7 +117,7 @@ Vue.use(Toasted);
 export default {
     name:'TheCheckout',
     computed: {
-    ...mapGetters(["auth", "carts","totalPay"]),
+    ...mapGetters(["auth", "carts","totalPay","orderSelected"]),
   
   },
   methods: {
@@ -191,12 +191,14 @@ export default {
           userId: this.auth.user.userId,
           receiver:this.receiver ,
           phone:this.phoneNumber,
-          orderAddress:this.orderAddress
+          orderAddress:this.orderAddress,
+          orderTotal:this.totalPay,
+          payment:this.forPay
           //  orderDate: new Date().toISOString()
           // Thay bằng tên khách hàng thực tế
           // Các trường khác của đơn hàng tùy theo yêu cầu của bạn
         };
-      //  console.log("tạo đơn hàng",orderData);
+        console.log("tạo đơn hàng",orderData);
 
         // Gọi API POST để tạo đơn hàng và nhận lại đối tượng đơn hàng đã được lưu vào CSDL
         const responseOrder = await axios.post(
@@ -211,6 +213,9 @@ export default {
 
         // Lấy OrderId của đơn hàng đã tạo
         const orderProductId = responseOrder.data.orderProductId;
+          // lấy orderId được tạo nếu thanh toán online 
+          this.$store.commit("SET_ORDERSELECTED",responseOrder.data);
+          console.log("đơn hàng lấy được",this.orderSelected);
         // Gọi API POST để tạo từng chi tiết đơn hàng
         for (const cart of this.carts) {
           const orderDetail = {
@@ -255,11 +260,12 @@ export default {
             productId: orderDetail.productId,
             productName:cart.ProductName,
             quantity: respone.data.Quantity- cart.Quantity,
-            price: cart.Price,
+            price: respone.data.Price,
             image: cart.Image,
             catagoryId:respone.data.CatagoryId,
             manufactorerId:respone.data.ManufactorerId,
-            description:respone.data.Description
+            description:respone.data.Description,
+            productSize:respone.data.ProductSize
             // Các trường khác của chi tiết đơn hàng tùy theo yêu cầu của bạn
           };
            // Gọi API POST để cập nhật lại số lượng trong database
@@ -310,7 +316,7 @@ export default {
           this.$toasted.show("Có lỗi trong quá trình đặt hàng", {
           duration: 3000, // Thời gian hiển thị thông báo (ms)
           position: "top-center", // Vị trí hiển thị
-          type: "success" // Kiểu thông báo (success, info, error)
+          type: "error" // Kiểu thông báo (success, info, error)
         });
         // Xử lý lỗi nếu cần thiết (hiển thị thông báo lỗi, log, ...)
       }

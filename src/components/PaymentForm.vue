@@ -108,7 +108,12 @@
 <script>
 import axios from 'axios';
 import { mapGetters } from "vuex";
+// // Import Vue và VueToasted
+// import Vue from 'vue';
+// import Toasted from 'vue-toasted';
 
+// // Sử dụng VueToasted với Vue
+// Vue.use(Toasted);
 export default {
   data() {
     return {
@@ -121,17 +126,27 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["totalPay"])
+    ...mapGetters(["totalPay","orderSelected"])
   },
   methods: {
     async createPayment() {
       const paymentRequest = {
-        orderId: '123456', // Replace with actual order ID
+        orderId: this.orderSelected.orderProductId, // Replace with actual order ID
         orderInfo: this.orderInfo,
         amount: this.amount,
         bankCode: this.bankCode,
         ipAddress: '127.0.0.1' // Hoặc có thể bỏ đi nếu không cần
       };
+      // kiểm tra số tiền thanh toán có khác so với số tổng tiền không
+      // if(this.amount!==this.formatCurrency(this.totalPay)){
+      //      // Hiển thị thông báo thành công
+      // this.$toasted.show('Vui lòng kiểm tra lại số tiền thanh toán với tổng tiền đơn hàng !', {
+      //   duration: 3000, // Thời gian hiển thị thông báo (ms)
+      //   position: 'top-center', // Vị trí hiển thị
+      //   type: 'error' // Kiểu thông báo (success, info, error)
+      // });
+      // return ;
+      //}
       console.log(paymentRequest);
       try {
         const response = await axios.post('https://localhost:7159/api/Payment/create_payment', paymentRequest);
@@ -142,6 +157,7 @@ export default {
         console.error('Error creating payment:', error);
       }
     },
+    
   },
 };
 </script>

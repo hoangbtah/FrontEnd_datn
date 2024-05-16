@@ -29,6 +29,7 @@
                                  <th class="m-gender">SỐ LƯỢNG</th>
                                  <th class="m-position">LOẠI SẢN PHẨM</th>
                                  <th class="m-department-name">HÃNG SẢN XUẤT</th>
+                                 <th class="m-department-name">SIZE</th>
                                  <th class="m-account">HÌNH ẢNH</th>
                                  <th class="m-option">CHỨC NĂNG</th>
                              </tr>       
@@ -41,6 +42,7 @@
                                     <td>{{ productad.Quantity }}</td>
                                     <td>{{ productad.CatagoryName }}</td>
                                     <td>{{ productad.ManufactorerName }}</td>
+                                    <td>{{ productad.ProductSize }} ml</td>
                                     <td> <img class="" style="width:80px;height:80px" :src="productad.Image" alt=""></td>
                                     
                                     <!-- <td></td> -->

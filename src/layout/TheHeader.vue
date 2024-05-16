@@ -97,8 +97,8 @@
                         <div class="navbar-nav ">
                             <router-link  class="nav-item nav-link" to="/" exact><div class="nav-text">Home</div></router-link>
                             <router-link class="nav-item nav-link" to="/theshop"><div class="nav-text">Shop</div></router-link>
-                            <!-- <router-link to="/paymentreturn" class="nav-item nav-link"><div class="nav-text">Payment Return</div></router-link>
-                            <router-link to="/payment" class="nav-item nav-link"><div class="nav-text">Payment</div></router-link> -->
+                            <router-link to="/paymentreturn" class="nav-item nav-link"><div class="nav-text">Payment Return</div></router-link>
+                            <router-link to="/payment" class="nav-item nav-link"><div class="nav-text">Payment</div></router-link>
                             <div class="nav-item dropdown" >
                                 <a href="#" class="nav-link dropdown-toggle " data-toggle="dropdown">Danh mục</a>
                                 <div class="dropdown-menu rounded-0 m-0" >
