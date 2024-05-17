@@ -9568,7 +9568,7 @@ a.text-dark:hover, a.text-dark:focus {
 
 .back-to-top {
   position: fixed;
-  display: none;
+  /* display: none; */
   right: 20px;
   bottom: 80px;
   z-index: 11;

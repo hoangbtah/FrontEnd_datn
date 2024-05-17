@@ -39,16 +39,19 @@
                 </a>
             </div>
             <div class="col-lg-6 col-6 text-left">
-                <form action="">
+                <!-- <form action="">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search for products">
+                        <input type="text" class="form-control" placeholder="Search for products" v-model="searchKey">
                         <div class="input-group-append">
-                            <span class="input-group-text bg-transparent text-primary">
-                                <i class="fa fa-search"></i>
-                            </span>
+                          
+                            <button  style="border: none; background-color: bg-transparent;" @click="getSearchProduct()" > 
+                                           <span class="input-group-text bg-transparent text-primary">
+                                            <i class="fa fa-search"></i>
+                                        </span>
+                            </button>
                         </div>
                     </div>
-                </form>
+                </form> -->
             </div>
             <div class="col-lg-3 col-6 text-right">
                 <a @click="goToNotification()" class="btn border">
@@ -79,8 +82,13 @@
                     <div class="navbar-nav w-100 overflow-hidden" style="min-height: 300px"  >
                        
                         <a class="nav-item nav-link"  v-for="manufactorer in manufactorers" :key="manufactorer.manufactorerId"
-                        @click="handleGetProductsByManufactorer(manufactorer.manufactorerId)"
-                       > <router-link to="/theshop">{{ manufactorer.manufactorerName }}</router-link></a>
+                        @click="handleGetProductsByManufactorer(manufactorer.manufactorerId)"> 
+                        <router-link to="/theshop">{{ manufactorer.manufactorerName }}</router-link></a>
+                        <a class="nav-item nav-link" @click="selectAllManufactorer()">
+                             <!-- <router-link to="/theshop"> -->
+                             CHỌN TẤT CẢ
+                             <!-- </router-link> -->
+                             </a>
                        
                     </div>
                 </nav>
@@ -97,15 +105,16 @@
                         <div class="navbar-nav ">
                             <router-link  class="nav-item nav-link" to="/" exact><div class="nav-text">Home</div></router-link>
                             <router-link class="nav-item nav-link" to="/theshop"><div class="nav-text">Shop</div></router-link>
-                            <router-link to="/paymentreturn" class="nav-item nav-link"><div class="nav-text">Payment Return</div></router-link>
-                            <router-link to="/payment" class="nav-item nav-link"><div class="nav-text">Payment</div></router-link>
+                            <!-- <router-link to="/paymentreturn" class="nav-item nav-link"><div class="nav-text">Payment Return</div></router-link>
+                            <router-link to="/payment" class="nav-item nav-link"><div class="nav-text">Payment</div></router-link> -->
                             <div class="nav-item dropdown" >
                                 <a href="#" class="nav-link dropdown-toggle " data-toggle="dropdown">Danh mục</a>
                                 <div class="dropdown-menu rounded-0 m-0" >
                                     <a class="dropdown-item" v-for="catagory in catagorys" :key="catagory.catagoryId" @click="getProductsByCatagoryId(catagory.catagoryId)"><router-link to="/theshop">{{ catagory.catagoryName }}</router-link></a>
+                                    <a class="dropdown-item" @click="selectAllCatagory()">Chọn tất cả</a>
                                 </div>
                             </div>
-                            <router-link to="/contact"  class="nav-item nav-link"><div class="nav-text">Contact</div></router-link>
+                            <!-- <router-link to="/contact"  class="nav-item nav-link"><div class="nav-text">Contact</div></router-link> -->
                         </div>
                         <div class="navbar-nav ml-auto py-0">
                            <div v-if="auth.isAuthenticated"> <router-link to="/login" class="nav-item nav-link"><div class="nav-text">Login</div></router-link></div>
@@ -135,7 +144,7 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   name: "TheHeader",
   components: {},
-  computed: { ...mapGetters(["catagorys", "manufactorers", "auth", "carts","unreadCount"]) },
+  computed: { ...mapGetters(["catagorys", "manufactorers", "auth", "carts","unreadCount","searchProduct"]) },
   created() {
     this.getCatagorys();
     this.getManufactorers();
@@ -155,11 +164,11 @@ export default {
     // lấy giỏ hàng
     this.getCarts(this.auth.user.userId);
   },
-  watch:{
-    unreadCount(){
-
-    }
-  },
+//   watch:{
+//     unreadCount(){
+      
+//     }
+//   },
   methods: {
     ...mapActions([
       "getCatagorys",
@@ -208,7 +217,26 @@ export default {
 
       // Cập nhật giao diện hoặc chuyển hướng đến trang chủ
       this.$router.push("/theshop");
-    }
+    },
+    // chọn tất cả các hãng
+    selectAllManufactorer(){
+        this.$store.commit("RESET_SELECTEDMANUFACTORERID");
+    },
+    // chọn tất cả danh mục
+    selectAllCatagory(){
+        this.$store.commit("SET_SELECTEDCATAGORYID");
+    },
+    // getSearchProduct(){
+    //     console.log("search key",this.searchKey)
+    //     this.$store.commit("SET_SEARCHPRODUCT",this.searchKey);
+    //     console.log("search Product",this.searchProduct)
+    //   this.$router.push("/theshop");
+    // }
+  },
+  data() {
+    return {
+    //   searchKey: "", // Biến lưu từ khóa tìm kiếm,
+    };
   }
 };
 </script>

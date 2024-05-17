@@ -64,33 +64,7 @@
       
                 <!-- Size Start -->
                 <div class="mb-5">
-                    <!-- <h5 class="font-weight-semi-bold mb-4">Filter by size</h5>
-                    <form @submit.prevent>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="size-all">
-                            <label class="custom-control-label" for="size-all">All Size</label>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="size-1">
-                            <label class="custom-control-label" for="size-1">10 ml</label>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="size-2">
-                            <label class="custom-control-label" for="size-2">20 ml</label>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="size-3">
-                            <label class="custom-control-label" for="size-3">30 ml</label>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="size-4">
-                            <label class="custom-control-label" for="size-4">50 ml</label>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
-                            <input type="checkbox" class="custom-control-input" id="size-5">
-                            <label class="custom-control-label" for="size-5">100 ml</label>
-                        </div>
-                    </form> -->
+                   
                 </div>
                 <!-- Size End -->
             </div>
@@ -117,7 +91,7 @@
                                     </div>
                                 </div>
                             </form>
-                            <div class="dropdown ml-4">
+                            <!-- <div class="dropdown ml-4">
                                 <button class="btn border dropdown-toggle" type="button" id="triggerId" data-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false">
                                             Sort by
@@ -127,7 +101,7 @@
                                     <a class="dropdown-item" href="#">Popularity</a> 
                                     <a class="dropdown-item" href="#">Best Rating</a>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12 pb-1" v-for="productabc in pageproducts" :key="productabc.ProductId">
@@ -269,8 +243,17 @@ export default {
         this.moneyFirst,
         this.moneyLast
       );
-    }
-   
+    },
+    // searchProduct(){
+    //   // this.fetchItems(
+    //   //   this.selectedManufacturerId,
+    //   //   this.searchProduct,
+    //   //   this.selectedCatagoryId,
+    //   //   this.moneyFirst,
+    //   //   this.moneyLast
+    //   // );
+    //   this.getSearchProduct(this.searchProduct);
+    // }
   },
   methods: {
     ...mapActions([
@@ -313,7 +296,10 @@ export default {
     } else if (event.target === this.$refs.price5) {
         this.moneyFirst = 2000000;
         this.moneyLast = 10000000;
-    }
+    }else if (event.target === this.$refs.priceAll) {
+        this.moneyFirst = 0;
+        this.moneyLast = 100000000;
+    }    
 
       console.log("khoảng giá vừa chọn", this.firstMoney, "+", this.lastMoney);
       this.pageNumber = 1;
@@ -389,15 +375,7 @@ export default {
     async nextPage() {
       if (this.pageNumber < this.totalPages) {
         this.pageNumber++;
-        // this.fetchItems();
-        // if (this.selectedManufacturerId) {
-        //   //  console.log("lấy theo nhà sản xuất")
-        //   await this.fetchItems(this.selectedManufacturerId);
-        //   // await this.getProductsByManufactorerId(this.selectedManufacturerId);
-        // } else {
-        //   //  console.log("lấy tất cả")
-        //   await this.fetchItems();
-        // }
+       
         await this.fetchItems(
           this.selectedManufacturerId,
           this.searchProduct,
@@ -440,21 +418,8 @@ export default {
     },
     ///tìm kiếm sản phẩm
     async getSearchProduct(searchKey) {
-      // // Lấy danh sách tìm kiếm từ Local Storage
-      // let searchHistory =
-      //   JSON.parse(localStorage.getItem("searchHistory")) || [];
-
-      // // Kiểm tra xem chuỗi tìm kiếm đã tồn tại trong danh sách chưa
-      // if (!searchHistory.includes(searchKey)) {
-      //   // Nếu chưa tồn tại, thêm vào danh sách
-      //   searchHistory.push(searchKey);
-      //   // Lưu danh sách mới vào Local Storage
-      //   localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
-      // }
-
       await this.getProductSearch(searchKey);
       console.log("chuỗi nhập vào", this.searchProduct);
-
       try {
         // Gọi hàm fetchItems với manufactorerId và searchProduct được truyền vào
         //  await this.fetchItems(this.selectedManufacturerId, this.searchProduct);
@@ -575,7 +540,7 @@ export default {
   position: absolute;
   right: 0;
   padding-right: 5px;
-  z-index: 999;
+  z-index: 9;
 }
 .sale-product p {
   color: red;

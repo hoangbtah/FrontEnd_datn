@@ -50,8 +50,7 @@ export default {
     if(this.transactionStatus==='00')
     {
       this.status="Giao dịch thành công";
-      this.getOrder(this.orderId);
-      this.updateOrder(this.orderSelected);
+      this.processOrder();
     }
     else{
       this.status="Giao dịch thất bại"
@@ -81,8 +80,16 @@ export default {
       // Ví dụ: 100000 sẽ thành "100.000"
       return number.toLocaleString("vi-VN");
     },
+    async processOrder() {
+    try {
+      await this.getOrder(this.orderId); // Đợi cho đến khi getOrder hoàn thành
+      this.updateOrder(this.orderSelected); // Sau đó gọi updateOrder
+    } catch (error) {
+      console.error("Lỗi khi lấy đơn hàng hoặc cập nhật đơn hàng:", error);
+    }
+  },
     async updateOrder(orderSelected){
-      console.log(orderSelected);
+      console.log("orderSelected trong update",orderSelected);
        //cập nhật trạng thái thanh toán cho đơn hàng khi trả về thanh toán thành công
     const formData = {
     orderProductId: orderSelected.orderProductId,

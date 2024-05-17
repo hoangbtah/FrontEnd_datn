@@ -64,21 +64,56 @@
                 </p> -->
             </div>
             <div class="col-md-6 px-xl-0 text-center text-md-right">
-                <img class="img-fluid" src="img/payments.png" alt="">
+                <!-- <img class="img-fluid" src="img/payments.png" alt=""> -->
             </div>
         </div>
     </div>
     <!-- Footer End -->
-    <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+    <a href="#" class="btn btn-primary back-to-top" @click="backToTop"><i class="fa fa-angle-double-up"></i></a>
 
     </div>
 
 </template>
 <script>
 export default {
-    name:'TheFooter'
-}
+  name: "TheFooter",
+  //     mounted() {
+  //     window.addEventListener('scroll', this.handleScroll);
+  //   },
+  //   beforeDestroy() {
+  //     window.removeEventListener('scroll', this.handleScroll);
+  //   },
+  methods: {
+    backToTop($) {
+      // Back to top button
+      $(window).scroll(function() {
+        if ($(this).scrollTop() > 100) {
+          $(".back-to-top").fadeIn("slow");
+        } else {
+          $(".back-to-top").fadeOut("slow");
+        }
+      });
+      $(".back-to-top").click(function() {
+        $("html, body").animate({ scrollTop: 0 }, 3000, "easeInOutExpo");
+        return false;
+      });
+    }
+    // handleScroll() {
+    //   const backToTopButton = this.$el.querySelector('.back-to-top');
+    //   if (window.scrollY > 100) {
+    //     backToTopButton.style.display = 'block';
+    //   } else {
+    //     backToTopButton.style.display = 'none';
+    //   }
+    // },
+    // backToTop() {
+    //   window.scrollTo({
+    //     top: 0,
+    //     behavior: 'smooth'
+    //   });
+    // }
+  }
+};
 </script>
 <style lang="">
-    
 </style>

@@ -433,6 +433,6 @@ export default {
 .sale-product .product-0 {
   margin-left: 5px;
   position: absolute;
-  z-index: 999;
+  z-index: 9;
 }
 </style>
