@@ -70,23 +70,7 @@
                             <!-- <input type="radio" class="custom-control-input" id="size-1" name="size"> -->
                             <label class="" for="size-1">{{product.ProductSize}} ml</label>
                         </div>
-                        <!-- <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="size-2" name="size">
-                            <label class="custom-control-label" for="size-2">20 ml</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="size-3" name="size">
-                            <label class="custom-control-label" for="size-3">30 ml</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="size-4" name="size">
-                            <label class="custom-control-label" for="size-4">50 ml</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="size-5" name="size">
-                            <label class="custom-control-label" for="size-5">100 ml</label>
-                        </div>
-                    </form> -->
+                      
                 </div>
                 <div class="d-flex mb-4">
                     
@@ -248,7 +232,7 @@
     </div>
     <!-- Shop Detail End -->
       <!-- Products Start -->
-      <div class="container-fluid pt-5">
+      <!-- <div class="container-fluid pt-5">
         <div class="text-center mb-4">
             <h2 class="section-title px-5"><span class="px-2">CÓ THỂ BẠN CŨNG THÍCH</span></h2>
         </div>
@@ -282,7 +266,7 @@
             </div>
             
         </div>
-    </div>
+    </div> -->
     <!-- Products End -->
     </div>
 </template>

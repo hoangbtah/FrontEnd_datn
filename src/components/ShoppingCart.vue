@@ -426,6 +426,7 @@ export default {
     const total = this.totalAmount();
     const discountAmount = total * this.inforVoucherPercentVoucher + this.inforVoucherDiscountMoney;
     this.$store.commit("SET_TOTALPAY",total-discountAmount);
+    this.$store.commit("SET_ORDERTOTAL",total-discountAmount);
     return total - discountAmount;
   },
   },

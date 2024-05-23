@@ -1,7 +1,20 @@
 <template >
     <div>
+      <div class="container-fluid bg-secondary mb-5">
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+            <h1 class="font-weight-semi-bold text-uppercase mb-3">Đơn hàng</h1>
+            <div class="d-inline-flex">
+                <!-- <p class="m-0"><a href="">Home</a></p>
+                <p class="m-0 px-2">-</p>
+                <p class="m-0">Shopping Cart</p>
+                <p class="m-0">{{ items }}</p> -->
+                <p v-if="orderUser.length === 0">Bạn chưa có đơn hàng nào !</p>
+
+            </div>
+        </div>
+    </div>
     <!-- Cart Start -->
-    <div class="container-fluid pt-5">
+    <div class="container-fluid pt-5" v-if="orderUser.length!==0">
         <!-- <div class="row px-xl-5"> -->
             <!-- <div class="col-lg-8 table-responsive mb-5"> -->
                 <table class="table table-bordered text-center mb-0">

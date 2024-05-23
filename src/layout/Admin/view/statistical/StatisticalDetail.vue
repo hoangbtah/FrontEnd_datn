@@ -1,26 +1,25 @@
 <template>
+
 <div class="statistical-manu">
-  <p>Biểu đồ thống kê doanh thu theo hãng</p>
-  <div >
-    <Pie class="bieudotron"
-    refs="chart"
-      :chart-options="chartOptions"
-      :chart-data="chartData"
-      :chart-id="chartId"
-      :dataset-id-key="datasetIdKey"   
-    />
+    <p>Biểu đồ thống kê doanh thu theo hãng</p>
+    <div>
+      <Pie class="bieudotron"
+        ref="chart"
+        :chart-options="chartOptions"
+        :chart-data="chartData"
+        :chart-id="chartId"
+        :dataset-id-key="datasetIdKey"
+      />
     </div>
-    <!-- <div v-if="responeData.length===0">
-    <p>Không có dữ liệu !</p>
-  </div> -->
-   
-</div>
-</template>
   
-  <script>
-import { Pie } from "vue-chartjs/legacy";
+  </div>
+</template>
+
+<script>
+import { Pie } from "vue-chartjs";
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import axios from "axios";
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 import {
   Chart as ChartJS,
   Title,
@@ -30,7 +29,7 @@ import {
   CategoryScale
 } from "chart.js";
 
-ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
+ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale, ChartDataLabels);
 
 export default {
   name: "PieChart",
@@ -63,31 +62,49 @@ export default {
       default: () => {}
     },
     plugins: {
-      // type: Array,
-      // default: () => []
-      type: Object, // Thay đổi từ Array thành Object
-      default: () => ({}) // Giá trị mặc định là một đối tượng trống
+      type: Object,
+      default: () => ({})
     }
   },
   computed: {
     ...mapGetters([
       "yearSelected",
-      "monthSelected","startDateSatis","endDateSatis"
-    ])},
+      "monthSelected",
+      "startDateSatis",
+      "endDateSatis"
+    ])
+  },
   data() {
     return {
       chartData: {
         labels: ["hoang", "viet"],
         datasets: [
           {
-            backgroundColor: ["#41B883", "#E46651", "#c6d917", "#DD1B16","#539bcf","#f59732","#3bd673","#552ecb"],
+            backgroundColor: [
+              "#41B883", "#E46651", "#c6d917", "#DD1B16",
+              "#539bcf", "#f59732", "#3bd673", "#552ecb"
+            ],
             data: [50, 50]
           }
         ]
       },
       chartOptions: {
         responsive: true,
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
+        plugins: {
+          datalabels: {
+            formatter: (value, context) => {
+              let sum = 0;
+              let dataArr = context.chart.data.datasets[0].data;
+              dataArr.map(data => {
+                sum += data;
+              });
+              let percentage = (value * 100 / sum).toFixed(2) + "%";
+              return percentage;
+            },
+            color: '#fff',
+          }
+        }
       },
       responeData: []
     };

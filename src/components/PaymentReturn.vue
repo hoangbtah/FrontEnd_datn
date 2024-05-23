@@ -100,7 +100,7 @@ export default {
     receiver: orderSelected.receiver,
     phone: orderSelected.phone,
     orderAddress: orderSelected.orderAddress,
-    payment: orderSelected.payment,
+    payment: 1,
     statusPayment: 1,
     orderTotal: orderSelected.orderTotal
       };

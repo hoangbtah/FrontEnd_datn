@@ -117,7 +117,7 @@ Vue.use(Toasted);
 export default {
     name:'TheCheckout',
     computed: {
-    ...mapGetters(["auth", "carts","totalPay","orderSelected"]),
+    ...mapGetters(["auth", "carts","totalPay","orderSelected",""]),
   
   },
   methods: {
