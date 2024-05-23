@@ -32,11 +32,7 @@ import VoucherList from './layout/Admin/view/voucher/VoucherList.vue'
 import TheNotification from './components/TheNotification.vue'
 import PaymentForm from './components/PaymentForm.vue'
 import PaymentReturn from './components/PaymentReturn.vue'
-
-
-
-
-
+import OrderUser from './components/OrderUser.vue'
 
 Vue.config.productionTip = false
 Vue.use(VueRouter)
@@ -55,8 +51,7 @@ const routes = [
   { path: '/contact', component: TheContact },
   { path: '/user', component: TheUser },
   { path: '/notification', component: TheNotification },
-
- 
+  { path: '/orderuser', component: OrderUser }, 
     ]
   },
   /// điều hướng của admin
@@ -84,10 +79,6 @@ const routes = [
   { path: '/forgotpasswordadmin', component: ForgotPasswordAdmin },
   { path: '/payment', component: PaymentForm },
   { path: '/paymentreturn', component: PaymentReturn },
-
-
-
-
 ];
 
 

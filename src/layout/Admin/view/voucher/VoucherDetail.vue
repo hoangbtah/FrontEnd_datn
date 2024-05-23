@@ -110,7 +110,6 @@ export default {
     },
     async btnSave(voucher) {
       this.isLoading=true;
-      // var me=this;
       const dataVoucher = {
         voucherId:voucher.voucherId,
         voucherCode:voucher.voucherCode,
@@ -132,17 +131,28 @@ export default {
           position: "top-right", // Vị trí hiển thị
           type: "error" // Kiểu thông báo (success, info, error)
         });
+      this.isLoading=false;
         return ;
       }
-      // //kiểm tra khoảng giá 
-      // if (dataVoucher.startPrice > dataVoucher.endPrice) {
-      //   this.$toasted.show("Khoảng giá đầu không thể lớn hơn khoảng giá sau !", {
-      //     duration: 2000, // Thời gian hiển thị thông báo (ms)
-      //     position: "top-right", // Vị trí hiển thị
-      //     type: "error" // Kiểu thông báo (success, info, error)
-      //   });
-      //   return ;
-      // }
+      // //kiểm tra tiền khuyến mãi
+      if (!dataVoucher.percentVoucher && !dataVoucher.discountMoney) {
+        this.$toasted.show("Bạn cần chọn giảm giá theo phần trăm hoặc giảm theo số tiền !", {
+          duration: 2000, // Thời gian hiển thị thông báo (ms)
+          position: "top-right", // Vị trí hiển thị
+          type: "error" // Kiểu thông báo (success, info, error)
+        });
+      this.isLoading=false;
+        return ;
+      }
+      if (dataVoucher.percentVoucher && dataVoucher.discountMoney) {
+        this.$toasted.show("Bạn không thể chọn giảm giá theo phần trăm và giảm theo số tiền trong cùng 1 voucher !", {
+          duration: 2000, // Thời gian hiển thị thông báo (ms)
+          position: "top-right", // Vị trí hiển thị
+          type: "error" // Kiểu thông báo (success, info, error)
+        });
+      this.isLoading=false;
+        return ;
+      }
         // Kiểm tra nếu startDate là ngày sau endDate
         if (!dataVoucher.startDateVoucher || !dataVoucher.endDateVoucher) {
         this.$toasted.show("Ngày bắt đầu và ngày kết thúc không được để trống !", {
@@ -150,6 +160,7 @@ export default {
           position: "top-right", // Vị trí hiển thị
           type: "error" // Kiểu thông báo (success, info, error)
         });
+      this.isLoading=false;
         return ;
       }
       if (!dataVoucher.decriptionUse) {
@@ -159,6 +170,8 @@ export default {
           position: "top-right", // Vị trí hiển thị
           type: "error" // Kiểu thông báo (success, info, error)
         });
+      this.isLoading=false;
+
         return ;
       }
       //2. build object thông tin nhân viên

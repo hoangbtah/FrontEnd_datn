@@ -7,10 +7,12 @@ const orderModules={
         monthSelected:'',
         startDateSatis:'',
         endDateSatis:'',
-        orderSelected:''
+        orderSelected:'',
+        orderUser:[]
     },
     getters:{
         orders:state=> state.orders,
+        orderUser:state=> state.orderUser,
         orderDetails:state=> state.orderDetails,
         yearSelected:state=> state.yearSelected,
         monthSelected:state=> state.monthSelected,
@@ -45,9 +47,20 @@ const orderModules={
         async getOrder({commit},orderId){
             try {
               const respone=await  axios.get(`https://localhost:7159/api/Order/${orderId}`)
-              console.log("lấy  đơn hàng thành công");
+              console.log("lấy đơn hàng thành công");
               console.log(respone.data);
                 commit('SET_ORDERSELECTED',respone.data);
+            } catch (error) {
+                console.log(error);
+            }
+           
+        },
+        async getOrderByUserId({commit},userId){
+            try {
+              const respone=await  axios.get(`https://localhost:7159/api/Order/orders/${userId}`)
+              console.log("lấy  đơn hàng của người thành công");
+              console.log(respone.data);
+                commit('SET_ORDERUSER',respone.data);
             } catch (error) {
                 console.log(error);
             }
@@ -76,6 +89,9 @@ const orderModules={
         },  
         SET_ORDERSELECTED(state,orderSelected){
             state.orderSelected=orderSelected
+        },
+        SET_ORDERUSER(state,orderUser){
+            state.orderUser=orderUser
         }
        
        

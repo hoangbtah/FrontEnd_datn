@@ -39,21 +39,9 @@
                 </a>
             </div>
             <div class="col-lg-6 col-6 text-left">
-                <!-- <form action="">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search for products" v-model="searchKey">
-                        <div class="input-group-append">
-                          
-                            <button  style="border: none; background-color: bg-transparent;" @click="getSearchProduct()" > 
-                                           <span class="input-group-text bg-transparent text-primary">
-                                            <i class="fa fa-search"></i>
-                                        </span>
-                            </button>
-                        </div>
-                    </div>
-                </form> -->
             </div>
             <div class="col-lg-3 col-6 text-right">
+                
                 <a @click="goToNotification()" class="btn border">
                     <i class="fas fa-bell text-primary" ></i>
                     <span class="badge" style="color:red" v-if="unreadCount>0">{{ unreadCount }}</span>
@@ -84,7 +72,7 @@
                         <a class="nav-item nav-link"  v-for="manufactorer in manufactorers" :key="manufactorer.manufactorerId"
                         @click="handleGetProductsByManufactorer(manufactorer.manufactorerId)"> 
                         <router-link to="/theshop">{{ manufactorer.manufactorerName }}</router-link></a>
-                        <a class="nav-item nav-link" @click="selectAllManufactorer()">
+                        <a class="nav-item nav-link" @click="selectAllManufactorer()" style="cursor:pointer">
                              <!-- <router-link to="/theshop"> -->
                              CHỌN TẤT CẢ
                              <!-- </router-link> -->
@@ -111,15 +99,18 @@
                                 <a href="#" class="nav-link dropdown-toggle " data-toggle="dropdown">Danh mục</a>
                                 <div class="dropdown-menu rounded-0 m-0" >
                                     <a class="dropdown-item" v-for="catagory in catagorys" :key="catagory.catagoryId" @click="getProductsByCatagoryId(catagory.catagoryId)"><router-link to="/theshop">{{ catagory.catagoryName }}</router-link></a>
-                                    <a class="dropdown-item" @click="selectAllCatagory()">Chọn tất cả</a>
+                                    <a class="dropdown-item" @click="selectAllCatagory()" style="cursor:pointer">Chọn tất cả</a>
                                 </div>
                             </div>
+                            <div v-if="!auth.isAuthenticated">  <router-link to="/orderuser" class="nav-item nav-link"><div class="nav-text">Đơn hàng</div></router-link></div>
+                           
                             <!-- <router-link to="/contact"  class="nav-item nav-link"><div class="nav-text">Contact</div></router-link> -->
                         </div>
                         <div class="navbar-nav ml-auto py-0">
                            <div v-if="auth.isAuthenticated"> <router-link to="/login" class="nav-item nav-link"><div class="nav-text">Login</div></router-link></div>
+                           
                            <div v-else>
-                            <router-link to="/user" class="nav-item nav-link"><div class="nav-text">{{ auth.user.name }}</div></router-link>
+                            <router-link to="/user" class="nav-item nav-link"><div class="nav-text">Hi,{{ auth.user.name }}</div></router-link>
                             </div>
                             <router-link to="/register" class="nav-item nav-link"><div class="nav-text">Register</div></router-link>
                             <div v-if="auth.isAuthenticated==false"><a class="nav-item nav-link" @click="logout()"><div class="nav-text">Logout</div></a>

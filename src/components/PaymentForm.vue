@@ -27,7 +27,7 @@
       </nav>
     </div>
 
-    <h3>Tạo mới đơn hàng</h3>
+    <h3>Thanh toán đơn hàng</h3>
     <div class="table-responsive">
       <form @submit.prevent="createPayment">
         <div class="form-group">
