@@ -46,6 +46,7 @@
                                    <td v-if="order.Payment===1">Online</td>
                                    <td v-if="order.Status===0">Chưa xử lý</td>
                                    <td v-if="order.Status===1">Đã xử lý</td>
+                                   <td v-if="order.Status===2">Khách hàng đã hủy</td>
                                    <td>{{ formatCurrency(order.OrderTotal) }}</td>
                                    <td>
                                       <div class="m-option">
@@ -206,7 +207,10 @@ export default {
       status:1,
       receiver:order.Receiver,
       phone:order.Phone,
-      orderAddress:order.OrderAddress
+      orderAddress:order.OrderAddress,
+      orderTotal:order.OrderTotal,
+      statusPayment:order.StatusPayment,
+      payment:order.Payment
     }
     try{
     await axios.put(`https://localhost:7159/api/Order/${order.OrderProductId}`,formData);

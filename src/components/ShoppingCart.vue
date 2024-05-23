@@ -157,10 +157,7 @@ export default {
         quantity: cart.Quantity,
         price: cart.Price
       };
-      // console.log("cart tăng số lượng");
-      // console.log(formData);
-      // const userId = this.auth.user.userId;
-      // console.log(userId);
+     
       const token = localStorage.getItem("token");
       // console.log(token);
       if (!token) {

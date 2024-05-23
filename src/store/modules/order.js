@@ -8,7 +8,8 @@ const orderModules={
         startDateSatis:'',
         endDateSatis:'',
         orderSelected:'',
-        orderUser:[]
+        orderUser:[],
+        orderTotal:'',
     },
     getters:{
         orders:state=> state.orders,
@@ -19,9 +20,7 @@ const orderModules={
         startDateSatis:state=>state.startDateSatis,
         endDateSatis:state=>state.endDateSatis,
         orderSelected:state=>state.orderSelected,
-
-
-      //  isShowOD:state=>state.isShowOD,
+        orderTotal:state=>state.orderTotal,
     },
     actions:{
         async getOrders({commit}){
@@ -92,8 +91,10 @@ const orderModules={
         },
         SET_ORDERUSER(state,orderUser){
             state.orderUser=orderUser
+        },
+        SET_ORDERTOTAL(state,orderTotal){
+            state.orderTotal=orderTotal
         }
-       
        
     }
 }

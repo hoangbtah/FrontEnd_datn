@@ -37,8 +37,10 @@
                                    <td>{{ formatCurrency(order.OrderTotal) }}</td>
                                    <td>
                                       <div class="m-option">
-                                       <!-- <button class="m-btn-option m-btn-de btn-info"  @click="btnOrderDetailClick(order.OrderProductId)">Chi tiết</button> -->
                                        <button v-if="order.StatusPayment===0" class="m-btn-option m-btn-pay btn-info" @click="btnPay(order)">Thanh toán</button>
+                                        <button v-if="order.Status!==2" class="m-btn-option m-btn-de btn-warning"  @click="btnCancelOrder(order)">Hủy</button>
+                                      
+                                      <button v-if="order.Status===2" class="m-btn-option m-btn-de btn-success"  >Đã hủy</button>
                                       </div>
                                    </td>
                                </tr>
@@ -54,7 +56,7 @@
 <script>
 
 import { mapActions, mapGetters } from "vuex";
-// import axios from "axios";
+import axios from "axios";
 // Import Vue và VueToasted
 import Vue from 'vue';
 import Toasted from 'vue-toasted';
@@ -67,7 +69,7 @@ export default {
      this.getOrderByUserId(this.auth.user.userId);
   },
   computed: {
-    ...mapGetters(["auth", "carts","voucherOfUser","underCount",'orderUser']),
+    ...mapGetters(["auth", "carts","voucherOfUser","underCount",'orderUser',"orderTotal"]),
     
   },
   methods: {
@@ -113,9 +115,100 @@ export default {
       return number.toLocaleString("vi-VN");
     },
     async btnPay(order){
-        console.log(order.OrderProductId)
+        console.log(order.OrderProductId);
+        console.log("số tiền ",order.OrderTotal);
+      await this.$store.commit("SET_ORDERTOTAL",order.OrderTotal);
        await this.getOrder(order.OrderProductId);
        await this.$router.push('/payment');      
+    },
+    // hủy đơn hàng
+    //1 cập nhật lại trạng thái đơn hàng
+    async btnCancelOrder(order){
+      const formData={
+      orderProductId:order.OrderProductId,
+      userId:order.UserId,
+      orderDate:order.OrderDate,
+      deliveryDate:order.OrderDate,
+      status:2,
+      receiver:order.Receiver,
+      phone:order.Phone,
+      orderAddress:order.OrderAddress,
+      orderTotal:order.OrderTotal,
+      statusPayment:order.StatusPayment,
+      payment:order.Payment
+    }
+    try{
+    await axios.put(`https://localhost:7159/api/Order/${order.OrderProductId}`,formData);
+      console.log("đon hàng sửa",formData);
+      this.$toasted.show('Hủy đơn hàng thành công !', {
+        duration: 2000, // Thời gian hiển thị thông báo (ms)
+        position: 'top-center', // Vị trí hiển thị
+        type: 'success' // Kiểu thông báo (success, info, error)
+
+        });
+        // gọi lại dữ liệu 
+        this.getOrderByUserId(this.auth.user.userId);
+    }
+    catch(error){
+          // Hiển thị thông báo thành công
+          this.$toasted.show('Cập nhật thất bại !', {
+        duration: 2000, // Thời gian hiển thị thông báo (ms)
+        position: 'top-center', // Vị trí hiển thị
+        type: 'error' // Kiểu thông báo (success, info, error)
+
+        });
+    }
+    // 2lấy chi tiết của đơn hàng muốn hủy
+    try{
+     const orderDetails= await axios.get(`https://localhost:7159/api/OrderDetail/getorderDetail/${order.OrderProductId}`);
+     // const orderDetails= respone.data;
+      for( const orderDetail of  orderDetails.data){
+         ///3 sau khi hủy đơn hàng thành công cập nhật lại số lượng trong database
+          //lấy sản phẩm đó trong database;
+          const respone = await axios.get(`https://localhost:7159/api/v1/Product/product/${orderDetail.ProductId}`)
+          console.log(" sản phẩm cần cập nhật",respone.data);
+
+
+           const updateProduct = {
+            // orderId: orderProductId,
+            productId: orderDetail.ProductId,
+            productName:orderDetail.ProductName,
+            quantity: respone.data.Quantity+ orderDetail.Quantity,
+            price: respone.data.Price,
+            image: orderDetail.Image,
+            catagoryId:respone.data.CatagoryId,
+            manufactorerId:respone.data.ManufactorerId,
+            description:respone.data.Description,
+            productSize:respone.data.ProductSize
+            // Các trường khác của chi tiết đơn hàng tùy theo yêu cầu của bạn
+          };
+           // Gọi API POST để cập nhật lại số lượng trong database
+         //   console.log("cập nhật lại sản phẩm",updateProduct);
+           try {
+             await axios.put(
+              `https://localhost:7159/api/v1/Product/${updateProduct.productId}`,updateProduct);
+            //   {
+            //     headers: {
+            //       Authorization: `Bearer ${token}` // Gửi token qua header Authorization
+            //     }
+            //   }
+            // );
+            console.log("cập nhật thành công:");
+          } catch (error) {
+            console.error("Lỗi khi cập nhật:",
+              error.response ? error.response.data : error.message
+            );
+            // Xử lý lỗi tại đây nếu cần thiết
+
+          
+        }
+      }
+
+    }
+    catch(error){
+      console.log("Có lỗi xảy ra khi lấy chi tiết đơn hàng muốn hủy");
+    }
+      
     }
    
   },
@@ -128,6 +221,6 @@ export default {
 </script>
 <style>
 .m-btn-pay{
-    width:120px;
+    width:100px;
 }
 </style>

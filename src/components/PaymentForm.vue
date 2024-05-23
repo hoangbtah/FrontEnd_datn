@@ -2,7 +2,7 @@
   <div class="container">
     <div class="clearfix" style="padding-bottom: 1rem;">
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">VNPAY DEMO</a>
+        <a class="navbar-brand" href="#">VNPAY </a>
         <!-- <button
           class="navbar-toggler"
           type="button"
@@ -108,12 +108,10 @@
 <script>
 import axios from 'axios';
 import { mapGetters } from "vuex";
-// // Import Vue và VueToasted
-// import Vue from 'vue';
-// import Toasted from 'vue-toasted';
-
-// // Sử dụng VueToasted với Vue
-// Vue.use(Toasted);
+// Import Vue và VueToasted
+import Vue from 'vue';
+import Toasted from 'vue-toasted';
+Vue.use(Toasted);
 export default {
   data() {
     return {
@@ -126,7 +124,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["totalPay","orderSelected"])
+    ...mapGetters(["totalPay","orderSelected","orderTotal"])
   },
   methods: {
     async createPayment() {
@@ -137,16 +135,18 @@ export default {
         bankCode: this.bankCode,
         ipAddress: '127.0.0.1' // Hoặc có thể bỏ đi nếu không cần
       };
+      console.log("số tiền ",this.amount);
+      console.log("số tiền cần thanh toán",this.formatCurrency(this.orderTotal));
       // kiểm tra số tiền thanh toán có khác so với số tổng tiền không
-      // if(this.amount!==this.formatCurrency(this.totalPay)){
-      //      // Hiển thị thông báo thành công
-      // this.$toasted.show('Vui lòng kiểm tra lại số tiền thanh toán với tổng tiền đơn hàng !', {
-      //   duration: 3000, // Thời gian hiển thị thông báo (ms)
-      //   position: 'top-center', // Vị trí hiển thị
-      //   type: 'error' // Kiểu thông báo (success, info, error)
-      // });
-      // return ;
-      //}
+      if(this.formatCurrency(this.amount)!==this.formatCurrency(this.orderTotal)){
+           // Hiển thị thông báo thành công
+      this.$toasted.show(`Số tiền bạn cần thanh toán cho đơn hàng này là ${this.formatCurrency(this.orderTotal)} đ`, {
+        duration: 4000, // Thời gian hiển thị thông báo (ms)
+        position: 'top-center', // Vị trí hiển thị
+        type: 'error' // Kiểu thông báo (success, info, error)
+      });
+      return ;
+      }
       console.log(paymentRequest);
       try {
         const response = await axios.post('https://localhost:7159/api/Payment/create_payment', paymentRequest);
@@ -156,6 +156,25 @@ export default {
       } catch (error) {
         console.error('Error creating payment:', error);
       }
+    },
+      // format tiền
+      formatCurrency(number) {
+      // Chuyển số sang chuỗi và đảm bảo là kiểu number
+
+      number = Number(number);
+      // Kiểm tra nếu không phải là số hợp lệ
+      if (isNaN(number)) {
+        return "0";
+      }
+      // Làm tròn số tiền theo quy tắc gần nhất
+      if (number < 1000) {
+        number = Math.round(number / 100) * 100; // Làm tròn đến hàng trăm gần nhất
+      } else {
+        number = Math.round(number / 1000) * 1000; // Làm tròn đến hàng nghìn gần nhất
+      }
+      // Sử dụng hàm toLocaleString() để định dạng tiền tệ theo định dạng của Việt Nam
+      // Ví dụ: 100000 sẽ thành "100.000"
+      return number.toLocaleString("vi-VN");
     },
     
   },
