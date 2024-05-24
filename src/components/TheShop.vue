@@ -211,6 +211,8 @@ export default {
   //  console.log("chạy lại");
     this.resetGetProductsByManufactorerId();
     this.resetGetProductsByCatagoryId();
+    this.$store.commit("SET_SEARCHPRODUCT",'');
+
    // console.log("mã nhà sản xuất ", this.selectedManufacturerId);
   //  console.log("mã danh muc ", this.selectedCatagoryId);
     this.fetchItems();
@@ -244,16 +246,7 @@ export default {
         this.moneyLast
       );
     },
-    // searchProduct(){
-    //   // this.fetchItems(
-    //   //   this.selectedManufacturerId,
-    //   //   this.searchProduct,
-    //   //   this.selectedCatagoryId,
-    //   //   this.moneyFirst,
-    //   //   this.moneyLast
-    //   // );
-    //   this.getSearchProduct(this.searchProduct);
-    // }
+   
   },
   methods: {
     ...mapActions([

@@ -137,9 +137,9 @@ export default {
     }
   },
 
-  created() {
-   
-    this.fetchItems();
+ async created() {
+    await this.$store.commit("SET_SEARCHPRODUCT",'');
+   await this.fetchItems();
   },
 
   methods: {

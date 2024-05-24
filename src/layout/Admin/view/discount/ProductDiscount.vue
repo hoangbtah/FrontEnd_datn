@@ -11,7 +11,7 @@
                    <input id="txtSearch" class="m-input m-btn-icon-right m-icon-search" v-model="searchProductDiscount" placeholder="Tìm theo tên" style="width: 200px;"/>
                </div>
                <div class="m-toolbar-right">
-                   <button @click="getSearchProduct(searchProductDiscount)" class="m-icon-refresh"></button>
+                   <button @click="getSearchProductDiscount(searchProductDiscount)" class="m-icon-refresh"></button>
                </div>
            </div>
            <div class="m-page-grid">
@@ -117,21 +117,19 @@ export default {
  watch: {
    product() {
     console.log("sản phẩm thay đổi")
-     this.fetchItems( this.searchProduct);
+     this.fetchProductsDiscount( this.searchProduct);
    },
    products() {
-     this.fetchItems( this.searchProduct);
+     this.fetchProductsDiscount( this.searchProduct);
    },
-   pageproducts() {
-     this.fetchItems( this.searchProduct);
-   },
+  //  pageproducts() {
+  //    this.fetchProductsDiscount( this.searchProduct);
+  //  },
 
  },
-
  created() {
   
-   this.fetchItems();
-  
+  this.fetchProductsDiscount();
  },
 
  methods: {
@@ -144,7 +142,7 @@ export default {
    ]),
    
    ///tìm kiếm sản phẩm
-   async getSearchProduct(searchProductDiscount) {
+   async getSearchProductDiscount(searchProductDiscount) {
      // // Lấy danh sách tìm kiếm từ Local Storage
      // let searchHistory =
      //   JSON.parse(localStorage.getItem("searchHistory")) || [];
@@ -157,13 +155,13 @@ export default {
      //   localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
      // }
 
-   //  await this.getProductSearch(searchProductDiscount);
+     await this.getProductSearch(searchProductDiscount);
      console.log("chuỗi nhập vào", searchProductDiscount);
 
      try {
-       // Gọi hàm fetchItems với manufactorerId và searchProduct được truyền vào
-       //  await this.fetchItems(this.selectedManufacturerId, this.searchProduct);
-       await this.fetchItems(
+       // Gọi hàm fetchProductsDiscount với manufactorerId và searchProduct được truyền vào
+       //  await this.fetchProductsDiscount(this.selectedManufacturerId, this.searchProduct);
+       await this.fetchProductsDiscount(
          // this.selectedManufacturerId,
          searchProductDiscount
          // this.selectedCatagoryId,
@@ -175,7 +173,7 @@ export default {
      }
    },
    //lấy sản phẩm theo phân trang lọc tìm kiếm
-   async fetchItems(searchProduct) {
+   async fetchProductsDiscount(searchProduct) {
      try {
       
        let url = `https://localhost:7159/api/v1/Product/products/discounted?pagenumber=${
@@ -215,7 +213,7 @@ export default {
        // console.log(this.items);
        // Lưu danh sách sản phẩm phân trang vào Local Storage
        localStorage.setItem(
-         "listPageAdminProduct",
+         "listPageAdminProductDiscount",
          JSON.stringify(response.data)
        );
      
@@ -227,19 +225,19 @@ export default {
    nextPage() {
      if (this.pageNumber < this.totalPages) {
        this.pageNumber++;
-       this.fetchItems();
+       this.fetchProductsDiscount();
      }
    },
    prevPage() {
      if (this.pageNumber > 1) {
        this.pageNumber--;
-       this.fetchItems();
+       this.fetchProductsDiscount();
      }
    },
    gotoPage(page) {
      if (page !== this.pageNumber) {
        this.pageNumber = page;
-       this.fetchItems();
+       this.fetchProductsDiscount();
      }
    },
 

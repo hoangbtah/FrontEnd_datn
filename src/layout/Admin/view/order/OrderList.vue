@@ -68,12 +68,12 @@
                            <div class="m-number-page">
                               
                            </div>
-                           <div class="m-number">
+                           <!-- <div class="m-number">
                                <button @click="prevPage" :disabled="pageNumber === 1">Trước</button>
                                <button v-for="page in displayedPages" :key="page" @click="gotoPage(page)" :class="{ 'm-page-selected': page === pageNumber }">{{ page }}</button>
                                <button @click="nextPage" :disabled="pageNumber === totalPages">Sau</button>
                               
-                           </div>
+                           </div> -->
                           
                        </div>
                    </div>   
