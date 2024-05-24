@@ -138,7 +138,7 @@ export default {
 
           monthlySalesData.forEach(item => {
             if (item.Month >= 1 && item.Month <= 12) {
-              newData[item.Month - 1] = item.SalesAmount;
+              newData[item.Month - 1] = this.formatCurrency(item.SalesAmount);
             }
           });
 
@@ -176,7 +176,7 @@ export default {
     updateChart() {
       this.chartData.labels = this.responseData.map(item => this.formatDate(item.date));
       this.chartData.datasets[0].data = this.responseData.map(
-        item => item.salesAmount
+        item => this.formatCurrency(item.salesAmount)
       );
       this.$refs.chart.update(); // Update the chart
     },
@@ -186,7 +186,26 @@ export default {
 
       // Cắt chuỗi từ datetime thành date (lấy 10 ký tự đầu tiên)
       return datetimeString.slice(0, 10);
-    }
+    },
+      // format tiền
+  formatCurrency(number) {
+      // Chuyển số sang chuỗi và đảm bảo là kiểu number
+
+      number = Number(number);
+      // Kiểm tra nếu không phải là số hợp lệ
+      if (isNaN(number)) {
+        return "0";
+      }
+      // Làm tròn số tiền theo quy tắc gần nhất
+      if (number < 1000) {
+        number = Math.round(number / 100) * 100; // Làm tròn đến hàng trăm gần nhất
+      } else {
+        number = Math.round(number / 1000) * 1000; // Làm tròn đến hàng nghìn gần nhất
+      }
+      // Sử dụng hàm toLocaleString() để định dạng tiền tệ theo định dạng của Việt Nam
+      // Ví dụ: 100000 sẽ thành "100.000"
+      return number
+    },
   },
   created() {
     const currentYear = new Date().getFullYear(); // Lấy năm hiện tại

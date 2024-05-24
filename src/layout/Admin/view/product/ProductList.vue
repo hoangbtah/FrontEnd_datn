@@ -7,6 +7,15 @@
                 </div>
             </div>
             <div class="m-page-toolbar">
+              <!-- <div><label for="">Hãng sản xuất </label></div>
+                               <div>
+                               <select v-model="product.ManufactorerId">
+                                      
+                                      <option v-for="manufactorer in manufactorers" :key="manufactorer.manufactorerId" :value="manufactorer.manufactorerId">
+                                        {{ manufactorer.manufactorerName }}
+                                      </option>
+                                    </select>
+                              </div> -->
                 <div class="m-toolbar-left">
                     <input id="txtSearch" class="m-input m-btn-icon-right m-icon-search" v-model="searchKey" placeholder="Tìm theo tên" style="width: 200px;"/>
                 </div>
@@ -52,6 +61,7 @@
                                         <button class="m-btn-option m-btn-ud btn-warning" @click="btnUpdateClick(productad.ProductId)">Sửa</button>
                                         <button class="m-btn-option m-btn-ud  btn-danger" @click="btnDelete(productad.ProductId)">Xóa</button>
                                         <button v-if="productad.DiscountPercent==null" class="m-btn-option m-btn-sale " @click="btnAddDiscount(productad.ProductId)">+ Sale</button>
+                                        <button  class="m-btn-option btn-warning " @click="btnUpdateComment(productad.ProductId)">Comment</button>
                                        </div>
                                     </td>
                                 </tr>
@@ -101,6 +111,7 @@ export default {
       "isShowDialog",
       "pageproducts",
       "searchProduct",
+      "manufactorers"
       // "selectedProductId",
     ]),
     // hiển thị trang
@@ -136,7 +147,8 @@ export default {
       "getProduct",
       "getProducts",
       "getComments",
-      "getProductSearch"
+      "getProductSearch",
+     
     ]),
     // format tiền
     formatCurrency(number) {
@@ -304,6 +316,12 @@ export default {
       console.log(this.forModeDetail);
       this.getProduct(productId);
       this.$store.commit("TOGGLE_ISSHOW");
+    },
+    // quản lý đánh giá và bình luận sản phẩm
+    btnUpdateComment(productId){
+      this.getComments(productId);
+     // this.getProduct(productId);
+      this.$router.push('/comment');      
     }
   },
   data() {

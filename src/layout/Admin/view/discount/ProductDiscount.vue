@@ -8,10 +8,10 @@
            </div>
            <div class="m-page-toolbar">
                <div class="m-toolbar-left">
-                   <input id="txtSearch" class="m-input m-btn-icon-right m-icon-search" v-model="searchKey" placeholder="Tìm theo tên" style="width: 200px;"/>
+                   <input id="txtSearch" class="m-input m-btn-icon-right m-icon-search" v-model="searchProductDiscount" placeholder="Tìm theo tên" style="width: 200px;"/>
                </div>
                <div class="m-toolbar-right">
-                   <button @click="getSearchProduct(searchKey)" class="m-icon-refresh"></button>
+                   <button @click="getSearchProduct(searchProductDiscount)" class="m-icon-refresh"></button>
                </div>
            </div>
            <div class="m-page-grid">
@@ -144,28 +144,28 @@ export default {
    ]),
    
    ///tìm kiếm sản phẩm
-   async getSearchProduct(searchKey) {
+   async getSearchProduct(searchProductDiscount) {
      // // Lấy danh sách tìm kiếm từ Local Storage
      // let searchHistory =
      //   JSON.parse(localStorage.getItem("searchHistory")) || [];
 
      // // Kiểm tra xem chuỗi tìm kiếm đã tồn tại trong danh sách chưa
-     // if (!searchHistory.includes(searchKey)) {
+     // if (!searchHistory.includes(searchProductDiscount)) {
      //   // Nếu chưa tồn tại, thêm vào danh sách
-     //   searchHistory.push(searchKey);
+     //   searchHistory.push(searchProductDiscount);
      //   // Lưu danh sách mới vào Local Storage
      //   localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
      // }
 
-     await this.getProductSearch(searchKey);
-     console.log("chuỗi nhập vào", this.searchProduct);
+   //  await this.getProductSearch(searchProductDiscount);
+     console.log("chuỗi nhập vào", searchProductDiscount);
 
      try {
        // Gọi hàm fetchItems với manufactorerId và searchProduct được truyền vào
        //  await this.fetchItems(this.selectedManufacturerId, this.searchProduct);
        await this.fetchItems(
          // this.selectedManufacturerId,
-         this.searchProduct
+         searchProductDiscount
          // this.selectedCatagoryId,
          // this.moneyFirst,
          // this.moneyLast
@@ -175,7 +175,7 @@ export default {
      }
    },
    //lấy sản phẩm theo phân trang lọc tìm kiếm
-   async fetchItems() {
+   async fetchItems(searchProduct) {
      try {
       
        let url = `https://localhost:7159/api/v1/Product/products/discounted?pagenumber=${
@@ -186,10 +186,10 @@ export default {
        //   url += `&manufactorerId=${manufactorerId}`;
        //   console.log("mã hãng", manufactorerId);
        // }
-    //    if (searchProduct) {
-    //      url += `&search=${searchProduct}`;
-    //      // console.log("chuỗi tìm kiếm", searchProduct);
-    //    }
+       if (searchProduct) {
+         url += `&search=${searchProduct}`;
+         // console.log("chuỗi tìm kiếm", searchProduct);
+       }
        // if (catagoryId) {
        //   url += `&catagoryId=${catagoryId}`;
        //   console.log("mã hãng", catagoryId);
@@ -311,7 +311,7 @@ export default {
      totalPages: 0,
      maxDisplayedPages: 5,
      forDiscount: 0,
-     searchKey: "",
+     searchProductDiscount: "",
      datatotal: 0 // Biến lưu từ khóa tìm kiếm,
    };
  }

@@ -48,6 +48,18 @@ const commentModules={
           throw error;
         }
       },
+      /// Xóa bình luận
+      async deleteComment({commit},commentId){
+        try {
+          const respone=await  axios.delete(`https://localhost:7159/api/Comment/${commentId}`)
+          console.log(respone.data);
+            commit('DELETE_COMMENT',commentId);
+             // Lưu comment vào Local Storage
+           //  localStorage.setItem('commentsProduct', JSON.stringify(respone.data));
+        } catch (error) {
+            console.log(error)
+        }
+    },
       
     },
     mutations:{
@@ -64,6 +76,9 @@ const commentModules={
             }
             state.comments.unshift(formData);
            },
+           DELETE_COMMENT(state, commentId) {
+            state.comments = state.comments.filter(comment => comment.CommentId !== commentId)
+        },
       
         
     }

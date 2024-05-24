@@ -33,6 +33,7 @@ import TheNotification from './components/TheNotification.vue'
 import PaymentForm from './components/PaymentForm.vue'
 import PaymentReturn from './components/PaymentReturn.vue'
 import OrderUser from './components/OrderUser.vue'
+import CommentList from './layout/Admin/view/comment/CommentList.vue'
 
 Vue.config.productionTip = false
 Vue.use(VueRouter)
@@ -69,6 +70,7 @@ const routes = [
 { path: '/productdiscount', component: ProductDiscount },
 { path: '/updateuser', component: UpdateUser },
 { path: '/voucher', component: VoucherList },
+{ path: '/comment', component: CommentList },
   ]
 },
   { path: '/login', component: TheLogin },
